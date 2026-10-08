@@ -3,9 +3,11 @@
 namespace app;
 
 use app\controller\EventoController;
+use app\controller\HomeController;
 use app\controller\LoginController;
 use app\controller\LugaresController;
 use app\controller\ReservaController;
+use app\model\EquipoModel;
 use app\model\EventoModel;
 use app\model\LoginModel;
 use app\model\LugaresModel;
@@ -32,12 +34,23 @@ class Configuration
         );
     }
 
+    public function getHomeController(){
+        return new HomeController(
+            $this->getRender(),
+            $this->getEquipoModel()
+        );
+    }
+
     // Los privados
     private function getLoginModel()
     {
         return new LoginModel(
             $this->getDatabase()
         );
+    }
+
+    private function getEquipoModel(){
+        return new EquipoModel();
     }
 
     private function getDatabase()
@@ -51,13 +64,13 @@ class Configuration
         );
     }
 
-    private function gerRender()
+    private function getRender()
     {
         return new MustacheRender();
     }
 
     public function getRouter()
     {
-        return new Router($this, "evento", "show");
+        return new Router($this, "home", "show");
     }
 }
