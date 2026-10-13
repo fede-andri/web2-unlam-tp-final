@@ -7,7 +7,7 @@ class EquipoModel
     public function obtenerDatosEquipo()
     {
         return [
-            'nombre' => 'Nombre del equipo',
+            'nombre' => 'GRUPO 5',
             'universidad' => 'UNLaM',
             'materia' => 'Programación Web II',
             'anio' => '2026',
