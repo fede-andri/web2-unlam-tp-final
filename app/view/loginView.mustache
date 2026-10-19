@@ -78,6 +78,12 @@
                         </div>
                         {{/login_error}}
 
+                        {{#registro_exitoso}}
+                            <div class="alert alert-success">
+                                Tu cuenta fue creada correctamente. Ya podés iniciar sesión.
+                            </div>
+                        {{/registro_exitoso}}
+
                         <form method="POST" action="/web2-unlam-tp-final/login/login">
                             <div class="mb-3">
                                 <label for="usuario" class="form-label fw-medium">Usuario</label>
@@ -107,6 +113,14 @@
                             </div>
 
                             <button type="submit" class="btn btn-primary btn-lg w-100 fw-semibold">Ingresar</button>
+
+                            <div class="d-flex align-items-center my-4">
+                                <hr class="flex-grow-1">
+                                <span class="px-3 text-secondary small">o</span>
+                                <hr class="flex-grow-1">
+                            </div>
+
+                            <a href="/web2-unlam-tp-final/registro/show" class="btn btn-outline-primary btn-lg w-100 fw-semibold">Registrarse</a>
                         </form>
 
                         <p class="text-center text-secondary small mt-4 mb-0">

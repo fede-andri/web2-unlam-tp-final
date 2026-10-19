@@ -22,8 +22,14 @@ class LoginController
             Redirect::toIndex();
         }
 
+        $registroExitoso = false;
+        if (isset($_GET['registro']) && $_GET['registro'] === 'ok') {
+            $registroExitoso = true;
+        }
+
         $this->render->renderiza('login', [
             'login_error' => isset($_GET['login_error']),
+            'registro_exitoso' => $registroExitoso,
         ]);
     }
     public function login()
