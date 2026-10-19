@@ -12,11 +12,16 @@ class LoginModel
 
     public function autenticar($usuario, $password)
     {
-        $passwordHash = md5($password);
+//        $passwordHash = md5($password);
 
         // A propósito sin prepared statements: lo arreglamos en la clase de refactor
-        $sql = "SELECT id, usuario FROM usuarios WHERE usuario = '$usuario' AND password = '$passwordHash'";
+        $sql = "SELECT id, usuario, password FROM usuarios WHERE usuario = ?";
+        $fila = $this->database->queryOne($sql, [$usuario]);
 
-        return $this->database->queryOne($sql);
+        if ($fila && password_verify($password, $fila['password'])) {
+            unset($fila['password']);
+            return $fila;
+        }
+        return null;
     }
 }

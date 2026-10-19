@@ -6,12 +6,14 @@ use app\controller\EventoController;
 use app\controller\HomeController;
 use app\controller\LoginController;
 use app\controller\LugaresController;
+use app\controller\RegistroController;
 use app\controller\ReservaController;
 use app\model\EquipoModel;
 use app\model\EventoModel;
 use app\model\LoginModel;
 use app\model\LugaresModel;
 use app\model\ReservaModel;
+use app\model\UsuarioModel;
 use MustacheRender;
 use MyDatabase;
 use Router;
@@ -30,8 +32,15 @@ class Configuration
     public function getLoginController()
     {
         return new LoginController(
-            $this->getLoginModel()
-        );
+          $this->getLoginModel(),
+          $this->getRender()
+      );
+    }
+    public function getRegistroController(){
+        return new RegistroController(
+            $this->getRender(),
+            $this->getUsuarioModel()
+      );
     }
 
     public function getHomeController(){
@@ -45,6 +54,13 @@ class Configuration
     private function getLoginModel()
     {
         return new LoginModel(
+            $this->getDatabase()
+        );
+    }
+
+    public function getUsuarioModel()
+    {
+        return new UsuarioModel(
             $this->getDatabase()
         );
     }

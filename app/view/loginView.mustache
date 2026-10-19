@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f4f7fb">
+    <title>Iniciar sesión | Preguntones</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <style>
+        body {
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at 12% 15%, rgba(13, 110, 253, .09), transparent 28rem),
+                #f4f7fb;
+        }
+
+        .login-card {
+            max-width: 980px;
+            overflow: hidden;
+            border: 0;
+            border-radius: 1.25rem;
+            box-shadow: 0 1.5rem 4rem rgba(25, 42, 70, .12);
+        }
+
+        .login-aside {
+            min-height: 100%;
+            background: linear-gradient(145deg, #123d76, #0d6efd);
+        }
+
+        .brand-mark {
+            display: grid;
+            width: 3rem;
+            height: 3rem;
+            place-items: center;
+            border: 1px solid rgba(255, 255, 255, .3);
+            border-radius: .9rem;
+            background: rgba(255, 255, 255, .14);
+            font-size: 1.35rem;
+            font-weight: 700;
+        }
+
+        .form-control {
+            min-height: 3rem;
+        }
+
+        .form-control:focus {
+            border-color: #86b7fe;
+            box-shadow: 0 0 0 .2rem rgba(13, 110, 253, .15);
+        }
+    </style>
+</head>
+<body>
+    <main class="container min-vh-100 d-flex align-items-center justify-content-center py-5">
+        <div class="card login-card w-100">
+            <div class="row g-0">
+                <section class="col-lg-5 login-aside text-white p-4 p-md-5 d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="brand-mark mb-4" aria-hidden="true">?</div>
+                        <p class="text-white-50 text-uppercase small fw-semibold letter-spacing">Preguntones</p>
+                        <h1 class="display-6 fw-bold mb-3">Un espacio para compartir conocimiento.</h1>
+                        <p class="text-white-50 mb-0">Iniciá sesión para continuar participando de la comunidad.</p>
+                    </div>
+                    <p class="small text-white-50 mt-5 mb-0">Simple, colaborativo y siempre en movimiento.</p>
+                </section>
+
+                <section class="col-lg-7 p-4 p-md-5">
+                    <div class="mx-auto" style="max-width: 420px;">
+                        <div class="mb-4">
+                            <p class="text-primary fw-semibold small text-uppercase mb-2">Bienvenido/a</p>
+                            <h2 class="h3 fw-bold mb-2">Iniciar sesión</h2>
+                            <p class="text-secondary mb-0">Ingresá tus datos para acceder a tu cuenta.</p>
+                        </div>
+
+                        {{#login_error}}
+                        <div class="alert alert-danger d-flex align-items-start gap-2" role="alert">
+                            <span class="fw-bold" aria-hidden="true">!</span>
+                            <span>El usuario o la contraseña son incorrectos. Revisá tus datos e intentá nuevamente.</span>
+                        </div>
+                        {{/login_error}}
+
+                        {{#registro_exitoso}}
+                            <div class="alert alert-success">
+                                Tu cuenta fue creada correctamente. Ya podés iniciar sesión.
+                            </div>
+                        {{/registro_exitoso}}
+
+                        <form method="POST" action="/web2-unlam-tp-final/login/login">
+                            <div class="mb-3">
+                                <label for="usuario" class="form-label fw-medium">Usuario</label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    id="usuario"
+                                    name="usuario"
+                                    placeholder="Tu nombre de usuario"
+                                    autocomplete="username"
+                                    required
+                                    autofocus
+                                >
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="password" class="form-label fw-medium">Contraseña</label>
+                                <input
+                                    type="password"
+                                    class="form-control"
+                                    id="password"
+                                    name="password"
+                                    placeholder="Ingresá tu contraseña"
+                                    autocomplete="current-password"
+                                    required
+                                >
+                            </div>
+
+                            <button type="submit" class="btn btn-primary btn-lg w-100 fw-semibold">Ingresar</button>
+
+                            <div class="d-flex align-items-center my-4">
+                                <hr class="flex-grow-1">
+                                <span class="px-3 text-secondary small">o</span>
+                                <hr class="flex-grow-1">
+                            </div>
+
+                            <a href="/web2-unlam-tp-final/registro/show" class="btn btn-outline-primary btn-lg w-100 fw-semibold">Registrarse</a>
+                        </form>
+
+                        <p class="text-center text-secondary small mt-4 mb-0">
+                            Sistema de Preguntas y Respuestas
+                        </p>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

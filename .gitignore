@@ -1,0 +1,8 @@
+# Configuración local
+config/config.ini
+
+# Carpeta de configuración de PhpStorm / IDE
+.idea/
+
+# Archivos de log
+log/
