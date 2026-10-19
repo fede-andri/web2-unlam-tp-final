@@ -8,26 +8,43 @@ use Request;
 class LoginController
 {
     private $model;
+    private $render;
 
-    public function __construct($model)
+    public function __construct($model, $render)
     {
         $this->model = $model;
+        $this->render = $render;
     }
 
-    public function login()
+    public function show()
     {
-        $usuario = $this->model->autenticar(Request::post('usuario'), Request::post('password'));
-        if ($usuario === null) {
-            Redirect::to('/?login_error=1');
+        if (isset($_SESSION['usuario_id'])) {
+            Redirect::toIndex();
         }
 
-        $_SESSION['usuario_id'] = $usuario['id'];
-        $_SESSION['usuario'] = $usuario['usuario'];
+        $this->render->renderiza('login', [
+            'login_error' => isset($_GET['login_error']),
+        ]);
+    }
+    public function login()
+    {
+        $usuario  = trim(Request::post('usuario') ?? '');
+        $password = Request::post('password') ?? '';
+
+        $datosUsuario = $this->model->autenticar($usuario, $password);
+
+        if ($datosUsuario === null) {
+            Redirect::to('/login?login_error=1');
+        }
+//        session_regenerate_id(true);
+        $_SESSION['usuario_id'] = $datosUsuario['id'];
+        $_SESSION['usuario'] = $datosUsuario['usuario'];
         Redirect::toIndex();
     }
 
     public function logout()
     {
+        $_SESSION = [];
         session_destroy();
         Redirect::toIndex();
     }

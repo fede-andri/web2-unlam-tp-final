@@ -30,8 +30,9 @@ class Configuration
     public function getLoginController()
     {
         return new LoginController(
-            $this->getLoginModel()
-        );
+          $this->getLoginModel(),
+          $this->getRender()
+      );
     }
 
     public function getHomeController(){

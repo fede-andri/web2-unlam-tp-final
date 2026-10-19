@@ -2,6 +2,8 @@
 
 namespace app\controller;
 
+use Redirect;
+
 class HomeController
 {
     private $render;
@@ -12,6 +14,9 @@ class HomeController
     }
 
     public function show(){
+        if (!isset($_SESSION['usuario_id'])) {
+            Redirect::to('/login');
+        }
         $data = $this->equipoModel->obtenerDatosEquipo();
         $this->render->renderiza('presentacion', $data);
     }

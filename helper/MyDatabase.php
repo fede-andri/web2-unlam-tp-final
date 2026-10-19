@@ -6,28 +6,39 @@ class MyDatabase
 
     public function __construct($host, $user, $pass, $db)
     {
-        $this->conexion = new PDO("mysql:host=$host;dbname=$db", $user, $pass);
+        $this->conexion = new PDO(
+            "mysql:host=$host;dbname=$db;charset=utf8mb4",
+            $user,
+            $pass,
+            [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            ]
+        );
     }
 
-    public function queryOne(string $sql)
+    public function queryOne(string $sql, array $params = [])
     {
         Log::info($sql);
-        $resultado = $this->conexion->query($sql, PDO::FETCH_ASSOC);
-        $fila = $resultado->fetch();
+        $stmt = $this->conexion->prepare($sql);
+        $stmt->execute($params);
+        $fila = $stmt->fetch();
         return $fila === false ? null : $fila;
     }
 
-    public function queryAll(string $sql)
+    public function queryAll(string $sql, array $params = [])
     {
         Log::info($sql);
-        $resultado = $this->conexion->query($sql, PDO::FETCH_ASSOC);
-        return $resultado->fetchAll();
+        $stmt = $this->conexion->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchAll();
     }
 
-    public function execute(string $sql)
+    public function execute(string $sql, array $params = [])
     {
         Log::info($sql);
-        return $this->conexion->exec($sql);
+        $stmt = $this->conexion->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->rowCount();
     }
 
     public function lastInsertId()
