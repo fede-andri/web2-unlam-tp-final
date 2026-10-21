@@ -6,16 +6,19 @@ use app\controller\EventoController;
 use app\controller\HomeController;
 use app\controller\LoginController;
 use app\controller\LugaresController;
+use app\controller\RankingController;
 use app\controller\RegistroController;
 use app\controller\ReservaController;
 use app\model\EquipoModel;
 use app\model\EventoModel;
 use app\model\LoginModel;
 use app\model\LugaresModel;
+use app\model\RankingModel;
 use app\model\ReservaModel;
 use app\model\UsuarioModel;
 use MustacheRender;
 use MyDatabase;
+use Redirect;
 use Router;
 
 require_once("helper/Autoloader.php");
@@ -27,6 +30,7 @@ class Configuration
 
     public function __construct()
     {
+        $this->inicializarRedirect();
     }
 
     public function getLoginController()
@@ -50,6 +54,12 @@ class Configuration
         );
     }
 
+    public function getRankingController(){
+        return new RankingController(
+            $this->getRender(),
+            $this->getRankingModel()
+        );
+    }
     // Los privados
     private function getLoginModel()
     {
@@ -69,6 +79,11 @@ class Configuration
         return new EquipoModel();
     }
 
+    private function getRankingModel(){
+        return new RankingModel(
+            $this->getDatabase()
+        );
+    }
     private function getDatabase()
     {
         $config = parse_ini_file("config/config.ini");
@@ -80,6 +95,11 @@ class Configuration
         );
     }
 
+    private function inicializarRedirect(){
+        $config = parse_ini_file("config/config.ini");
+
+        Redirect::setBaseDir($config["base_dir"] ?? '/');
+    }
     private function getRender()
     {
         return new MustacheRender();

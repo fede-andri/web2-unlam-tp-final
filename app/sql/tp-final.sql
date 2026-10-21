@@ -30,3 +30,12 @@ ADD rol VARCHAR(20) NOT NULL DEFAULT 'JUGADOR',
 ADD validado BOOLEAN NOT NULL DEFAULT FALSE,
 ADD fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
 */
+CREATE TABLE partidas (
+                          id INT AUTO_INCREMENT PRIMARY KEY,
+                          usuario_id INT NOT NULL,
+                          puntaje INT NOT NULL DEFAULT 0,
+                          fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                          FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+);
+
+INSERT INTO partidas (usuario_id, puntaje) VALUES (1, 5),(1,9), (2, 8), (3, 3);

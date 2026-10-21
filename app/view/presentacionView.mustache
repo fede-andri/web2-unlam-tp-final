@@ -19,11 +19,9 @@
 
                     <div class="card-header bg-danger text-white py-3 px-4 d-flex align-items-center justify-content-between gap-3">
                         <h1 class="h3 mb-0">{{nombre}}</h1>
-                        <form method="POST" action="/web2-unlam-tp-final/login/logout">
-                            <button type="submit" class="btn btn-outline-light btn-sm text-nowrap">
-                                Cerrar sesión
-                            </button>
-                        </form>
+                        <a href="/web2-unlam-tp-final/login/logout" class="btn btn-outline-light btn-sm text-nowrap">
+                            Cerrar sesión
+                        </a>
                     </div>
 
                     <div class="card-body p-4">
@@ -49,6 +47,12 @@
                                 </li>
                             {{/integrantes}}
                         </ul>
+
+                        <div class="text-center mt-4">
+                            <a href="ranking" class="btn btn-primary">
+                                Ver ranking
+                            </a>
+                        </div>
 
                     </div>
 
