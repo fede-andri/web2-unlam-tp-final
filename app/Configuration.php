@@ -6,6 +6,7 @@ use app\controller\EventoController;
 use app\controller\HomeController;
 use app\controller\LoginController;
 use app\controller\LugaresController;
+use app\controller\PartidaController;
 use app\controller\RankingController;
 use app\controller\RegistroController;
 use app\controller\ReservaController;
@@ -13,6 +14,7 @@ use app\model\EquipoModel;
 use app\model\EventoModel;
 use app\model\LoginModel;
 use app\model\LugaresModel;
+use app\model\PartidaModel;
 use app\model\RankingModel;
 use app\model\ReservaModel;
 use app\model\UsuarioModel;
@@ -60,6 +62,10 @@ class Configuration
             $this->getRankingModel()
         );
     }
+    public function getPartidaController(){
+        return new PartidaController($this->getRender(), $this->getPartidaModel());
+    }
+
     // Los privados
     private function getLoginModel()
     {
@@ -83,6 +89,10 @@ class Configuration
         return new RankingModel(
             $this->getDatabase()
         );
+    }
+
+    private function getPartidaModel(){
+        return new PartidaModel($this->getDatabase());
     }
     private function getDatabase()
     {

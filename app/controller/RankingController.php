@@ -15,7 +15,9 @@ class RankingController{
     }
 
     public function show(){
-        $this->requerirLogin();
+        if(!isset($_SESSION['usuario_id'])){
+            Redirect::to('/login');
+        }
         $ranking = $this->model->getRanking();
 
         foreach ($ranking as $i => &$fila){
@@ -30,9 +32,4 @@ class RankingController{
         ]);
     }
 
-    private function requerirLogin(){
-        if(!isset($_SESSION['usuario_id'])){
-            Redirect::to('/web2-unlam-tp-final/login');
-        }
-    }
 }
