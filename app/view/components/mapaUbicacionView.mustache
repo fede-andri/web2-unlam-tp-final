@@ -1,0 +1,24 @@
+<div class="mb-3">
+
+    <label class="form-label">
+        Seleccioná tu ubicación
+    </label>
+
+    <div
+            id="map"
+            style="
+                height: 350px;
+                border-radius: 12px;
+                overflow: hidden;
+                border: 1px solid #dee2e6;">
+    </div>
+
+    <div class="form-text">
+        {{mensaje_mapa}}
+    </div>
+
+    {{#modo_edicion}}
+        <input type="hidden" id="latitud" name="latitud">
+        <input type="hidden" id="longitud" name="longitud">
+    {{/modo_edicion}}
+</div>

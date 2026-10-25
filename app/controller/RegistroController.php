@@ -16,7 +16,18 @@ class RegistroController
     }
 
     public function show(){
-        $this->render->renderiza('registro', $this->mapConfig);
+        $data = [
+
+            "tile_layer" => $this->mapConfig["tile_layer"],
+            "reverse_geocode" => $this->mapConfig["reverse_geocode"],
+            "default_lat" => $this->mapConfig["default_lat"],
+            "default_lng" => $this->mapConfig["default_lng"],
+            "default_zoom" => $this->mapConfig["default_zoom"],
+
+            "modo_edicion" => true,
+            "mensaje_mapa" => "Seleccioná tu ubicación en el mapa."
+        ];
+        $this->render->renderiza('registro', $data);
     }
 
     public function registrar()

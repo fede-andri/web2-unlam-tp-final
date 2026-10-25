@@ -141,17 +141,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">
-                                Seleccioná tu ubicación
-                            </label>
-                            <div
-                                    id="map"
-                                    style="
-                                    height: 350px;
-                                    border-radius: 12px;
-                                    overflow: hidden;
-                                    border: 1px solid #dee2e6;">
-                            </div>
+                            {{> components/mapaUbicacionView}}
                         </div>
 
                         <div class="col-md-4 mb-3">
@@ -199,21 +189,19 @@
 </main>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-    const map = L.map('map').setView(
-            [
-                {{default_lat}},
-                {{default_lng}}
-            ],
-        {{default_zoom}}
-    );
+    const MAP_CONFIG = {
 
-    L.tileLayer(
-            '{{tile_layer}}',
-            {
-                attribution: '&copy; OpenStreetMap'
-            }
-    ).addTo(map);
+        defaultLat: {{default_lat}},
+        defaultLng: {{default_lng}},
+        defaultZoom: {{default_zoom}},
 
+        tileLayer: "{{tile_layer}}",
+        reverseGeocode: "{{reverse_geocode}}",
+
+        modoEdicion: "{{modo_edicion}}"
+
+    };
 </script>
+<script src="/web2-unlam-tp-final/public/js/mapaUbicacion.js"></script>
 </body>
 </html>
