@@ -24,9 +24,11 @@ require_once("helper/Autoloader.php");
 
 class Configuration
 {
+    private $config;
 
     public function __construct()
     {
+        $this->config = parse_ini_file("config/config.ini", true);
     }
 
     public function getLoginController()
@@ -71,12 +73,11 @@ class Configuration
 
     private function getDatabase()
     {
-        $config = parse_ini_file("config/config.ini");
-
-        return new MyDatabase($config["db_host"],
-            $config["db_user"],
-            $config["db_pass"],
-            $config["db_name"]
+        return new MyDatabase(
+            $this->config["BD"]["db_host"],
+            $this->config["BD"]["db_user"],
+            $this->config["BD"]["db_pass"],
+            $this->config["BD"]["db_name"]
         );
     }
 
