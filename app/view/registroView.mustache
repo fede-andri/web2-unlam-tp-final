@@ -4,116 +4,371 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#091411">
+
     <title>Registro | Preguntones</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <link href="/web2-unlam-tp-final/estilos/aplicacion.css" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+          crossorigin="anonymous">
+
+    <link href="/web2-unlam-tp-final/estilos/aplicacion.css"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 </head>
+
 <body class="register-page">
-    <header class="site-header">
-        <div class="header-inner">
-            <a href="/web2-unlam-tp-final/" class="brand">
-                <span class="brand-mark" aria-hidden="true">ᚨ</span>
-                <span>Preguntones</span>
+
+<header class="site-header">
+
+    <div class="header-inner">
+
+        <a href="/web2-unlam-tp-final/" class="brand">
+            <span class="brand-mark" aria-hidden="true">ᚨ</span>
+            <span>Preguntones</span>
+        </a>
+
+        <nav aria-label="Navegación principal">
+
+            <a href="/web2-unlam-tp-final/" class="header-link">
+                Inicio
             </a>
-            <nav aria-label="Navegación principal">
-                <a href="/web2-unlam-tp-final/" class="header-link">Inicio</a>
-                <a href="/web2-unlam-tp-final/login/show" class="header-link">Iniciar sesión</a>
-            </nav>
-        </div>
-    </header>
 
-    <main class="auth-wrap">
-        <div class="auth-card">
-            <section class="auth-aside">
-                <div>
-                    <div class="aside-mark" aria-hidden="true">✦</div>
-                    <p class="eyebrow mb-0">Preguntones</p>
-                    <h1 class="aside-title">Tu aventura empieza con una pregunta.</h1>
-                    <p class="aside-copy mb-0">Creá tu cuenta para responder desafíos, sumar puntos y competir por un lugar en el ranking.</p>
+            <a href="/web2-unlam-tp-final/login/show" class="header-link">
+                Iniciar sesión
+            </a>
+
+        </nav>
+
+    </div>
+
+</header>
+
+<main class="auth-wrap">
+
+    <div class="auth-card">
+
+        <section class="auth-aside">
+
+            <div>
+
+                <div class="aside-mark" aria-hidden="true">
+                    ✦
                 </div>
-                <p class="aside-footnote">Aprendé, competí y convertite en el mejor.</p>
-            </section>
 
-            <section class="auth-content">
+                <p class="eyebrow mb-0">
+                    Preguntones
+                </p>
+
+                <h1 class="aside-title">
+                    Tu aventura empieza con una pregunta.
+                </h1>
+
+                <p class="aside-copy mb-0">
+                    Creá tu cuenta para responder desafíos, sumar puntos y competir por un lugar en el ranking.
+                </p>
+
+            </div>
+
+            <p class="aside-footnote">
+                Aprendé, competí y convertite en el mejor.
+            </p>
+
+        </section>
+
+        <section class="auth-content">
+
+            <div class="form-shell">
+
                 <div class="mb-4">
-                    <p class="eyebrow mb-0">Nuevo usuario</p>
-                    <h2 class="form-title">Crear cuenta</h2>
-                    <p class="form-intro">Completá tus datos para sumarte a la comunidad.</p>
 
-                    {{#error}}
-                        <div class="alert alert-danger mb-4" role="alert">
-                            {{error}}
-                        </div>
-                    {{/error}}
+                    <p class="eyebrow mb-0">
+                        Nuevo usuario
+                    </p>
+
+                    <h2 class="form-title">
+                        Crear cuenta
+                    </h2>
+
+                    <p class="form-intro">
+                        Completá tus datos para sumarte a la comunidad.
+                    </p>
+
                 </div>
 
-                <form method="POST" action="/web2-unlam-tp-final/registro/registrar" enctype="multipart/form-data">
+                {{#error}}
+                    <div class="alert alert-danger mb-4" role="alert">
+                        {{error}}
+                    </div>
+                {{/error}}
+
+                {{#success}}
+                    <div class="alert alert-success mb-4" role="alert">
+                        {{success}}
+                    </div>
+                {{/success}}
+
+                <form
+                        method="POST"
+                        action="/web2-unlam-tp-final/registro/registrar"
+                        enctype="multipart/form-data">
+
                     <div class="row">
+
                         <div class="col-md-6 mb-3">
-                            <label for="nombre" class="form-label">Nombre completo</label>
-                            <input type="text" class="form-control" id="nombre" name="nombre" autocomplete="name" required>
+
+                            <label for="nombre" class="form-label">
+                                Nombre completo
+                            </label>
+
+                            <input
+                                    type="text"
+                                    class="form-control"
+                                    id="nombre"
+                                    name="nombre"
+                                    autocomplete="name"
+                                    required>
+
                         </div>
+
                         <div class="col-md-6 mb-3">
-                            <label for="usuario" class="form-label">Usuario</label>
-                            <input type="text" class="form-control" id="usuario" name="usuario" autocomplete="username" required>
+
+                            <label for="usuario" class="form-label">
+                                Usuario
+                            </label>
+
+                            <input
+                                    type="text"
+                                    class="form-control"
+                                    id="usuario"
+                                    name="usuario"
+                                    autocomplete="username"
+                                    required>
+
                         </div>
+
                     </div>
 
                     <div class="row">
+
                         <div class="col-md-6 mb-3">
-                            <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" name="email" autocomplete="email" required>
+
+                            <label for="email" class="form-label">
+                                Email
+                            </label>
+
+                            <input
+                                    type="email"
+                                    class="form-control"
+                                    id="email"
+                                    name="email"
+                                    autocomplete="email"
+                                    required>
+
                         </div>
+
                         <div class="col-md-6 mb-3">
-                            <label for="fecha_nacimiento" class="form-label">Fecha de nacimiento</label>
-                            <input type="date" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento" required>
+
+                            <label for="fecha_nacimiento" class="form-label">
+                                Fecha de nacimiento
+                            </label>
+
+                            <input
+                                    type="date"
+                                    class="form-control"
+                                    id="fecha_nacimiento"
+                                    name="fecha_nacimiento"
+                                    required>
+
                         </div>
+
                     </div>
 
                     <div class="row">
+
                         <div class="col-md-4 mb-3">
-                            <label for="sexo" class="form-label">Sexo</label>
-                            <select class="form-select" id="sexo" name="sexo" required>
-                                <option value="">Seleccionar</option>
-                                <option value="MASCULINO">Masculino</option>
-                                <option value="FEMENINO">Femenino</option>
-                                <option value="OTRO">Otro</option>
-                                <option value="PREFIERO_NO_DECIR">Prefiero no decir</option>
+
+                            <label for="sexo" class="form-label">
+                                Sexo
+                            </label>
+
+                            <select
+                                    class="form-select"
+                                    id="sexo"
+                                    name="sexo"
+                                    required>
+
+                                <option value="">
+                                    Seleccionar
+                                </option>
+
+                                <option value="MASCULINO">
+                                    Masculino
+                                </option>
+
+                                <option value="FEMENINO">
+                                    Femenino
+                                </option>
+
+                                <option value="OTRO">
+                                    Otro
+                                </option>
+
+                                <option value="PREFIERO_NO_DECIR">
+                                    Prefiero no decir
+                                </option>
+
                             </select>
+
                         </div>
+
                         <div class="col-md-4 mb-3">
-                            <label for="pais" class="form-label">País</label>
-                            <input type="text" class="form-control" id="pais" name="pais" autocomplete="country-name" required>
+
+                            <label for="pais" class="form-label">
+                                País
+                            </label>
+
+                            <input
+                                    type="text"
+                                    class="form-control"
+                                    id="pais"
+                                    name="pais"
+                                    required
+                                    readonly>
+
                         </div>
+
                         <div class="col-md-4 mb-3">
-                            <label for="ciudad" class="form-label">Ciudad</label>
-                            <input type="text" class="form-control" id="ciudad" name="ciudad" autocomplete="address-level2" required>
+
+                            <label for="ciudad" class="form-label">
+                                Ciudad
+                            </label>
+
+                            <input
+                                    type="text"
+                                    class="form-control"
+                                    id="ciudad"
+                                    name="ciudad"
+                                    required
+                                    readonly>
+
                         </div>
+
+                    </div>
+
+                    <div class="mb-4">
+                        {{> components/mapaUbicacionView}}
                     </div>
 
                     <div class="mb-3">
-                        <label for="foto" class="form-label">Foto de perfil</label>
-                        <input type="file" class="form-control" id="foto" name="foto" accept="image/*">
+
+                        <label for="foto" class="form-label">
+                            Foto de perfil
+                        </label>
+
+                        <input
+                                type="file"
+                                class="form-control"
+                                id="foto"
+                                name="foto"
+                                accept="image/*">
+
                     </div>
 
                     <div class="row">
+
                         <div class="col-md-6 mb-3">
-                            <label for="password" class="form-label">Contraseña</label>
-                            <input type="password" class="form-control" id="password" name="password" autocomplete="new-password" required>
+
+                            <label for="password" class="form-label">
+                                Contraseña
+                            </label>
+
+                            <input
+                                    type="password"
+                                    class="form-control"
+                                    id="password"
+                                    name="password"
+                                    autocomplete="new-password"
+                                    required>
+
                         </div>
+
                         <div class="col-md-6 mb-3">
-                            <label for="confirm_password" class="form-label">Confirmar contraseña</label>
-                            <input type="password" class="form-control" id="confirm_password" name="confirm_password" autocomplete="new-password" required>
+
+                            <label for="confirm_password" class="form-label">
+                                Confirmar contraseña
+                            </label>
+
+                            <input
+                                    type="password"
+                                    class="form-control"
+                                    id="confirm_password"
+                                    name="confirm_password"
+                                    autocomplete="new-password"
+                                    required>
+
                         </div>
+
                     </div>
 
-                    <button type="submit" class="btn btn-accent btn-lg w-100">Crear cuenta</button>
+                    <button
+                            type="submit"
+                            class="btn btn-accent btn-lg w-100">
+
+                        Crear cuenta
+
+                    </button>
+
                 </form>
 
-                <div class="form-divider">o</div>
-                <a href="/web2-unlam-tp-final/login/show" class="btn btn-outline-accent btn-lg w-100">Ya tengo una cuenta</a>
-            </section>
-        </div>
-    </main>
+                <div class="form-divider">
+                    o
+                </div>
+
+                <a href="/web2-unlam-tp-final/login/show"
+                   class="btn btn-outline-accent btn-lg w-100">
+
+                    Ya tengo una cuenta
+
+                </a>
+
+                <p class="form-footer">
+                    Sistema de Preguntas y Respuestas
+                </p>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</main>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+
+    const MAP_CONFIG = {
+
+        defaultLat: {{default_lat}},
+        defaultLng: {{default_lng}},
+        defaultZoom: {{default_zoom}},
+
+        tileLayer: "{{tile_layer}}",
+
+        reverseGeocode: "{{reverse_geocode}}",
+
+    modoEdicion:
+        {{#modo_edicion}}true{{/modo_edicion}}
+        {{^modo_edicion}}false{{/modo_edicion}}
+
+    };
+
+</script>
+
+<script src="/web2-unlam-tp-final/public/js/mapaUbicacion.js"></script>
+
 </body>
 </html>

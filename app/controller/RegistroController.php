@@ -7,13 +7,27 @@ class RegistroController
     private $render;
     private $usuarioModel;
 
-    public function __construct($render, $usuarioModel){
+    private $mapConfig;
+
+    public function __construct($render, $usuarioModel, $mapConfig){
         $this->render = $render;
         $this->usuarioModel = $usuarioModel;
+        $this->mapConfig = $mapConfig;
     }
 
     public function show(){
-        $this->render->renderiza('registro');
+        $data = [
+
+            "tile_layer" => $this->mapConfig["tile_layer"],
+            "reverse_geocode" => $this->mapConfig["reverse_geocode"],
+            "default_lat" => $this->mapConfig["default_lat"],
+            "default_lng" => $this->mapConfig["default_lng"],
+            "default_zoom" => $this->mapConfig["default_zoom"],
+
+            "modo_edicion" => true,
+            "mensaje_mapa" => "Seleccioná tu ubicación en el mapa."
+        ];
+        $this->render->renderiza('registro', $data);
     }
 
     public function registrar()
@@ -25,7 +39,8 @@ class RegistroController
         $sexo = $_POST['sexo'];
         $pais = $_POST['pais'];
         $ciudad = $_POST['ciudad'];
-
+        $latitud = $_POST['latitud'];
+        $longitud = $_POST['longitud'];
         $password = $_POST['password'];
         $confirmPassword = $_POST['confirm_password'];
 
@@ -72,6 +87,8 @@ class RegistroController
             $sexo,
             $pais,
             $ciudad,
+            $latitud,
+            $longitud,
             $foto
         );
 

@@ -1,21 +1,28 @@
 CREATE DATABASE preguntones_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE preguntones_db;
 
-CREATE TABLE usuarios(
-                         id INT AUTO_INCREMENT PRIMARY KEY,
-                         nombre VARCHAR(100) NOT NULL,
-                         usuario VARCHAR(150) NOT NULL UNIQUE,
-                         email VARCHAR(150) NOT NULL UNIQUE,
-                         password VARCHAR(255) NOT NULL,
-                         fecha_nacimiento DATE NOT NULL,
-                         sexo VARCHAR(30) NOT NULL,
-                         pais VARCHAR(100) NOT NULL,
-                         ciudad VARCHAR(100) NOT NULL,
-                         foto VARCHAR(255) DEFAULT 'default.png',
-                         rol VARCHAR(20) NOT NULL DEFAULT 'JUGADOR',
-                         validado BOOLEAN NOT NULL DEFAULT FALSE,
-                         fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+-- preguntones_db.usuarios definition
+
+CREATE TABLE `usuarios` (
+                            `id` int NOT NULL AUTO_INCREMENT,
+                            `nombre` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+                            `usuario` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL,
+                            `email` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL,
+                            `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+                            `fecha_nacimiento` date NOT NULL,
+                            `sexo` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+                            `pais` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+                            `ciudad` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+                            `foto` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT 'default.png',
+                            `rol` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'JUGADOR',
+                            `validado` tinyint(1) NOT NULL DEFAULT '0',
+                            `fecha_creacion` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+                            `latitud` decimal(10,8) DEFAULT NULL,
+                            `longitud` decimal(11,8) DEFAULT NULL,
+                            PRIMARY KEY (`id`),
+                            UNIQUE KEY `usuario` (`usuario`),
+                            UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Si la tabla usuarios ya la crearon correr el siguiente sql
 /*

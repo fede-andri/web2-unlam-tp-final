@@ -29,10 +29,11 @@ require_once("helper/Autoloader.php");
 
 class Configuration
 {
+    private $config;
 
     public function __construct()
     {
-        $this->inicializarRedirect();
+        $this->config = parse_ini_file("config/config.ini", true);
     }
 
     public function getLoginController()
@@ -45,7 +46,8 @@ class Configuration
     public function getRegistroController(){
         return new RegistroController(
             $this->getRender(),
-            $this->getUsuarioModel()
+            $this->getUsuarioModel(),
+            $this->getMapConfig()
       );
     }
 
@@ -96,13 +98,23 @@ class Configuration
     }
     private function getDatabase()
     {
-        $config = parse_ini_file("config/config.ini");
-
-        return new MyDatabase($config["db_host"],
-            $config["db_user"],
-            $config["db_pass"],
-            $config["db_name"]
+        return new MyDatabase(
+            $this->config["BD"]["db_host"],
+            $this->config["BD"]["db_user"],
+            $this->config["BD"]["db_pass"],
+            $this->config["BD"]["db_name"]
         );
+    }
+
+    public function getMapConfig()
+    {
+        return [
+            "tile_layer" => $this->config["map"]["tile_layer"],
+            "reverse_geocode" => $this->config["map"]["reverse_geocode"],
+            "default_lat" => $this->config["map"]["default_lat"],
+            "default_lng" => $this->config["map"]["default_lng"],
+            "default_zoom" => $this->config["map"]["default_zoom"]
+        ];
     }
 
     private function inicializarRedirect(){
