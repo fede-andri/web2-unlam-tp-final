@@ -66,7 +66,8 @@ class Configuration
     public function getRankingController(){
         return new RankingController(
             $this->getRender(),
-            $this->getRankingModel()
+            $this->getRankingModel(),
+            $this->getAppConfig()
         );
     }
     public function getPartidaController(){
@@ -109,7 +110,9 @@ class Configuration
             "logout_url" => $this->config["app"]["logout_url"],
             "registro_url" => $this->config["app"]["registro_url"],
             "registrar_url" => $this->config["app"]["registrar_url"],
-            "validacion_url" => $this->config["app"]["validacion_url"]
+            "validacion_url" => $this->config["app"]["validacion_url"],
+            "home_url" => $this->config["app"]["home_url"],
+            "ranking_show_url"=>$this->config["app"]["ranking_show_url"],
         ];
     }
 

@@ -33,6 +33,7 @@ class LoginController
             'registro_exitoso' => $registroExitoso,
             'registro_url' => $this->appConfig["base_path_url"] .$this->appConfig["registro_url"],
             'login_url' => $this->appConfig["base_path_url"] . $this->appConfig["login_url"],
+            'usuario_no_validado'=>isset($_GET['usuario_no_validado']),
         ]);
     }
     public function login()
@@ -41,20 +42,25 @@ class LoginController
         $password = Request::post('password') ?? '';
 
         $datosUsuario = $this->model->autenticar($usuario, $password);
-
         if ($datosUsuario === null) {
-            Redirect::to('/login?login_error=1');
+            Redirect::to('/show?login_error=1');
+        }
+
+        if (!$datosUsuario['validado']) {
+            Redirect::to('/show?usuario_no_validado=1');
         }
 //        session_regenerate_id(true);
         $_SESSION['usuario_id'] = $datosUsuario['id'];
         $_SESSION['usuario'] = $datosUsuario['usuario'];
-        Redirect::toIndex();
+        header('Location:' . $this->appConfig['base_path_url'] .$this->appConfig['home_url']);
+        exit();
     }
 
     public function logout()
     {
         $_SESSION = [];
         session_destroy();
-        Redirect::toIndex();
+        header('Location:' . $this->appConfig['base_path_url'] .$this->appConfig['login_show_url']);
+        exit();
     }
 }

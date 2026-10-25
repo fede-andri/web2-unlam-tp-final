@@ -16,7 +16,8 @@ class PartidaController{
 
     public function getPartidas(){
         if(!isset($_SESSION['usuario_id'])){
-            Redirect::to('/login');
+            header('Location: /web2-unlam-tp-final/login/show');
+            exit();
         }
 
         $partidas = $this->model->getPartidasDeUsuario((int)$_SESSION['usuario_id']);

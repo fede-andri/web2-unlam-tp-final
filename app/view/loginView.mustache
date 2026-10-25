@@ -49,6 +49,13 @@
                         </div>
                     {{/login_error}}
 
+                    {{#usuario_no_validado}}
+                        <div class="alert alert-warning d-flex align-items-start gap-2" role="alert">
+                            <span class="fw-bold" aria-hidden="true">!</span>
+                            <span> Debés validar tu cuenta desde el correo electrónico antes de iniciar sesión.</span>
+                        </div>
+                    {{/usuario_no_validado}}
+
                     {{#registro_exitoso}}
                         <div class="alert alert-success" role="status">
                             Tu cuenta fue creada correctamente. Ya podés iniciar sesión.

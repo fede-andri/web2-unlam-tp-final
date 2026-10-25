@@ -17,7 +17,8 @@ class HomeController
 
     public function show(){
         if (!isset($_SESSION['usuario_id'])) {
-            Redirect::to('/login');
+            header('Location:' . $this->appConfig['base_path_url'] .$this->appConfig['login_show_url']);
+            exit();
         }
         $datosEquipo = $this->equipoModel->obtenerDatosEquipo();
         $data = [
@@ -27,6 +28,8 @@ class HomeController
             'anio' => $datosEquipo['anio'],
             'integrantes' => $datosEquipo['integrantes'],
             'logout_url' => $this->appConfig['base_path_url'] . $this->appConfig['logout_url'],
+            'ranking_show_url' => $this->appConfig['base_path_url'] . $this->appConfig['ranking_show_url'],
+
         ];
         $this->render->renderiza('presentacion', $data);
     }

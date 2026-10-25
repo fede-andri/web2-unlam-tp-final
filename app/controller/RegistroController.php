@@ -43,6 +43,10 @@ class RegistroController
 
     public function registrar()
     {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location:' . $this->appConfig['base_path_url'] .$this->appConfig['registro_url']);
+            exit();
+        }
         $nombre = $_POST['nombre'];
         $usuario = $_POST['usuario'];
         $email = $_POST['email'];

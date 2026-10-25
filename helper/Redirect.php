@@ -25,6 +25,6 @@ class Redirect
 
     public static function toIndex()
     {
-        self::to('/');
+        self::to('/web2-unlam-tp-final');
     }
 }

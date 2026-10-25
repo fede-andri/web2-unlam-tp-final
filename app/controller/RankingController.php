@@ -8,15 +8,18 @@ class RankingController{
 
     private $model;
     private $render;
+    private $appConfig;
 
-    public function __construct($render, $model){
+    public function __construct($render, $model, $appConfig){
         $this->render = $render;
         $this->model = $model;
+        $this->appConfig = $appConfig;
     }
 
     public function show(){
         if(!isset($_SESSION['usuario_id'])){
-            Redirect::to('/login');
+            header('Location:' . $this->appConfig['base_path_url'] .$this->appConfig['login_show_url']);
+            exit();
         }
         $ranking = $this->model->getRanking();
 
