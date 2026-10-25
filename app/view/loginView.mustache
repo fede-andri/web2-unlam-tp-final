@@ -55,7 +55,7 @@
                         </div>
                     {{/registro_exitoso}}
 
-                    <form method="POST" action="/web2-unlam-tp-final/login/login">
+                    <form method="POST" action="{{login_url}}">
                         <div class="mb-3">
                             <label for="usuario" class="form-label">Usuario</label>
                             <input
@@ -85,7 +85,7 @@
 
                         <button type="submit" class="btn btn-accent btn-lg w-100">Ingresar</button>
                         <div class="form-divider">o</div>
-                        <a href="/web2-unlam-tp-final/registro/show" class="btn btn-outline-accent btn-lg w-100">Registrarse</a>
+                        <a href="{{registro_url}}" class="btn btn-outline-accent btn-lg w-100">Registrarse</a>
                     </form>
 
                     <p class="form-footer">Sistema de Preguntas y Respuestas</p>

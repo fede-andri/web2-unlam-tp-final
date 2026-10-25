@@ -19,6 +19,7 @@ CREATE TABLE `usuarios` (
                             `fecha_creacion` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
                             `latitud` decimal(10,8) DEFAULT NULL,
                             `longitud` decimal(11,8) DEFAULT NULL,
+                            `token_validacion` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
                             PRIMARY KEY (`id`),
                             UNIQUE KEY `usuario` (`usuario`),
                             UNIQUE KEY `email` (`email`)
@@ -45,4 +46,14 @@ CREATE TABLE partidas (
                           FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
 );
 
+/*
+ALTER TABLE usuarios
+ADD latitud DECIMAL(10,8) NULL,
+ADD longitud DECIMAL(11,8) NULL;
+ */
+
+/*
+ ALTER TABLE usuarios
+ADD token_validacion VARCHAR(255) NULL;
+ */
 INSERT INTO partidas (usuario_id, puntaje) VALUES (1, 5),(1,9), (2, 8), (3, 3);

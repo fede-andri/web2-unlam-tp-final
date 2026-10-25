@@ -18,6 +18,7 @@ use app\model\PartidaModel;
 use app\model\RankingModel;
 use app\model\ReservaModel;
 use app\model\UsuarioModel;
+use app\service\MailService;
 use MustacheRender;
 use MyDatabase;
 use Redirect;
@@ -40,21 +41,25 @@ class Configuration
     {
         return new LoginController(
           $this->getLoginModel(),
-          $this->getRender()
+          $this->getRender(),
+          $this->getAppConfig()
       );
     }
     public function getRegistroController(){
         return new RegistroController(
             $this->getRender(),
             $this->getUsuarioModel(),
-            $this->getMapConfig()
+            $this->getMapConfig(),
+            $this->getAppConfig(),
+            $this->getMailService()
       );
     }
 
     public function getHomeController(){
         return new HomeController(
             $this->getRender(),
-            $this->getEquipoModel()
+            $this->getEquipoModel(),
+            $this->getAppConfig()
         );
     }
 
@@ -87,6 +92,27 @@ class Configuration
         return new EquipoModel();
     }
 
+    public function getMailService()
+    {
+        return new MailService(
+            $this->getMailConfig()
+        );
+    }
+
+    public function getAppConfig()
+    {
+        return [
+            "base_url" => $this->config["app"]["base_url"],
+            "base_path_url" => $this->config["app"]["base_path_url"],
+            "login_show_url" => $this->config["app"]["login_show_url"],
+            "login_url" => $this->config["app"]["login_url"],
+            "logout_url" => $this->config["app"]["logout_url"],
+            "registro_url" => $this->config["app"]["registro_url"],
+            "registrar_url" => $this->config["app"]["registrar_url"],
+            "validacion_url" => $this->config["app"]["validacion_url"]
+        ];
+    }
+
     private function getRankingModel(){
         return new RankingModel(
             $this->getDatabase()
@@ -117,11 +143,19 @@ class Configuration
         ];
     }
 
-    private function inicializarRedirect(){
-        $config = parse_ini_file("config/config.ini");
-
-        Redirect::setBaseDir($config["base_dir"] ?? '/');
+    public function getMailConfig()
+    {
+        return [
+            "host" => $this->config["mail"]["host"],
+            "port" => $this->config["mail"]["port"],
+            "username" => $this->config["mail"]["username"],
+            "password" => $this->config["mail"]["password"],
+            "from_email" => $this->config["mail"]["from_email"],
+            "from_name" => $this->config["mail"]["from_name"]
+        ];
     }
+
+
     private function getRender()
     {
         return new MustacheRender();

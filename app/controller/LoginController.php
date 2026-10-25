@@ -9,11 +9,12 @@ class LoginController
 {
     private $model;
     private $render;
-
-    public function __construct($model, $render)
+    private $appConfig;
+    public function __construct($model, $render, $appConfig)
     {
         $this->model = $model;
         $this->render = $render;
+        $this->appConfig = $appConfig;
     }
 
     public function show()
@@ -30,6 +31,8 @@ class LoginController
         $this->render->renderiza('login', [
             'login_error' => isset($_GET['login_error']),
             'registro_exitoso' => $registroExitoso,
+            'registro_url' => $this->appConfig["base_path_url"] .$this->appConfig["registro_url"],
+            'login_url' => $this->appConfig["base_path_url"] . $this->appConfig["login_url"],
         ]);
     }
     public function login()
