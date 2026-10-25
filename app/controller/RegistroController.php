@@ -76,7 +76,7 @@ class RegistroController
         );
 
         // Redirige al login
-        header("Location: /web2-unlam-tp-final/login/show?registro=ok");
+        header("Location: /login/show?registro=ok");
         exit();
     }
 }

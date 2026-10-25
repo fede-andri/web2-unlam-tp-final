@@ -3,97 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#f4f7fb">
-
+    <meta name="theme-color" content="#091411">
     <title>Registro | Preguntones</title>
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <style>
-        body {
-            min-height: 100vh;
-            background:
-                    radial-gradient(circle at 12% 15%, rgba(13, 110, 253, .09), transparent 28rem),
-                    #f4f7fb;
-        }
-
-        .register-card {
-            max-width: 1100px;
-            overflow: hidden;
-            border: 0;
-            border-radius: 1.25rem;
-            box-shadow: 0 1.5rem 4rem rgba(25, 42, 70, .12);
-        }
-
-        .register-aside {
-            background: linear-gradient(145deg, #123d76, #0d6efd);
-        }
-
-        .brand-mark {
-            display: grid;
-            width: 3rem;
-            height: 3rem;
-            place-items: center;
-            border: 1px solid rgba(255,255,255,.3);
-            border-radius: .9rem;
-            background: rgba(255,255,255,.14);
-            font-size: 1.35rem;
-            font-weight: 700;
-        }
-
-        .form-control,
-        .form-select {
-            min-height: 3rem;
-        }
-
-        .form-control:focus,
-        .form-select:focus {
-            border-color: #86b7fe;
-            box-shadow: 0 0 0 .2rem rgba(13, 110, 253, .15);
-        }
-    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link href="/web2-unlam-tp-final/estilos/aplicacion.css" rel="stylesheet">
 </head>
+<body class="register-page">
+    <header class="site-header">
+        <div class="header-inner">
+            <a href="/web2-unlam-tp-final/" class="brand">
+                <span class="brand-mark" aria-hidden="true">ᚨ</span>
+                <span>Preguntones</span>
+            </a>
+            <nav aria-label="Navegación principal">
+                <a href="/web2-unlam-tp-final/" class="header-link">Inicio</a>
+                <a href="/web2-unlam-tp-final/login/show" class="header-link">Iniciar sesión</a>
+            </nav>
+        </div>
+    </header>
 
-<body>
-
-<main class="container min-vh-100 d-flex align-items-center justify-content-center py-5">
-
-    <div class="card register-card w-100">
-
-        <div class="row g-0">
-
-            <section class="col-lg-4 register-aside text-white p-4 p-md-5 d-flex flex-column justify-content-between">
+    <main class="auth-wrap">
+        <div class="auth-card">
+            <section class="auth-aside">
                 <div>
-                    <div class="brand-mark mb-4">
-                        ?
-                    </div>
-
-                    <p class="text-white-50 text-uppercase small fw-semibold">
-                        Preguntones
-                    </p>
-
-                    <h1 class="display-6 fw-bold mb-3">
-                        Sumate a la comunidad.
-                    </h1>
-
-                    <p class="text-white-50 mb-0">
-                        Creá tu cuenta para participar en rankings, responder preguntas y desafiar a otros jugadores.
-                    </p>
+                    <div class="aside-mark" aria-hidden="true">✦</div>
+                    <p class="eyebrow mb-0">Preguntones</p>
+                    <h1 class="aside-title">Tu aventura empieza con una pregunta.</h1>
+                    <p class="aside-copy mb-0">Creá tu cuenta para responder desafíos, sumar puntos y competir por un lugar en el ranking.</p>
                 </div>
-
-                <p class="small text-white-50 mt-5 mb-0">
-                    Aprendé, competí y convertite en el mejor.
-                </p>
+                <p class="aside-footnote">Aprendé, competí y convertite en el mejor.</p>
             </section>
 
-            <section class="col-lg-8 p-4 p-md-5">
-
+            <section class="auth-content">
                 <div class="mb-4">
-                    <p class="text-primary fw-semibold small text-uppercase mb-2">Nuevo usuario</p>
-
-                    <h2 class="h3 fw-bold mb-2">Crear cuenta</h2>
-
-                    <p class="text-secondary mb-0">Completá tus datos para registrarte.</p>
+                    <p class="eyebrow mb-0">Nuevo usuario</p>
+                    <h2 class="form-title">Crear cuenta</h2>
+                    <p class="form-intro">Completá tus datos para sumarte a la comunidad.</p>
 
                     {{#error}}
                         <div class="alert alert-danger mb-4" role="alert">
@@ -103,35 +48,32 @@
                 </div>
 
                 <form method="POST" action="/web2-unlam-tp-final/registro/registrar" enctype="multipart/form-data">
-
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Nombre completo</label>
-                            <input type="text" class="form-control" name="nombre" required>
+                            <label for="nombre" class="form-label">Nombre completo</label>
+                            <input type="text" class="form-control" id="nombre" name="nombre" autocomplete="name" required>
                         </div>
-
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Usuario</label>
-                            <input type="text" class="form-control" name="usuario" required>
+                            <label for="usuario" class="form-label">Usuario</label>
+                            <input type="text" class="form-control" id="usuario" name="usuario" autocomplete="username" required>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Email</label>
-                            <input type="email" class="form-control" name="email" required>
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" autocomplete="email" required>
                         </div>
-
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Fecha de nacimiento</label>
-                            <input type="date" class="form-control" name="fecha_nacimiento" required>
+                            <label for="fecha_nacimiento" class="form-label">Fecha de nacimiento</label>
+                            <input type="date" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento" required>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-md-4 mb-3">
-                            <label class="form-label">Sexo</label>
-                            <select class="form-select" name="sexo" required>
+                            <label for="sexo" class="form-label">Sexo</label>
+                            <select class="form-select" id="sexo" name="sexo" required>
                                 <option value="">Seleccionar</option>
                                 <option value="MASCULINO">Masculino</option>
                                 <option value="FEMENINO">Femenino</option>
@@ -139,49 +81,39 @@
                                 <option value="PREFIERO_NO_DECIR">Prefiero no decir</option>
                             </select>
                         </div>
-
                         <div class="col-md-4 mb-3">
-                            <label class="form-label">País</label>
-                            <input type="text" class="form-control" name="pais" required>
+                            <label for="pais" class="form-label">País</label>
+                            <input type="text" class="form-control" id="pais" name="pais" autocomplete="country-name" required>
                         </div>
-
                         <div class="col-md-4 mb-3">
-                            <label class="form-label">Ciudad</label>
-                            <input type="text" class="form-control" name="ciudad" required>
+                            <label for="ciudad" class="form-label">Ciudad</label>
+                            <input type="text" class="form-control" id="ciudad" name="ciudad" autocomplete="address-level2" required>
                         </div>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label">
-                            Foto de perfil
-                        </label>
-                        <input type="file" class="form-control" name="foto" accept="image/*">
+                        <label for="foto" class="form-label">Foto de perfil</label>
+                        <input type="file" class="form-control" id="foto" name="foto" accept="image/*">
                     </div>
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Contraseña</label>
-                            <input type="password" class="form-control" name="password" required>
+                            <label for="password" class="form-label">Contraseña</label>
+                            <input type="password" class="form-control" id="password" name="password" autocomplete="new-password" required>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Confirmar contraseña</label>
-                            <input type="password" class="form-control" name="confirm_password" required>
+                            <label for="confirm_password" class="form-label">Confirmar contraseña</label>
+                            <input type="password" class="form-control" id="confirm_password" name="confirm_password" autocomplete="new-password" required>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-lg w-100 fw-semibold">Crear cuenta</button>
 
+                    <button type="submit" class="btn btn-accent btn-lg w-100">Crear cuenta</button>
                 </form>
 
-                <div class="d-flex align-items-center my-4">
-                    <hr class="flex-grow-1">
-                    <span class="px-3 text-secondary small">o</span>
-                    <hr class="flex-grow-1">
-                </div>
-
-                <a href="/web2-unlam-tp-final/login/show" class="btn btn-outline-primary btn-lg w-100 fw-semibold">Ya tengo una cuenta</a>
+                <div class="form-divider">o</div>
+                <a href="/web2-unlam-tp-final/login/show" class="btn btn-outline-accent btn-lg w-100">Ya tengo una cuenta</a>
             </section>
         </div>
-    </div>
-</main>
+    </main>
 </body>
 </html>
