@@ -112,7 +112,7 @@
 
                 <form
                         method="POST"
-                        action="/web2-unlam-tp-final/registro/registrar"
+                        action="{{registrar_url}}"
                         enctype="multipart/form-data">
 
                     <div class="row">
@@ -274,7 +274,6 @@
                                 id="foto"
                                 name="foto"
                                 accept="image/*">
-
                     </div>
 
                     <div class="row">
@@ -316,9 +315,7 @@
                     <button
                             type="submit"
                             class="btn btn-accent btn-lg w-100">
-
                         Crear cuenta
-
                     </button>
 
                 </form>
@@ -327,17 +324,14 @@
                     o
                 </div>
 
-                <a href="/web2-unlam-tp-final/login/show"
+                <a href="{{login_show_url}}"
                    class="btn btn-outline-accent btn-lg w-100">
-
                     Ya tengo una cuenta
-
                 </a>
 
                 <p class="form-footer">
                     Sistema de Preguntas y Respuestas
                 </p>
-
             </div>
 
         </section>
@@ -368,7 +362,7 @@
 
 </script>
 
-<script src="/web2-unlam-tp-final/public/js/mapaUbicacion.js"></script>
+<script src="{{base_path_url}}/public/js/mapaUbicacion.js"></script>
 
 </body>
 </html>
