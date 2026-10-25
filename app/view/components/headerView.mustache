@@ -1,0 +1,47 @@
+<header class="site-header">
+
+    <div class="header-inner">
+
+        <a href="{{home_url}}" class="brand">
+
+            <span class="brand-mark" aria-hidden="true">
+                ᚨ
+            </span>
+
+            <span>
+                Preguntones
+            </span>
+
+        </a>
+
+        <nav aria-label="Navegación principal">
+
+            {{#mostrar_inicio}}
+                <a href="{{base_url}}/" class="header-link">
+                    Inicio
+                </a>
+            {{/mostrar_inicio}}
+
+            {{#mostrar_ranking}}
+                <a href="{{ranking_show_url}}" class="header-link">
+                    Ranking
+                </a>
+            {{/mostrar_ranking}}
+
+            {{#mostrar_login}}
+                <a href="{{base_url}}/login/show" class="header-link">
+                    Iniciar sesión
+                </a>
+            {{/mostrar_login}}
+
+            {{#mostrar_registro}}
+                <a href="{{base_url}}/registro/show" class="header-link">
+                    Crear cuenta
+                </a>
+            {{/mostrar_registro}}
+
+        </nav>
+
+    </div>
+
+</header>

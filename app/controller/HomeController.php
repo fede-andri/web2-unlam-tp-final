@@ -29,7 +29,7 @@ class HomeController
             'integrantes' => $datosEquipo['integrantes'],
             'logout_url' => $this->appConfig['base_path_url'] . $this->appConfig['logout_url'],
             'ranking_show_url' => $this->appConfig['base_path_url'] . $this->appConfig['ranking_show_url'],
-
+            'home_url' => $this->appConfig['base_path_url']
         ];
         $this->render->renderiza('presentacion', $data);
     }

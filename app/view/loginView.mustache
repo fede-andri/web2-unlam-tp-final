@@ -9,18 +9,7 @@
     <link href="/web2-unlam-tp-final/estilos/aplicacion.css" rel="stylesheet">
 </head>
 <body class="login-page">
-    <header class="site-header">
-        <div class="header-inner">
-            <a href="/web2-unlam-tp-final/" class="brand">
-                <span class="brand-mark" aria-hidden="true">ᚨ</span>
-                <span>Preguntones</span>
-            </a>
-            <nav aria-label="Navegación principal">
-                <a href="/web2-unlam-tp-final/" class="header-link">Inicio</a>
-                <a href="/web2-unlam-tp-final/registro/show" class="header-link">Crear cuenta</a>
-            </nav>
-        </div>
-    </header>
+    {{> components/headerView}}
 
     <main class="auth-wrap">
         <div class="auth-card">
@@ -100,5 +89,6 @@
             </section>
         </div>
     </main>
+    {{> components/footerView}}
 </body>
 </html>

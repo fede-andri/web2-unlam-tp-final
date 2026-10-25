@@ -32,6 +32,10 @@ class RankingController{
         $this->render->renderiza('ranking', [
             'ranking' => $ranking,
             'hay_jugadores' => count($ranking) > 0,
+            'base_url'=>$this->appConfig['base_path_url'],
+            'ranking_show_url' => $this->appConfig['base_path_url'] . $this->appConfig['ranking_show_url'],
+            'mostrar_inicio'=>true,
+            'mostrar_ranking'=>true,
         ]);
     }
 
