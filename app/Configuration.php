@@ -53,7 +53,8 @@ class Configuration
     public function getHomeController(){
         return new HomeController(
             $this->getRender(),
-            $this->getEquipoModel()
+            $this->getEquipoModel(),
+            $this->getAppConfig()
         );
     }
 
@@ -90,6 +91,7 @@ class Configuration
             "base_path_url" => $this->config["app"]["base_path_url"],
             "login_show_url" => $this->config["app"]["login_show_url"],
             "login_url" => $this->config["app"]["login_url"],
+            "logout_url" => $this->config["app"]["logout_url"],
             "registro_url" => $this->config["app"]["registro_url"],
             "registrar_url" => $this->config["app"]["registrar_url"],
             "validacion_url" => $this->config["app"]["validacion_url"]

@@ -35,6 +35,8 @@ class RegistroController
             "modo_edicion" => true,
             "mensaje_mapa" => "Seleccioná tu ubicación en el mapa.",
             "registrar_url" => $this->basePathUrl . $this->appConfig["registrar_url"],
+            "login_show_url" => $this->basePathUrl . $this->appConfig["login_show_url"],
+            "base_path_url" => $this->basePathUrl
         ];
         $this->render->renderiza('registro', $data);
     }
@@ -92,7 +94,6 @@ class RegistroController
             $this->baseUrl . $this->basePathUrl . $this->appConfig["validacion_url"] .
             "?token=" .
             $tokenValidacion;
-        var_dump($urlValidacion);
         // Crear usuario
         $this->usuarioModel->crearUsuario(
             $nombre,
