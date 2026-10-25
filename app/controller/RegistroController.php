@@ -7,12 +7,20 @@ class RegistroController
     private $render;
     private $usuarioModel;
 
+    private $mailService;
     private $mapConfig;
-
-    public function __construct($render, $usuarioModel, $mapConfig){
+    private $appConfig;
+    private $baseUrl;
+    private $basePathUrl;
+    public function __construct($render, $usuarioModel, $mapConfig, $appConfig, $mailService){
         $this->render = $render;
         $this->usuarioModel = $usuarioModel;
         $this->mapConfig = $mapConfig;
+        $this->appConfig = $appConfig;
+        $this->mailService = $mailService;
+        $this->baseUrl = $this->appConfig["base_url"];
+        $this->basePathUrl = $this->appConfig["base_path_url"];
+
     }
 
     public function show(){
@@ -25,7 +33,8 @@ class RegistroController
             "default_zoom" => $this->mapConfig["default_zoom"],
 
             "modo_edicion" => true,
-            "mensaje_mapa" => "Seleccioná tu ubicación en el mapa."
+            "mensaje_mapa" => "Seleccioná tu ubicación en el mapa.",
+            "registrar_url" => $this->basePathUrl . $this->appConfig["registrar_url"],
         ];
         $this->render->renderiza('registro', $data);
     }
@@ -77,6 +86,13 @@ class RegistroController
         // Foto por defecto
         $foto = "default.png";
 
+        $tokenValidacion = bin2hex(random_bytes(32));
+
+        $urlValidacion =
+            $this->baseUrl . $this->basePathUrl . $this->appConfig["validacion_url"] .
+            "?token=" .
+            $tokenValidacion;
+        var_dump($urlValidacion);
         // Crear usuario
         $this->usuarioModel->crearUsuario(
             $nombre,
@@ -89,11 +105,30 @@ class RegistroController
             $ciudad,
             $latitud,
             $longitud,
-            $foto
+            $foto,
+            $tokenValidacion
         );
 
         // Redirige al login
-        header("Location: /web2-unlam-tp-final/login/show?registro=ok");
+        header("Location: ". $this->basePathUrl . $this->appConfig['login_show_url'] ."?registro=ok");
+        exit();
+    }
+
+    public function validar(){
+        $token = $_GET['token'];
+        if (empty($token)) {
+            header("Location: ". $this->basePathUrl . $this->appConfig['login_show_url']);
+            exit();
+        }
+
+        $usuario = $this->usuarioModel->buscarPorToken($token);
+
+        if (!$usuario) {
+            header("Location: ". $this->basePathUrl . $this->appConfig['login_show_url'] ."validacion=error");
+            exit();
+        }
+        $this->usuarioModel->validarUsuario($token);
+        header("Location: ". $this->basePathUrl . $this->appConfig['login_show_url'] . "?validacion=ok");
         exit();
     }
 }

@@ -84,7 +84,7 @@
                             </div>
                         {{/registro_exitoso}}
 
-                        <form method="POST" action="/web2-unlam-tp-final/login/login">
+                        <form method="POST" action="{{login_url}}">
                             <div class="mb-3">
                                 <label for="usuario" class="form-label fw-medium">Usuario</label>
                                 <input
@@ -120,7 +120,7 @@
                                 <hr class="flex-grow-1">
                             </div>
 
-                            <a href="/web2-unlam-tp-final/registro/show" class="btn btn-outline-primary btn-lg w-100 fw-semibold">Registrarse</a>
+                            <a href="{{registro_url}}" class="btn btn-outline-primary btn-lg w-100 fw-semibold">Registrarse</a>
                         </form>
 
                         <p class="text-center text-secondary small mt-4 mb-0">

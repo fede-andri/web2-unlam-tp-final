@@ -14,6 +14,7 @@ use app\model\LoginModel;
 use app\model\LugaresModel;
 use app\model\ReservaModel;
 use app\model\UsuarioModel;
+use app\service\MailService;
 use MustacheRender;
 use MyDatabase;
 use Router;
@@ -35,14 +36,17 @@ class Configuration
     {
         return new LoginController(
           $this->getLoginModel(),
-          $this->getRender()
+          $this->getRender(),
+          $this->getAppConfig()
       );
     }
     public function getRegistroController(){
         return new RegistroController(
             $this->getRender(),
             $this->getUsuarioModel(),
-            $this->getMapConfig()
+            $this->getMapConfig(),
+            $this->getAppConfig(),
+            $this->getMailService()
       );
     }
 
@@ -72,6 +76,26 @@ class Configuration
         return new EquipoModel();
     }
 
+    public function getMailService()
+    {
+        return new MailService(
+            $this->getMailConfig()
+        );
+    }
+
+    public function getAppConfig()
+    {
+        return [
+            "base_url" => $this->config["app"]["base_url"],
+            "base_path_url" => $this->config["app"]["base_path_url"],
+            "login_show_url" => $this->config["app"]["login_show_url"],
+            "login_url" => $this->config["app"]["login_url"],
+            "registro_url" => $this->config["app"]["registro_url"],
+            "registrar_url" => $this->config["app"]["registrar_url"],
+            "validacion_url" => $this->config["app"]["validacion_url"]
+        ];
+    }
+
     private function getDatabase()
     {
         return new MyDatabase(
@@ -92,6 +116,19 @@ class Configuration
             "default_zoom" => $this->config["map"]["default_zoom"]
         ];
     }
+
+    public function getMailConfig()
+    {
+        return [
+            "host" => $this->config["mail"]["host"],
+            "port" => $this->config["mail"]["port"],
+            "username" => $this->config["mail"]["username"],
+            "password" => $this->config["mail"]["password"],
+            "from_email" => $this->config["mail"]["from_email"],
+            "from_name" => $this->config["mail"]["from_name"]
+        ];
+    }
+
 
     private function getRender()
     {

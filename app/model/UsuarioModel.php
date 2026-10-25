@@ -34,7 +34,8 @@ class UsuarioModel
         $ciudad,
         $latitud,
         $longitud,
-        $foto = "default.png"
+        $foto = "default.png",
+        $tokenValidacion
     ) {
 
         $sql = "
@@ -50,11 +51,12 @@ class UsuarioModel
                 ciudad,
                 latitud,
                 longitud,
-                foto
+                foto,
+                token_validacion
             )
             VALUES
             (
-                ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+                ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
             )
        ";
 
@@ -71,8 +73,39 @@ class UsuarioModel
                 $ciudad,
                 $latitud,
                 $longitud,
-                $foto
+                $foto,
+                $tokenValidacion
             ]
+        );
+    }
+
+    public function buscarPorToken($token)
+    {
+        $sql = "
+        SELECT *
+        FROM usuarios
+        WHERE token_validacion = ?
+    ";
+
+        return $this->database->queryOne(
+            $sql,
+            [$token]
+        );
+    }
+
+    public function validarUsuario($token)
+    {
+        $sql = "
+        UPDATE usuarios
+        SET
+            validado = 1,
+            token_validacion = NULL
+        WHERE token_validacion = ?
+    ";
+
+        return $this->database->execute(
+            $sql,
+            [$token]
         );
     }
 }
