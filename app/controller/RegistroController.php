@@ -7,13 +7,16 @@ class RegistroController
     private $render;
     private $usuarioModel;
 
-    public function __construct($render, $usuarioModel){
+    private $mapConfig;
+
+    public function __construct($render, $usuarioModel, $mapConfig){
         $this->render = $render;
         $this->usuarioModel = $usuarioModel;
+        $this->mapConfig = $mapConfig;
     }
 
     public function show(){
-        $this->render->renderiza('registro');
+        $this->render->renderiza('registro', $this->mapConfig);
     }
 
     public function registrar()

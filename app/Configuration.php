@@ -41,7 +41,8 @@ class Configuration
     public function getRegistroController(){
         return new RegistroController(
             $this->getRender(),
-            $this->getUsuarioModel()
+            $this->getUsuarioModel(),
+            $this->getMapConfig()
       );
     }
 
@@ -79,6 +80,17 @@ class Configuration
             $this->config["BD"]["db_pass"],
             $this->config["BD"]["db_name"]
         );
+    }
+
+    public function getMapConfig()
+    {
+        return [
+            "tile_layer" => $this->config["map"]["tile_layer"],
+            "reverse_geocode" => $this->config["map"]["reverse_geocode"],
+            "default_lat" => $this->config["map"]["default_lat"],
+            "default_lng" => $this->config["map"]["default_lng"],
+            "default_zoom" => $this->config["map"]["default_zoom"]
+        ];
     }
 
     private function getRender()
