@@ -8,7 +8,7 @@
     <title>Registro | Preguntones</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
     <style>
         body {
             min-height: 100vh;
@@ -140,14 +140,28 @@
                             </select>
                         </div>
 
+                        <div class="mb-3">
+                            <label class="form-label">
+                                Seleccioná tu ubicación
+                            </label>
+                            <div
+                                    id="map"
+                                    style="
+                                    height: 350px;
+                                    border-radius: 12px;
+                                    overflow: hidden;
+                                    border: 1px solid #dee2e6;">
+                            </div>
+                        </div>
+
                         <div class="col-md-4 mb-3">
                             <label class="form-label">País</label>
-                            <input type="text" class="form-control" name="pais" required>
+                            <input type="text" class="form-control" name="pais" required readonly>
                         </div>
 
                         <div class="col-md-4 mb-3">
                             <label class="form-label">Ciudad</label>
-                            <input type="text" class="form-control" name="ciudad" required>
+                            <input type="text" class="form-control" name="ciudad" required readonly>
                         </div>
                     </div>
 
@@ -183,5 +197,21 @@
         </div>
     </div>
 </main>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+
+    const map = L.map('map').setView(
+            [-34.675, -58.561],
+            13
+    );
+
+    L.tileLayer(
+            'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+            {
+                attribution: '&copy; OpenStreetMap'
+            }
+    ).addTo(map);
+
+</script>
 </body>
 </html>
