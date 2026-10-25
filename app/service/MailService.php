@@ -1,7 +1,9 @@
 <?php
 
 namespace app\service;
-
+require_once __DIR__ . '/../../vendor/PHPMailer/src/PHPMailer.php';
+require_once __DIR__ . '/../../vendor/PHPMailer/src/Exception.php';
+require_once __DIR__ . '/../../vendor/PHPMailer/src/SMTP.php';
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
@@ -14,7 +16,7 @@ class MailService
         $this->config = $config;
     }
 
-    public function enviarValidacion(
+    public function enviarValidacionMail(
         string $email,
         string $nombre,
         string $linkValidacion
@@ -50,22 +52,15 @@ class MailService
 
             $mail->isHTML(true);
 
-            $mail->Subject = 'Validación de cuenta';
+            $mail->Subject = 'Validación de cuenta - Preguntones';
 
-            $mail->Body = "
-                <h2>Bienvenido a Preguntones</h2>
-
-                <p>
-                    Para activar tu cuenta hacé click en el siguiente enlace:
-                </p>
-
-                <p>
-                    <a href='{$linkValidacion}'>
-                        Validar cuenta
-                    </a>
-                </p>
-            ";
-
+            $mail->Body = $this->cargarTemplate(
+                __DIR__ . '/../mail/validacionCuenta.html',
+                [
+                    'nombre' => $nombre,
+                    'link_validacion' => $linkValidacion
+                ]
+            );
             return $mail->send();
 
         } catch (Exception $e) {
@@ -75,5 +70,25 @@ class MailService
             return false;
 
         }
+    }
+
+    private function cargarTemplate(
+        string $archivo,
+        array $variables
+    ): string {
+
+        $html = file_get_contents($archivo);
+
+        foreach ($variables as $clave => $valor) {
+
+            $html = str_replace(
+                "{{{$clave}}}",
+                $valor,
+                $html
+            );
+
+        }
+
+        return $html;
     }
 }

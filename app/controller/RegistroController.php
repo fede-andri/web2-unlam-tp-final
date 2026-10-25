@@ -110,6 +110,7 @@ class RegistroController
             $tokenValidacion
         );
 
+        $mailEnviado = $this->mailService->enviarValidacionMail($email,$nombre,$urlValidacion);
         // Redirige al login
         header("Location: ". $this->basePathUrl . $this->appConfig['login_show_url'] ."?registro=ok");
         exit();
