@@ -39,7 +39,8 @@ class RegistroController
         $sexo = $_POST['sexo'];
         $pais = $_POST['pais'];
         $ciudad = $_POST['ciudad'];
-
+        $latitud = $_POST['latitud'];
+        $longitud = $_POST['longitud'];
         $password = $_POST['password'];
         $confirmPassword = $_POST['confirm_password'];
 
@@ -86,6 +87,8 @@ class RegistroController
             $sexo,
             $pais,
             $ciudad,
+            $latitud,
+            $longitud,
             $foto
         );
 

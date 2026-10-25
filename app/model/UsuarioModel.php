@@ -32,6 +32,8 @@ class UsuarioModel
         $sexo,
         $pais,
         $ciudad,
+        $latitud,
+        $longitud,
         $foto = "default.png"
     ) {
 
@@ -46,11 +48,13 @@ class UsuarioModel
                 sexo,
                 pais,
                 ciudad,
+                latitud,
+                longitud,
                 foto
             )
             VALUES
             (
-                ?, ?, ?, ?, ?, ?, ?, ?, ?
+                ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
             )
        ";
 
@@ -65,6 +69,8 @@ class UsuarioModel
                 $sexo,
                 $pais,
                 $ciudad,
+                $latitud,
+                $longitud,
                 $foto
             ]
         );

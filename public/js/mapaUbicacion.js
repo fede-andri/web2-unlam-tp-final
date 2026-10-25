@@ -33,8 +33,6 @@ if (MAP_CONFIG.modoEdicion){
             );
 
             const data = await response.json();
-            console.log(document.getElementById('pais'));
-            console.log(document.getElementById('ciudad'));
             document.getElementById('pais').value =
                 data.address.country || '';
 
@@ -54,6 +52,5 @@ if (MAP_CONFIG.modoEdicion){
             );
 
         }
-        console.log(lat, lng);
     });
 }
