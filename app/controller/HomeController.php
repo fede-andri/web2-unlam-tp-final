@@ -1,5 +1,5 @@
 <?php
-
+/*
 namespace app\controller;
 
 use Redirect;
@@ -34,3 +34,4 @@ class HomeController
         $this->render->renderiza('presentacion', $data);
     }
 }
+*/

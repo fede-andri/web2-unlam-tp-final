@@ -57,14 +57,6 @@ class Configuration
       );
     }
 
-    public function getHomeController(){
-        return new HomeController(
-            $this->getRender(),
-            $this->getEquipoModel(),
-            $this->getAppConfig()
-        );
-    }
-
     public function getRankingController(){
         return new RankingController(
             $this->getRender(),
@@ -181,6 +173,6 @@ class Configuration
 
     public function getRouter()
     {
-        return new Router($this, "home", "show");
+        return new Router($this, "lobby", "show");
     }
 }

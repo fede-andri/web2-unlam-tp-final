@@ -36,6 +36,8 @@ class RankingController{
             'ranking_show_url' => $this->appConfig['base_path_url'] . $this->appConfig['ranking_show_url'],
             'mostrar_inicio'=>true,
             'mostrar_ranking'=>true,
+            'mostrar_logout' => true,
+            'logout_url' => $this->appConfig['base_path_url'] . $this->appConfig['logout_url'],
         ]);
     }
 

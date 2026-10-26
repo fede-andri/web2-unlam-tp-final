@@ -4,10 +4,10 @@ use app\Configuration;
 session_start();
 require_once("app/Configuration.php");
 
-$configuration = new Configuration();
+$configuration = new \app\Configuration();
 $router = $configuration->getRouter();
 
 $router->dispatch(
-        Request::get("controller", "home"),
+        Request::get("controller", "lobby"),
         Request::get("method", "show")
 );
