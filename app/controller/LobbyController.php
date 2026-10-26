@@ -67,6 +67,8 @@ class LobbyController
             'logout_url' => $basePath . $this->appConfig['logout_url'],
             'mostrar_ranking' => true,
             'mostrar_logout' => true,
+            'mostrar_perfil' => true,
+            'perfil_url'     => $this->appConfig['base_path_url'] . $this->appConfig['perfil_url'],
         ]);
     }
 

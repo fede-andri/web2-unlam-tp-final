@@ -29,7 +29,7 @@ class RankingController{
         }
         unset($fila);
 
-        $this->render->renderiza('ranking', [
+            $this->render->renderiza('ranking', [
             'ranking' => $ranking,
             'hay_jugadores' => count($ranking) > 0,
             'base_url'=>$this->appConfig['base_path_url'],
@@ -37,6 +37,8 @@ class RankingController{
             'mostrar_inicio'=>true,
             'mostrar_ranking'=>true,
             'mostrar_logout' => true,
+            'mostrar_perfil' => true,
+            'perfil_url'     => $this->appConfig['base_path_url'] . $this->appConfig['perfil_url'],
             'logout_url' => $this->appConfig['base_path_url'] . $this->appConfig['logout_url'],
         ]);
     }
