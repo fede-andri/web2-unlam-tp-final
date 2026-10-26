@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+    <!-- Fondo del lobby: Grieta del Invocador estilizada con detalles hextech -->
+    <defs>
+        <pattern id="hex" width="56" height="100" patternUnits="userSpaceOnUse">
+            <path d="M28 66L0 50L0 16L28 0L56 16L56 50L28 66L28 100" fill="none" stroke="#62d4b8" stroke-opacity=".07" stroke-width="1"/>
+            <path d="M28 0L28 34L0 50L0 84L28 100L56 84L56 50L28 34" fill="none" stroke="#62d4b8" stroke-opacity=".05" stroke-width="1"/>
+        </pattern>
+        <radialGradient id="glowTeal" cx="72%" cy="45%" r="45%">
+            <stop offset="0" stop-color="#62d4b8" stop-opacity=".22"/>
+            <stop offset="1" stop-color="#62d4b8" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="glowGold" cx="12%" cy="95%" r="40%">
+            <stop offset="0" stop-color="#c8aa6e" stop-opacity=".16"/>
+            <stop offset="1" stop-color="#c8aa6e" stop-opacity="0"/>
+        </radialGradient>
+        <linearGradient id="river" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#62d4b8" stop-opacity=".05"/>
+            <stop offset=".5" stop-color="#62d4b8" stop-opacity=".4"/>
+            <stop offset="1" stop-color="#62d4b8" stop-opacity=".05"/>
+        </linearGradient>
+        <g id="torre">
+            <rect x="-7" y="-7" width="14" height="14" transform="rotate(45)" fill="#091411" stroke="currentColor" stroke-width="2"/>
+            <circle r="2.5" fill="currentColor"/>
+        </g>
+    </defs>
+
+    <rect width="1600" height="900" fill="#091411"/>
+    <rect width="1600" height="900" fill="url(#hex)"/>
+    <rect width="1600" height="900" fill="url(#glowTeal)"/>
+    <rect width="1600" height="900" fill="url(#glowGold)"/>
+
+    <!-- Anillos hextech -->
+    <g fill="none" transform="translate(1150 420)">
+        <circle r="440" stroke="#c8aa6e" stroke-opacity=".14" stroke-width="1.5"/>
+        <circle r="470" stroke="#c8aa6e" stroke-opacity=".22" stroke-width="10" stroke-dasharray="2 22"/>
+        <circle r="505" stroke="#62d4b8" stroke-opacity=".1" stroke-width="1" stroke-dasharray="40 14"/>
+        <path d="M0 -470 L12 -490 L0 -510 L-12 -490 Z M0 470 L12 490 L0 510 L-12 490 Z M470 0 L490 12 L510 0 L490 -12 Z M-470 0 L-490 12 L-510 0 L-490 -12 Z" fill="#c8aa6e" fill-opacity=".35"/>
+    </g>
+    <g fill="none" stroke="#c8aa6e" transform="translate(140 860)">
+        <circle r="260" stroke-opacity=".12" stroke-width="1.5"/>
+        <circle r="290" stroke-opacity=".16" stroke-width="8" stroke-dasharray="2 20"/>
+    </g>
+
+    <!-- Mapa: base azul abajo a la izquierda, base roja arriba a la derecha -->
+    <g transform="translate(1150 420) rotate(-8)">
+        <rect x="-330" y="-330" width="660" height="660" rx="48" fill="#0c1b17" fill-opacity=".55" stroke="#c8aa6e" stroke-opacity=".25" stroke-width="2"/>
+
+        <!-- Río -->
+        <path d="M-330 -330 C-190 -230 -90 -70 0 0 S 190 230 330 330" fill="none" stroke="url(#river)" stroke-width="34" stroke-linecap="round"/>
+        <path d="M-330 -330 C-190 -230 -90 -70 0 0 S 190 230 330 330" fill="none" stroke="#a8edda" stroke-opacity=".18" stroke-width="2" stroke-dasharray="6 10"/>
+
+        <!-- Líneas: superior, central e inferior -->
+        <g fill="none" stroke="#c8aa6e" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M-268 210 L-268 -228 Q-268 -268 -228 -268 L210 -268" stroke-opacity=".3" stroke-width="16"/>
+            <path d="M-210 268 L228 268 Q268 268 268 228 L268 -210" stroke-opacity=".3" stroke-width="16"/>
+            <path d="M-205 205 L205 -205" stroke-opacity=".3" stroke-width="16"/>
+            <path d="M-268 210 L-268 -228 Q-268 -268 -228 -268 L210 -268 M-210 268 L228 268 Q268 268 268 228 L268 -210 M-205 205 L205 -205" stroke="#e8d5a8" stroke-opacity=".25" stroke-width="1.5"/>
+        </g>
+
+        <!-- Jungla -->
+        <g fill="#62d4b8" fill-opacity=".14">
+            <circle cx="-150" cy="40" r="9"/><circle cx="-60" cy="140" r="9"/><circle cx="-170" cy="150" r="6"/>
+            <circle cx="150" cy="-40" r="9"/><circle cx="60" cy="-140" r="9"/><circle cx="170" cy="-150" r="6"/>
+            <circle cx="-30" cy="-190" r="6"/><circle cx="30" cy="190" r="6"/>
+        </g>
+
+        <!-- Barón y Dragón -->
+        <g fill="none" stroke-width="2">
+            <circle cx="-150" cy="-120" r="26" stroke="#a78bfa" stroke-opacity=".45"/>
+            <circle cx="-150" cy="-120" r="8" fill="#a78bfa" fill-opacity=".35" stroke="none"/>
+            <circle cx="150" cy="120" r="26" stroke="#f0a35e" stroke-opacity=".45"/>
+            <circle cx="150" cy="120" r="8" fill="#f0a35e" fill-opacity=".35" stroke="none"/>
+        </g>
+
+        <!-- Torres -->
+        <g color="#62d4b8" opacity=".75">
+            <use href="#torre" x="-268" y="90"/><use href="#torre" x="-268" y="-60"/>
+            <use href="#torre" x="-90" y="268"/><use href="#torre" x="60" y="268"/>
+            <use href="#torre" x="-150" y="150"/><use href="#torre" x="-80" y="80"/>
+        </g>
+        <g color="#e0645a" opacity=".75">
+            <use href="#torre" x="268" y="-90"/><use href="#torre" x="268" y="60"/>
+            <use href="#torre" x="90" y="-268"/><use href="#torre" x="-60" y="-268"/>
+            <use href="#torre" x="150" y="-150"/><use href="#torre" x="80" y="-80"/>
+        </g>
+
+        <!-- Nexos -->
+        <g fill="#091411" stroke-width="3">
+            <circle cx="-262" cy="262" r="34" stroke="#62d4b8" stroke-opacity=".7"/>
+            <path d="M-262 240 L-244 262 L-262 284 L-280 262 Z" fill="#62d4b8" fill-opacity=".55" stroke="none"/>
+            <circle cx="262" cy="-262" r="34" stroke="#e0645a" stroke-opacity=".7"/>
+            <path d="M262 -284 L280 -262 L262 -240 L244 -262 Z" fill="#e0645a" fill-opacity=".55" stroke="none"/>
+        </g>
+    </g>
+
+    <!-- Runas flotantes -->
+    <g fill="none" stroke="#c8aa6e" stroke-opacity=".3" stroke-width="1.5">
+        <path d="M520 140 L536 164 L520 188 L504 164 Z"/>
+        <path d="M640 760 L652 778 L640 796 L628 778 Z"/>
+        <path d="M380 420 L390 435 L380 450 L370 435 Z"/>
+    </g>
+</svg>

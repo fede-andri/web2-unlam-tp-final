@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#091411">
+    <title>Lobby | Preguntones</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link href="/web2-unlam-tp-final/estilos/aplicacion.css" rel="stylesheet">
+</head>
+<body class="lobby-page">
+
+    {{> components/headerView}}
+
+    <main class="page-content">
+
+        <section class="panel lobby-hero" aria-labelledby="lobby-heading">
+            <div class="level-ring" style="--xp: {{xp_porcentaje}}" role="img" aria-label="Nivel {{nivel}}, {{xp_porcentaje}}% hacia el siguiente nivel">
+                <div class="level-ring-inner">
+                    <span class="level-ring-label">Nivel</span>
+                    <span class="level-ring-value">{{nivel}}</span>
+                </div>
+            </div>
+
+            <div class="lobby-hero-body">
+                <p class="eyebrow mb-0">Lobby del invocador</p>
+                <h1 id="lobby-heading" class="page-title">Bienvenido, {{usuario}}</h1>
+                <div class="hero-meta">
+                    <span class="rank-badge">{{rango}}</span>
+                    <span>{{xp_actual}} / {{xp_siguiente_nivel}} XP para el nivel siguiente</span>
+                </div>
+                <div class="xp-bar" aria-hidden="true">
+                    <span style="width: {{xp_porcentaje}}%"></span>
+                </div>
+            </div>
+
+            <div class="lobby-hero-action">
+                <button type="button" class="btn btn-accent px-4" disabled>Jugar partida</button>
+                <small>Disponible próximamente</small>
+            </div>
+        </section>
+
+        <div class="lobby-grid">
+
+            <section class="panel" aria-labelledby="stats-heading">
+                <div class="panel-heading">
+                    <h2 id="stats-heading">Estadísticas</h2>
+                    <span class="live-label">Temporada actual</span>
+                </div>
+
+                {{#estadisticas}}
+                    <dl class="stat-grid">
+                        <div class="stat-tile">
+                            <dt>Partidas jugadas</dt>
+                            <dd>{{partidas_jugadas}}</dd>
+                        </div>
+                        <div class="stat-tile">
+                            <dt>Precisión</dt>
+                            <dd>{{precision}}%</dd>
+                        </div>
+                        <div class="stat-tile">
+                            <dt>Mejor racha</dt>
+                            <dd>{{mejor_racha}}</dd>
+                        </div>
+                        <div class="stat-tile">
+                            <dt>Puntaje total</dt>
+                            <dd class="player-score">{{puntaje_total}}</dd>
+                        </div>
+                    </dl>
+                {{/estadisticas}}
+
+                <div class="category-list">
+                    <h3>Precisión por categoría</h3>
+                    {{#categorias}}
+                        <div class="category-row">
+                            <span class="category-name">{{nombre}}</span>
+                            <div class="category-bar" aria-hidden="true">
+                                <span style="width: {{precision}}%"></span>
+                            </div>
+                            <span class="category-value">{{precision}}%</span>
+                        </div>
+                    {{/categorias}}
+                </div>
+            </section>
+
+            <section class="panel" aria-labelledby="ranking-heading">
+                <div class="panel-heading">
+                    <h2 id="ranking-heading">Ranking</h2>
+                    <a href="{{ranking_show_url}}" class="panel-link">Ver completo <span aria-hidden="true">→</span></a>
+                </div>
+
+                <ol class="mini-ranking">
+                    {{#ranking}}
+                        <li class="{{#usuario_actual}}current-player{{/usuario_actual}}">
+                            <span class="position">{{posicion}}</span>
+                            <span class="player-name">
+                                {{usuario}}
+                                {{#usuario_actual}}<span class="you-badge">Vos</span>{{/usuario_actual}}
+                            </span>
+                            <span class="player-score">{{puntaje}}</span>
+                        </li>
+                    {{/ranking}}
+                </ol>
+            </section>
+
+            <section class="panel" aria-labelledby="partidas-heading">
+                <div class="panel-heading">
+                    <h2 id="partidas-heading">Últimas partidas</h2>
+                    <span class="live-label">Últimas 5</span>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table ranking-table align-middle">
+                        <thead>
+                            <tr>
+                                <th scope="col">Resultado</th>
+                                <th scope="col">Categoría</th>
+                                <th scope="col" class="text-end">Aciertos</th>
+                                <th scope="col" class="text-end">Puntaje</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#ultimas_partidas}}
+                                <tr>
+                                    <td>
+                                        {{#victoria}}<span class="result-badge result-win">Victoria</span>{{/victoria}}
+                                        {{^victoria}}<span class="result-badge result-loss">Derrota</span>{{/victoria}}
+                                        <span class="match-date">{{fecha}}</span>
+                                    </td>
+                                    <td>{{categoria}}</td>
+                                    <td class="text-end">{{aciertos}}/{{total}}</td>
+                                    <td class="text-end player-score">+{{puntaje}}</td>
+                                </tr>
+                            {{/ultimas_partidas}}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="panel locked-panel {{#crear_pregunta_bloqueada}}is-locked{{/crear_pregunta_bloqueada}}" aria-labelledby="crear-heading">
+                <div class="panel-heading">
+                    <h2 id="crear-heading">Crear nueva pregunta</h2>
+                    {{#crear_pregunta_bloqueada}}<span class="lock-badge">Bloqueado</span>{{/crear_pregunta_bloqueada}}
+                </div>
+
+                <div class="locked-body">
+                    <div class="aside-icon lock-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="4" y="11" width="16" height="10" rx="2"></rect>
+                            <path d="M8 11V7a4 4 0 0 1 8 0v4"></path>
+                        </svg>
+                    </div>
+                    <p>Proponé tus propias preguntas sobre League of Legends para que las respondan otros invocadores.</p>
+
+                    {{#crear_pregunta_bloqueada}}
+                        <p class="lock-note">
+                            Se desbloquea en el <strong>nivel {{nivel_requerido_crear_pregunta}}</strong>.
+                            Te faltan {{niveles_faltantes}} niveles.
+                        </p>
+                        <div class="unlock-progress">
+                            <div class="xp-bar" aria-hidden="true">
+                                <span style="width: {{progreso_desbloqueo}}%"></span>
+                            </div>
+                            <span>Nivel {{nivel}} / {{nivel_requerido_crear_pregunta}}</span>
+                        </div>
+                        <button type="button" class="btn btn-outline-accent w-100" disabled>Crear pregunta</button>
+                    {{/crear_pregunta_bloqueada}}
+                </div>
+            </section>
+
+        </div>
+
+        {{> components/footerView}}
+    </main>
+</body>
+</html>

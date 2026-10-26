@@ -52,7 +52,7 @@ class LoginController
 //        session_regenerate_id(true);
         $_SESSION['usuario_id'] = $datosUsuario['id'];
         $_SESSION['usuario'] = $datosUsuario['usuario'];
-        header('Location:' . $this->appConfig['base_path_url'] .$this->appConfig['home_url']);
+        header('Location:' . $this->appConfig['base_path_url'] .$this->appConfig['lobby_url']);
         exit();
     }
 
