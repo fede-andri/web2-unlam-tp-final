@@ -23,6 +23,12 @@ class UsuarioModel
         return $this->database->queryOne($sql, [$email]);
     }
 
+    public function buscarPorId($id)
+    {
+        $sql = "SELECT * FROM usuarios WHERE id = ?";
+        return $this->database->queryOne($sql, [$id]);
+    }
+
     public function crearUsuario(
         $nombre,
         $usuario,

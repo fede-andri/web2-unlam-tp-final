@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#091411">
+
+    <title>Mi perfil | Preguntones</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+          crossorigin="anonymous">
+
+    <link href="/web2-unlam-tp-final/estilos/aplicacion.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+    <style>
+        .perfil-foto-wrap {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            overflow: hidden;
+            background-color: #244038;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 140 140'%3E%3Ccircle cx='70' cy='54' r='24' fill='%2390b5a8'/%3E%3Cellipse cx='70' cy='120' rx='42' ry='34' fill='%2390b5a8'/%3E%3C/svg%3E");
+            background-size: cover;
+            background-position: center;
+        }
+        .perfil-foto {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .perfil-dato dt {
+            font-weight: 500;
+            opacity: .7;
+            font-size: .9rem;
+            margin-bottom: .15rem;
+        }
+        .perfil-dato dd {
+            margin-bottom: 1.1rem;
+            font-size: 1.05rem;
+        }
+        #mapa-perfil {
+            height: 240px;
+            border-radius: .5rem;
+        }
+    </style>
+</head>
+
+<body class="register-page">
+
+{{> components/headerView}}
+
+<main class="auth-wrap">
+
+    <div class="auth-card">
+
+        <section class="auth-aside">
+            <div>
+                <div class="perfil-foto-wrap mb-3">
+                    <img src="{{foto_url}}"
+                         alt="Foto de perfil de {{usuario}}"
+                         class="perfil-foto"
+                         onerror="this.style.display='none';">
+                </div>
+
+                <h1 class="aside-title">{{nombre}}</h1>
+                <p class="aside-copy mb-0">@{{usuario}}</p>
+            </div>
+
+            <p class="aside-footnote">
+                Aprendé, competí y convertite en el mejor.
+            </p>
+        </section>
+
+        <section class="auth-content">
+            <div class="form-shell">
+
+                <div class="mb-4">
+                    <h2 class="form-title">Mi perfil</h2>
+                    <p class="form-intro">Estos son los datos de tu cuenta.</p>
+                </div>
+
+                {{#error}}
+                    <div class="alert alert-danger mb-4" role="alert">{{error}}</div>
+                {{/error}}
+
+                {{#success}}
+                    <div class="alert alert-success mb-4" role="alert">{{success}}</div>
+                {{/success}}
+
+                <dl class="perfil-dato">
+
+                    <dt>Nombre completo</dt>
+                    <dd>{{nombre}}</dd>
+
+                    <dt>Usuario</dt>
+                    <dd>{{usuario}}</dd>
+
+                    <dt>Email</dt>
+                    <dd>{{email}}</dd>
+
+                    <dt>Fecha de nacimiento</dt>
+                    <dd>{{fecha_nacimiento}}</dd>
+
+                    <dt>Sexo</dt>
+                    <dd>{{sexo}}</dd>
+
+                    <dt>País</dt>
+                    <dd>{{pais}}</dd>
+
+                    <dt>Ciudad</dt>
+                    <dd>{{ciudad}}</dd>
+
+                </dl>
+
+                {{#tiene_ubicacion}}
+                    <div class="mb-4">
+                        <div id="mapa-perfil" role="img"
+                             aria-label="Mapa con tu ubicación: {{ciudad}}, {{pais}}"></div>
+                    </div>
+                {{/tiene_ubicacion}}
+
+                <a href="{{volver_url}}" class="btn btn-outline-accent btn-lg w-100">
+                    Volver al lobby
+                </a>
+
+                <p class="form-footer">Sistema de Preguntas y Respuestas</p>
+            </div>
+        </section>
+
+    </div>
+
+</main>
+
+{{#tiene_ubicacion}}
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        (function () {
+            const lat = {{latitud}};
+            const lng = {{longitud}};
+
+            const mapa = L.map('mapa-perfil').setView([lat, lng], 12);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap'
+            }).addTo(mapa);
+
+            L.marker([lat, lng]).addTo(mapa);
+        })();
+    </script>
+{{/tiene_ubicacion}}
+
+</body>
+</html>

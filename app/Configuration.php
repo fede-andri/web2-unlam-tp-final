@@ -8,6 +8,7 @@ use app\controller\LobbyController;
 use app\controller\LoginController;
 use app\controller\LugaresController;
 use app\controller\PartidaController;
+use app\controller\PerfilController;
 use app\controller\RankingController;
 use app\controller\RegistroController;
 use app\controller\ReservaController;
@@ -76,6 +77,14 @@ class Configuration
         return new PartidaController($this->getRender(), $this->getPartidaModel());
     }
 
+    public function getPerfilController(){
+        return new PerfilController(
+            $this->getRender(),        // para renderizar perfilView.mustache
+            $this->getUsuarioModel(),  // para leer los datos del usuario (buscarPorId)
+            $this->getAppConfig()      // URLs (login, lobby, base_path_url)
+        );
+    }
+
     // Los privados
     private function getLoginModel()
     {
@@ -120,6 +129,7 @@ class Configuration
             "home_url" => $this->config["app"]["home_url"],
             "ranking_show_url"=>$this->config["app"]["ranking_show_url"],
             "lobby_url" => $this->config["app"]["lobby_url"],
+            "perfil_url" => $this->config["app"]["perfil_url"] ?? "/perfil/show",
         ];
     }
 
