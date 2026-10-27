@@ -73,8 +73,12 @@ class Configuration
         );
     }
 
-    public function getPartidaController(){
-        return new PartidaController($this->getRender(), $this->getPartidaModel());
+        public function getPartidaController(){
+        return new PartidaController(
+            $this->getRender(),
+            $this->getPartidaModel(),
+            $this->getAppConfig()
+        );
     }
 
     public function getPerfilController(){

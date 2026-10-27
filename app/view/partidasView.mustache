@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#091411">
+    <title>Mis partidas | Preguntones</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link href="/web2-unlam-tp-final/estilos/aplicacion.css" rel="stylesheet">
+</head>
+<body>
+
+    {{> components/headerView}}
+
+    <main class="page-content">
+        <section class="panel">
+            <div class="panel-heading">
+                <h2>Partidas de {{usuario}}</h2>
+            </div>
+
+            {{#cant_partidas}}
+                <div class="table-responsive">
+                    <table class="table ranking-table align-middle">
+                        <thead>
+                            <tr>
+                                <th scope="col">Fecha</th>
+                                <th scope="col" class="text-end">Puntaje</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#partidas}}
+                                <tr>
+                                    <td>{{fecha}}</td>
+                                    <td class="text-end player-score">{{puntaje}}</td>
+                                </tr>
+                            {{/partidas}}
+                        </tbody>
+                    </table>
+                </div>
+            {{/cant_partidas}}
+            {{^cant_partidas}}
+                <p class="p-3 mb-0">Todavía no jugaste ninguna partida.</p>
+            {{/cant_partidas}}
+        </section>
+    </main>
+
+</body>
+</html>

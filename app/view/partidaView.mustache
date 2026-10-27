@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#091411">
+    <title>Jugando | Preguntones</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link href="/web2-unlam-tp-final/estilos/aplicacion.css" rel="stylesheet">
+</head>
+<body class="game-page" style="--cat: {{categoria_color}}">
+
+    {{> components/headerView}}
+
+    <main class="game-wrap">
+
+        <div class="game-status">
+            <span class="game-score" aria-live="polite">Puntaje <strong>{{puntaje}}</strong></span>
+            <span class="game-qnum">Pregunta {{numero_pregunta}}</span>
+        </div>
+
+        <section class="game-card" aria-labelledby="pregunta-texto">
+
+            <div class="game-cat-band">
+                <span class="game-cat-chip">{{categoria}}</span>
+            </div>
+
+            <h1 id="pregunta-texto" class="game-question">{{enunciado}}</h1>
+
+            <form method="POST" action="{{responder_url}}" class="game-options" id="form-respuesta">
+                {{#opciones}}
+                    <button type="submit" name="respuesta_id" value="{{id}}" class="game-option">
+                        <span class="game-option-letter">{{letra}}</span>
+                        <span class="game-option-text">{{texto}}</span>
+                    </button>
+                {{/opciones}}
+            </form>
+
+            <p class="game-hint">Cada respuesta correcta suma un punto. Si te equivocás, la partida termina.</p>
+
+        </section>
+
+    </main>
+
+    <script src="{{base_url}}/public/js/partida.js"></script>
+</body>
+</html>
