@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#091411">
+
+    <title>Perfil de jugador | Preguntones</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+          crossorigin="anonymous">
+
+    <link href="/web2-unlam-tp-final/estilos/aplicacion.css" rel="stylesheet">
+
+    <style>
+        .perfil-foto-wrap {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            overflow: hidden;
+            background-color: #244038;
+        }
+        .perfil-foto {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .perfil-dato dt {
+            font-weight: 500;
+            opacity: .7;
+            font-size: .9rem;
+            margin-bottom: .15rem;
+        }
+        .perfil-dato dd {
+            margin-bottom: 1.1rem;
+            font-size: 1.05rem;
+        }
+    </style>
+</head>
+
+<body class="register-page">
+
+{{> components/headerView}}
+
+<main class="auth-wrap">
+
+    <div class="auth-card">
+
+        {{#no_encontrado}}
+            <section class="auth-content">
+                <div class="form-shell">
+                    <h2 class="form-title">Jugador no encontrado</h2>
+                    <p class="form-intro">El perfil que buscás no existe o no está disponible.</p>
+                    <a href="{{volver_url}}" class="btn btn-outline-accent btn-lg w-100">Volver al lobby</a>
+                </div>
+            </section>
+        {{/no_encontrado}}
+
+        {{^no_encontrado}}
+            <section class="auth-aside">
+                <div>
+                    <div class="perfil-foto-wrap mb-3">
+                        <img src="{{foto_url}}"
+                             alt="Foto de perfil de {{usuario}}"
+                             class="perfil-foto"
+                             onerror="this.style.display='none';">
+                    </div>
+
+                    <h1 class="aside-title">{{nombre}}</h1>
+                    <p class="aside-copy mb-3">@{{usuario}}</p>
+
+                    <div class="mb-2">
+                        {{> components/qrView}}
+                    </div>
+                    <p class="aside-copy small mb-0">Escaneá el código para volver a este perfil.</p>
+                </div>
+
+                <p class="aside-footnote">
+                    Aprendé, competí y convertite en el mejor.
+                </p>
+            </section>
+
+            <section class="auth-content">
+                <div class="form-shell">
+
+                    <div class="mb-4">
+                        <h2 class="form-title">Perfil de {{usuario}}</h2>
+                        <p class="form-intro">Datos públicos del jugador.</p>
+                    </div>
+
+                    <dl class="perfil-dato">
+                        <dt>Nombre</dt>
+                        <dd>{{nombre}}</dd>
+
+                        <dt>País</dt>
+                        <dd>{{pais}}</dd>
+
+                        <dt>Ciudad</dt>
+                        <dd>{{ciudad}}</dd>
+
+                        <dt>Puntaje total</dt>
+                        <dd>{{puntaje_total}}</dd>
+
+                        <dt>Partidas jugadas</dt>
+                        <dd>{{partidas_jugadas}}</dd>
+                    </dl>
+
+                    <a href="{{volver_url}}" class="btn btn-outline-accent btn-lg w-100">
+                        Volver al lobby
+                    </a>
+
+                    <p class="form-footer">Sistema de Preguntas y Respuestas</p>
+                </div>
+            </section>
+        {{/no_encontrado}}
+
+    </div>
+
+</main>
+
+</body>
+</html>

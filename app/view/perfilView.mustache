@@ -68,7 +68,12 @@
                 </div>
 
                 <h1 class="aside-title">{{nombre}}</h1>
-                <p class="aside-copy mb-0">@{{usuario}}</p>
+                <p class="aside-copy mb-3">@{{usuario}}</p>
+
+                <div class="mb-2">
+                    {{> components/qrView}}
+                </div>
+                <p class="aside-copy small mb-0">Que te escaneen para ver tu perfil.</p>
             </div>
 
             <p class="aside-footnote">
