@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#091411">
+    <title>Resultado | Preguntones</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link href="/web2-unlam-tp-final/estilos/aplicacion.css" rel="stylesheet">
+</head>
+<body class="game-page" style="--cat: {{categoria_color}}">
+
+    {{> components/headerView}}
+
+    <main class="game-wrap">
+
+        <section class="game-card game-result" aria-labelledby="resultado-titulo">
+
+            <div class="game-cat-band">
+                <span class="game-cat-chip">{{#perdio}}Fin de la partida{{/perdio}}{{^perdio}}¡Partida completa!{{/perdio}}</span>
+            </div>
+
+            <h1 id="resultado-titulo" class="game-result-title">
+                {{#perdio}}¡Perdiste!{{/perdio}}
+                {{^perdio}}¡Respondiste todas las preguntas!{{/perdio}}
+            </h1>
+
+            <p class="game-result-score">
+                Ganaste <strong>{{puntaje}}</strong> {{#singular}}punto{{/singular}}{{^singular}}puntos{{/singular}}
+            </p>
+
+            {{#perdio}}
+                <div class="game-result-detail">
+                    <p class="game-result-cat">{{categoria}}</p>
+                    <p class="game-result-question">{{enunciado}}</p>
+
+                    <p class="game-result-line game-result-wrong">
+                        <span>Tu respuesta</span>
+                        <strong>{{elegida}}</strong>
+                    </p>
+                    <p class="game-result-line game-result-right">
+                        <span>La respuesta correcta era</span>
+                        <strong>{{correcta}}</strong>
+                    </p>
+                </div>
+            {{/perdio}}
+
+            <div class="game-result-actions">
+                <form method="POST" action="{{jugar_url}}">
+                    <button type="submit" class="btn btn-accent btn-lg w-100">Jugar otra vez</button>
+                </form>
+                <a href="{{lobby_url}}" class="btn btn-outline-accent btn-lg w-100">Volver al lobby</a>
+            </div>
+
+        </section>
+
+    </main>
+
+</body>
+</html>

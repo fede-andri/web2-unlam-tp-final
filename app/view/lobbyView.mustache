@@ -35,8 +35,10 @@
             </div>
 
             <div class="lobby-hero-action">
-                <button type="button" class="btn btn-accent px-4" disabled>Jugar partida</button>
-                <small>Disponible próximamente</small>
+                 <form method="POST" action="{{base_url}}/partida/iniciar">
+                    <button type="submit" class="btn btn-accent px-4 w-100">Jugar partida</button>
+                 </form>
+                <small>Respondé bien y sumá puntos</small>
             </div>
         </section>
 
