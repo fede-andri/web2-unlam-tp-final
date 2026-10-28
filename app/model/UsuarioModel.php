@@ -29,6 +29,20 @@ class UsuarioModel
         return $this->database->queryOne($sql, [$id]);
     }
 
+    // Solo datos aptos para mostrar a otros jugadores (sin mail ni fecha de nacimiento).
+    public function buscarPerfilPublico($usuario)
+    {
+        $sql = "SELECT u.id, u.nombre, u.usuario, u.pais, u.ciudad, u.foto,
+                       u.latitud, u.longitud,
+                       COALESCE(SUM(p.puntaje), 0) AS puntaje_total,
+                       COUNT(p.id) AS partidas_jugadas
+                FROM usuarios u
+                LEFT JOIN partidas p ON p.usuario_id = u.id
+                WHERE u.usuario = ? AND u.validado = 1
+                GROUP BY u.id, u.nombre, u.usuario, u.pais, u.ciudad, u.foto, u.latitud, u.longitud";
+        return $this->database->queryOne($sql, [$usuario]);
+    }
+
     public function crearUsuario(
         $nombre,
         $usuario,

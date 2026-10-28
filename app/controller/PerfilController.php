@@ -43,6 +43,8 @@ class PerfilController
             'ciudad'           => $usuario['ciudad'] ?? '',
             'iniciales'        => $this->iniciales($nombre),
             'foto_url'         => $this->appConfig['base_path_url'] . '/public/img/perfiles/' . $foto,
+            'qr_url'           => $this->urlPerfilPublico($usuario['usuario'] ?? ''),
+            'qr_alt'           => 'Código QR de tu perfil',
             'volver_url'       => $this->appConfig['base_path_url'] . $this->appConfig['lobby_url'],
 
             // Header (mismo patrón que RankingController)
@@ -64,6 +66,70 @@ class PerfilController
         }
 
         $this->render->renderiza('perfil', $data);
+    }
+
+    public function ver()
+    {
+        if (!isset($_SESSION['usuario_id'])) {
+            header('Location:' . $this->appConfig['base_path_url'] . $this->appConfig['login_show_url']);
+            exit();
+        }
+
+        $nombreUsuario = trim($_GET['usuario'] ?? '');
+        $jugador = $nombreUsuario === '' ? null : $this->usuarioModel->buscarPerfilPublico($nombreUsuario);
+
+        $data = $this->datosHeader();
+
+        if ($jugador === null) {
+            $data['no_encontrado'] = true;
+            $this->render->renderiza('perfilPublico', $data);
+            return;
+        }
+
+        $foto = !empty($jugador['foto']) ? $jugador['foto'] : 'default.png';
+
+        $this->render->renderiza('perfilPublico', array_merge($data, [
+            'nombre'           => $jugador['nombre'],
+            'usuario'          => $jugador['usuario'],
+            'pais'             => $jugador['pais'],
+            'ciudad'           => $jugador['ciudad'],
+            'puntaje_total'    => (int) $jugador['puntaje_total'],
+            'partidas_jugadas' => (int) $jugador['partidas_jugadas'],
+            'foto_url'         => $this->appConfig['base_path_url'] . '/public/img/perfiles/' . $foto,
+            'qr_url'           => $this->urlPerfilPublico($jugador['usuario']),
+            'qr_alt'           => 'Código QR del perfil de ' . $jugador['usuario'],
+        ]));
+    }
+
+    // Dirección absoluta que abre el QR; se arma con el host del pedido para que
+    // funcione igual en local, en la red del celular y en el hosting.
+    private function urlPerfilPublico($usuario)
+    {
+        $https = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+            || ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https';
+        $host = preg_match('/^[A-Za-z0-9.\-]+(:\d+)?$/', $_SERVER['HTTP_HOST'] ?? '')
+            ? $_SERVER['HTTP_HOST']
+            : 'localhost';
+
+        return ($https ? 'https://' : 'http://') . $host
+            . $this->appConfig['base_path_url'] . '/perfil/ver?usuario=' . rawurlencode($usuario);
+    }
+
+    private function datosHeader()
+    {
+        $base = $this->appConfig['base_path_url'];
+
+        return [
+            'base_url'         => $base,
+            'mostrar_inicio'   => true,
+            'mostrar_ranking'  => true,
+            'ranking_show_url' => $base . $this->appConfig['ranking_show_url'],
+            'mostrar_perfil'   => true,
+            'perfil_url'       => $base . $this->appConfig['perfil_url'],
+            'mostrar_logout'   => true,
+            'logout_url'       => $base . $this->appConfig['logout_url'],
+            'volver_url'       => $base . $this->appConfig['lobby_url'],
+        ];
     }
 
     private function formatearFecha($fecha)

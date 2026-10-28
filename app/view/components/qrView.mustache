@@ -1,0 +1,28 @@
+{{!
+    Componente QR reutilizable.
+    Variables: qr_url (dirección absoluta que abre el QR), qr_alt (texto descriptivo).
+}}
+<div class="qr-box">
+    <div class="qr-code" data-qr-url="{{qr_url}}" data-qr-alt="{{qr_alt}}"></div>
+    <noscript><a href="{{qr_url}}">{{qr_url}}</a></noscript>
+</div>
+
+<style>
+    .qr-box {
+        display: inline-block;
+        background: #fff;
+        padding: 10px;
+        border-radius: .5rem;
+        line-height: 0;
+    }
+    .qr-code svg {
+        width: 160px;
+        height: 160px;
+        display: block;
+    }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"
+        integrity="sha384-8FWZA6BGMXhsfO+BLtrJK0We6gg5o1JyO8xQm6peWDEUs17ACA5ziE/NIAkl9z2k"
+        crossorigin="anonymous"></script>
+<script src="{{base_url}}/public/js/qr.js"></script>
