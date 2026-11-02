@@ -34,13 +34,7 @@ class LobbyModel
                 ['fecha' => '23/10, 18:30', 'categoria' => 'eSports', 'aciertos' => 9, 'total' => 10, 'puntaje' => 940, 'victoria' => true],
                 ['fecha' => '22/10, 22:11', 'categoria' => 'Runas y hechizos', 'aciertos' => 4, 'total' => 10, 'puntaje' => 310, 'victoria' => false],
             ],
-            'ranking' => [
-                ['usuario' => 'Faker_Fan', 'puntaje' => 9870],
-                ['usuario' => 'YasuoMain', 'puntaje' => 8420],
-                ['usuario' => 'BaronHunter', 'puntaje' => 7155],
-                ['usuario' => $usuario, 'puntaje' => 4820],
-                ['usuario' => 'TeemoShrooms', 'puntaje' => 3990],
-            ],
+
         ];
     }
 }

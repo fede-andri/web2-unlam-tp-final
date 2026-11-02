@@ -15,8 +15,8 @@
 body {
     min-height: 100vh;
     background:
-        radial-gradient(ellipse at 50% -15%, rgba(98, 212, 184, .12), transparent 38rem),
-        var(--page);
+            radial-gradient(ellipse at 50% -15%, rgba(98, 212, 184, .12), transparent 38rem),
+            var(--page);
     color: var(--text);
     font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
 }
@@ -128,8 +128,8 @@ body {
     overflow: hidden;
     padding: clamp(1.75rem, 4vw, 3rem);
     background:
-        radial-gradient(ellipse at 100% 100%, rgba(98, 212, 184, .13), transparent 20rem),
-        #10231e;
+            radial-gradient(ellipse at 100% 100%, rgba(98, 212, 184, .13), transparent 20rem),
+            #10231e;
 }
 
 .register-page .auth-aside {
@@ -433,6 +433,32 @@ body {
     box-shadow: inset 3px 0 var(--accent);
 }
 
+/* Filas clicables del ranking */
+.ranking-row {
+    cursor: pointer;
+}
+
+.ranking-table tbody tr.ranking-row:hover {
+    background: rgba(98, 212, 184, .07);
+}
+
+.ranking-table tbody tr.current-player.ranking-row:hover {
+    background: rgba(98, 212, 184, .14);
+}
+
+/* Separador "···" antes de la fila propia cuando está fuera de la lista */
+.ranking-table tbody tr.ranking-gap,
+.ranking-table tbody tr.ranking-gap:hover {
+    background: transparent;
+}
+
+.ranking-table tbody tr.ranking-gap td {
+    padding-block: .2rem;
+    border-bottom: 0;
+    color: var(--muted);
+    letter-spacing: .3em;
+}
+
 .position {
     display: inline-grid;
     width: 2rem;
@@ -447,6 +473,21 @@ body {
 
 .player-name {
     font-weight: 650;
+}
+
+/* Link al perfil: no depende de la clase del body, así gana siempre al azul de Bootstrap */
+.player-link,
+.player-link:visited {
+    color: var(--text);
+    text-decoration: none;
+}
+
+.player-link:hover,
+.player-link:focus-visible,
+.ranking-row:hover .player-link,
+.mini-ranking li:hover .player-link {
+    color: var(--accent);
+    text-decoration: none;
 }
 
 .you-badge {
