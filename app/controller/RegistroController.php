@@ -89,8 +89,9 @@ class RegistroController
             PASSWORD_DEFAULT
         );
 
-        // Foto por defecto
-        $foto = "default.png";
+
+        $resultadoFoto = \FotoPerfil::guardar($_FILES['foto'] ?? null);
+        $foto = $resultadoFoto['foto'] ?? \FotoPerfil::POR_DEFECTO;
 
         $tokenValidacion = bin2hex(random_bytes(32));
 
