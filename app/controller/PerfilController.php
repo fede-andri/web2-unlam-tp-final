@@ -29,6 +29,8 @@ class PerfilController
             exit();
         }
 
+        $base = $this->appConfig['base_path_url'];
+
         $nombre = $usuario['nombre'] ?? '';
         $foto = !empty($usuario['foto']) ? $usuario['foto'] : 'default.png';
 
@@ -46,6 +48,14 @@ class PerfilController
             'qr_url'           => $this->urlPerfilPublico($usuario['usuario'] ?? ''),
             'qr_alt'           => 'Código QR de tu perfil',
             'volver_url'       => $this->appConfig['base_path_url'] . $this->appConfig['lobby_url'],
+
+            // foto de perfil (cambiar / eliminar)
+            'tiene_foto'        => $foto !== \FotoPerfil::POR_DEFECTO,
+            'subir_foto_url'    => $base . '/perfil/subirFoto',
+            'eliminar_foto_url' => $base . '/perfil/eliminarFoto',
+            //mensajes de resultado (llegan por ?foto=... o ?foto_error=...)
+            'success' => $this->mensajeExito($_GET['foto'] ?? ''),
+            'error'   => $this->mensajeError($_GET['foto_error'] ?? ''),
 
             // Header (mismo patrón que RankingController)
             'base_url'         => $this->appConfig['base_path_url'],
@@ -67,6 +77,51 @@ class PerfilController
 
         $this->render->renderiza('perfil', $data);
     }
+
+
+    public function subirFoto()
+    {
+        $this->exigirSesion();
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            $this->volverAlPerfil();
+        }
+
+        $resultado = \FotoPerfil::guardar($_FILES['foto'] ?? null);
+
+        if ($resultado['error'] !== null) {
+            $this->volverAlPerfil('?foto_error=' . $resultado['error']);
+        }
+
+        if ($resultado['foto'] === null) {
+            $this->volverAlPerfil('?foto_error=vacio');
+        }
+
+        $usuario = $this->usuarioModel->buscarPorId($_SESSION['usuario_id']);
+
+        $this->usuarioModel->actualizarFoto($_SESSION['usuario_id'], $resultado['foto']);
+
+        \FotoPerfil::eliminar($usuario['foto'] ?? null);
+
+        $this->volverAlPerfil('?foto=ok');
+    }
+
+    public function eliminarFoto()
+    {
+        $this->exigirSesion();
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            $this->volverAlPerfil();
+        }
+
+        $usuario = $this->usuarioModel->buscarPorId($_SESSION['usuario_id']);
+
+        \FotoPerfil::eliminar($usuario['foto'] ?? null);
+        $this->usuarioModel->actualizarFoto($_SESSION['usuario_id'], \FotoPerfil::POR_DEFECTO);
+
+        $this->volverAlPerfil('?foto=eliminada');
+    }
+
 
     public function ver()
     {
@@ -99,6 +154,40 @@ class PerfilController
             'qr_url'           => $this->urlPerfilPublico($jugador['usuario']),
             'qr_alt'           => 'Código QR del perfil de ' . $jugador['usuario'],
         ]));
+    }
+
+    private function exigirSesion()
+    {
+        if (!isset($_SESSION['usuario_id'])) {
+            header('Location:' . $this->appConfig['base_path_url'] . $this->appConfig['login_show_url']);
+            exit();
+        }
+    }
+
+    private function volverAlPerfil($query = '')
+    {
+        header('Location:' . $this->appConfig['base_path_url'] . $this->appConfig['perfil_url'] . $query);
+        exit();
+    }
+
+    private function mensajeExito($codigo)
+    {
+        $mensajes = [
+            'ok'        => 'Tu foto de perfil se actualizó.',
+            'eliminada' => 'Tu foto de perfil se eliminó.',
+        ];
+        return $mensajes[$codigo] ?? null;
+    }
+
+    private function mensajeError($codigo)
+    {
+        $mensajes = [
+            'vacio'  => 'Elegí una imagen antes de subir.',
+            'tamano' => 'La imagen es demasiado grande (máximo 2 MB).',
+            'tipo'   => 'El archivo tiene que ser una imagen JPG, PNG, WEBP o GIF.',
+            'subida' => 'No se pudo subir la imagen. Probá de nuevo.',
+        ];
+        return $mensajes[$codigo] ?? null;
     }
 
     // Dirección absoluta que abre el QR; se arma con el host del pedido para que

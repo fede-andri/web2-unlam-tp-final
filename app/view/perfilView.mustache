@@ -70,6 +70,37 @@
                 <h1 class="aside-title">{{nombre}}</h1>
                 <p class="aside-copy mb-3">@{{usuario}}</p>
 
+                <form method="POST"
+                      action="{{subir_foto_url}}"
+                      enctype="multipart/form-data"
+                      class="mb-2">
+
+                    <label for="foto" class="form-label small">Cambiar foto de perfil</label>
+
+                    <input type="file"
+                           class="form-control form-control-sm mb-2"
+                           id="foto"
+                           name="foto"
+                           accept="image/jpeg,image/png,image/webp,image/gif"
+                           required>
+
+                    <button type="submit" class="btn btn-accent btn-sm w-100">
+                        Subir foto
+                    </button>
+                </form>
+
+                {{#tiene_foto}}
+                    <form method="POST"
+                          action="{{eliminar_foto_url}}"
+                          class="mb-3"
+                          onsubmit="return confirm('¿Eliminar tu foto de perfil?');">
+                        <button type="submit" class="btn btn-outline-accent btn-sm w-100">
+                            Eliminar foto
+                        </button>
+                    </form>
+                {{/tiene_foto}}
+                <!-- FIN NUEVO -->
+
                 <div class="mb-2">
                     {{> components/qrView}}
                 </div>
