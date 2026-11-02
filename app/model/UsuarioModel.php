@@ -128,4 +128,9 @@ class UsuarioModel
             [$token]
         );
     }
+    public function actualizarFoto($id, $foto)
+    {
+        $sql = "UPDATE usuarios SET foto = ? WHERE id = ?";
+        return $this->database->execute($sql, [$foto, $id]);
+    }
 }
