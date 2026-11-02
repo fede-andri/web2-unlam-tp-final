@@ -47,7 +47,7 @@ class PerfilController
             'foto_url'         => $this->appConfig['base_path_url'] . '/public/img/perfiles/' . $foto,
             'qr_url'           => $this->urlPerfilPublico($usuario['usuario'] ?? ''),
             'qr_alt'           => 'Código QR de tu perfil',
-            'volver_url'       => $this->appConfig['base_path_url'] . $this->appConfig['lobby_url'],
+            'volver_url' => $this->appConfig['base_path_url'] . $this->appConfig['lobby_url'],
 
             // foto de perfil (cambiar / eliminar)
             'tiene_foto'        => $foto !== \FotoPerfil::POR_DEFECTO,

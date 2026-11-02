@@ -26,33 +26,48 @@
                     <span class="live-label">Clasificación general</span>
                 </div>
 
-                {{#hay_jugadores}}
-                    <div class="table-responsive">
-                        <table class="table ranking-table align-middle">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Posición</th>
-                                    <th scope="col">Jugador</th>
-                                    <th scope="col" class="text-end">Partidas</th>
-                                    <th scope="col" class="text-end">Puntaje</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {{#ranking}}
-                                    <tr class="{{#usuario_actual}}current-player{{/usuario_actual}}">
-                                        <td><span class="position">{{posicion}}</span></td>
-                                        <td>
-                                            <span class="player-name">{{usuario}}</span>
-                                            {{#usuario_actual}}<span class="you-badge">Vos</span>{{/usuario_actual}}
-                                        </td>
-                                        <td class="text-end">{{partidas_jugadas}}</td>
-                                        <td class="text-end player-score">{{puntaje_total}}</td>
-                                    </tr>
-                                {{/ranking}}
-                            </tbody>
-                        </table>
-                    </div>
-                {{/hay_jugadores}}
+            {{#hay_jugadores}}
+                <div class="table-responsive">
+                    <table class="table ranking-table align-middle">
+                        <thead>
+                        <tr>
+                            <th scope="col">Posición</th>
+                            <th scope="col">Jugador</th>
+                            <th scope="col" class="text-end">Partidas</th>
+                            <th scope="col" class="text-end">Puntaje</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{#ranking}}
+                            <tr class="ranking-row {{#usuario_actual}}current-player{{/usuario_actual}}" data-href="{{perfil_url}}?id={{id}}">
+                            <td><span class="position">{{posicion}}</span></td>
+                            <td>
+                                <a href="{{perfil_url}}?id={{id}}" class="player-name player-link">{{usuario}}</a>
+                                {{#usuario_actual}}<span class="you-badge">Vos</span>{{/usuario_actual}}
+                            </td>
+                            <td class="text-end">{{partidas_jugadas}}</td>
+                            <td class="text-end player-score">{{puntaje_total}}</td>
+                            </tr>
+                        {{/ranking}}
+
+                        {{#mi_posicion}}
+                            <tr class="ranking-gap" aria-hidden="true">
+                                <td colspan="4" class="text-center py-1">···</td>
+                            </tr>
+                            <tr class="ranking-row current-player" data-href="{{url_perfil}}">
+                            <td><span class="position">{{posicion}}</span></td>
+                            <td>
+                                <a href="{{url_perfil}}" class="player-name player-link">{{usuario}}</a>
+                                <span class="you-badge">Vos</span>
+                            </td>
+                            <td class="text-end">{{partidas_jugadas}}</td>
+                            <td class="text-end player-score">{{puntaje_total}}</td>
+                            </tr>
+                        {{/mi_posicion}}
+                        </tbody>
+                    </table>
+                </div>
+            {{/hay_jugadores}}
 
                 {{^hay_jugadores}}
                     <div class="empty-state">
@@ -70,7 +85,16 @@
             </aside>
         </div>
 
-        <footer class="site-footer">Sistema de Preguntas y Respuestas</footer>
-    </main>
+    <footer class="site-footer">Sistema de Preguntas y Respuestas</footer>
+</main>
+
+<script>
+    document.querySelectorAll('.ranking-row[data-href]').forEach(function (fila) {
+        fila.addEventListener('click', function (e) {
+            if (e.target.closest('a')) return; // el link ya navega solo
+            window.location.href = fila.dataset.href;
+        });
+    });
+</script>
 </body>
 </html>

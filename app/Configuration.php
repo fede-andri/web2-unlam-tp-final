@@ -69,7 +69,8 @@ class Configuration
         return new LobbyController(
             $this->getRender(),
             $this->getLobbyModel(),
-            $this->getAppConfig()
+            $this->getAppConfig(),
+            $this->getRankingModel()
         );
     }
 
