@@ -1,7 +1,9 @@
 <?php
 
 namespace app\controller;
+require_once __DIR__ . '/../../helper/FotoPerfil.php';
 
+use \FotoPerfil;
 class PerfilController
 {
     private $render;
@@ -125,11 +127,6 @@ class PerfilController
 
     public function ver()
     {
-        if (!isset($_SESSION['usuario_id'])) {
-            header('Location:' . $this->appConfig['base_path_url'] . $this->appConfig['login_show_url']);
-            exit();
-        }
-
         $nombreUsuario = trim($_GET['usuario'] ?? '');
         $jugador = $nombreUsuario === '' ? null : $this->usuarioModel->buscarPerfilPublico($nombreUsuario);
 
