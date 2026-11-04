@@ -39,10 +39,10 @@
                         </thead>
                         <tbody>
                         {{#ranking}}
-                            <tr class="ranking-row {{#usuario_actual}}current-player{{/usuario_actual}}" data-href="{{perfil_url}}?id={{id}}">
+                            <tr class="ranking-row {{#usuario_actual}}current-player{{/usuario_actual}}" data-href="{{url_perfil}}">
                             <td><span class="position">{{posicion}}</span></td>
                             <td>
-                                <a href="{{perfil_url}}?id={{id}}" class="player-name player-link">{{usuario}}</a>
+                                <a href="{{url_perfil}}" class="player-name player-link">{{usuario}}</a>
                                 {{#usuario_actual}}<span class="you-badge">Vos</span>{{/usuario_actual}}
                             </td>
                             <td class="text-end">{{partidas_jugadas}}</td>
