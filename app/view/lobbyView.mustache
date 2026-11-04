@@ -150,34 +150,20 @@
                 </div>
             </section>
 
-            <section class="panel locked-panel {{#crear_pregunta_bloqueada}}is-locked{{/crear_pregunta_bloqueada}}" aria-labelledby="crear-heading">
+            <section class="panel" aria-labelledby="crear-heading">
                 <div class="panel-heading">
-                    <h2 id="crear-heading">Crear nueva pregunta</h2>
-                    {{#crear_pregunta_bloqueada}}<span class="lock-badge">Bloqueado</span>{{/crear_pregunta_bloqueada}}
+                    <h2 id="crear-heading">Sugerir pregunta</h2>
                 </div>
 
                 <div class="locked-body">
-                    <div class="aside-icon lock-icon" aria-hidden="true">
+                    <div class="aside-icon" aria-hidden="true">
                         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="4" y="11" width="16" height="10" rx="2"></rect>
-                            <path d="M8 11V7a4 4 0 0 1 8 0v4"></path>
+                            <path d="M12 20h9"></path>
+                            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
                         </svg>
                     </div>
-                    <p>Proponé tus propias preguntas sobre League of Legends para que las respondan otros invocadores.</p>
-
-                    {{#crear_pregunta_bloqueada}}
-                        <p class="lock-note">
-                            Se desbloquea en el <strong>nivel {{nivel_requerido_crear_pregunta}}</strong>.
-                            Te faltan {{niveles_faltantes}} niveles.
-                        </p>
-                        <div class="unlock-progress">
-                            <div class="xp-bar" aria-hidden="true">
-                                <span style="width: {{progreso_desbloqueo}}%"></span>
-                            </div>
-                            <span>Nivel {{nivel}} / {{nivel_requerido_crear_pregunta}}</span>
-                        </div>
-                        <button type="button" class="btn btn-outline-accent w-100" disabled>Crear pregunta</button>
-                    {{/crear_pregunta_bloqueada}}
+                    <p>Proponé tus propias preguntas sobre League of Legends para que sean revisadas y sumadas al juego.</p>
+                    <a href="{{sugerir_pregunta_url}}" class="btn btn-outline-accent w-100">Sugerir pregunta</a>
                 </div>
             </section>
 

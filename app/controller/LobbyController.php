@@ -90,6 +90,7 @@ class LobbyController
             'mostrar_logout' => true,
             'mostrar_perfil' => true,
             'perfil_url'     => $this->appConfig['base_path_url'] . $this->appConfig['perfil_url'],
+            'sugerir_pregunta_url' => $basePath . $this->appConfig['sugerir_pregunta_url'],
         ]);
     }
 
