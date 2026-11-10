@@ -96,10 +96,43 @@ class PartidaController
             'tiempo_url' => $this->appConfig['base_path_url'] . '/partida/tiempoAgotado',
             'segundos_totales' => PartidaModel::SEGUNDOS_POR_PREGUNTA,
             'segundos_restantes' => $restantes,
+            'reportar_url' => $this->appConfig['base_path_url'] . '/partida/reportar',
+            'reportada' => Request::get('reportada') !== null,
         ]));
     }
 
-   
+    public function reportar()
+    {
+        $usuarioId = $this->requiereLogin();
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            $this->redirigir('/partida/jugar');
+        }
+
+        $partida = $this->model->getPartidaEnCurso($usuarioId);
+        if ($partida === null || empty($partida['pregunta_actual_id'])) {
+            $this->redirigir($this->appConfig['lobby_url']);
+        }
+
+        $preguntaId = (int) $partida['pregunta_actual_id'];
+        $motivo = trim(Request::post('motivo', 'Pregunta reportada por el usuario'));
+        if (empty($motivo)) {
+            $motivo = 'Pregunta inválida';
+        }
+
+        $this->model->reportarPregunta($preguntaId, $usuarioId, $motivo);
+
+        $reemplazada = $this->model->reemplazarPreguntaReportada((int) $partida['id'], $preguntaId);
+
+        if (!$reemplazada) {
+            $this->model->terminarPartida((int) $partida['id']);
+            $this->redirigir('/partida/resultado?id=' . (int) $partida['id']);
+        }
+
+        $this->redirigir('/partida/jugar?reportada=1');
+    }
+
+
     public function responder()
     {
         $usuarioId = $this->requiereLogin();

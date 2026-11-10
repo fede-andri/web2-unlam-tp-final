@@ -1,18 +1,22 @@
 <?php
 
 namespace app\controller;
+require_once __DIR__ . '/../../helper/FotoPerfil.php';
 
+use \FotoPerfil;
 class PerfilController
 {
     private $render;
     private $usuarioModel;
     private $appConfig;
+    private $mapConfig;
 
-    public function __construct($render, $usuarioModel, $appConfig)
+    public function __construct($render, $usuarioModel, $appConfig, $mapConfig)
     {
         $this->render = $render;
         $this->usuarioModel = $usuarioModel;
         $this->appConfig = $appConfig;
+        $this->mapConfig = $mapConfig;
     }
 
     public function show()
@@ -34,6 +38,8 @@ class PerfilController
         $nombre = $usuario['nombre'] ?? '';
         $foto = !empty($usuario['foto']) ? $usuario['foto'] : 'default.png';
 
+        $stats = $this->usuarioModel->buscarPerfilPublico($usuario['usuario'] ?? '');
+
         $data = [
             // Datos del perfil
             'nombre'           => $nombre,
@@ -43,19 +49,23 @@ class PerfilController
             'sexo'             => $this->formatearSexo($usuario['sexo'] ?? ''),
             'pais'             => $usuario['pais'] ?? '',
             'ciudad'           => $usuario['ciudad'] ?? '',
+            'puntaje_total'    => (int) ($stats['puntaje_total'] ?? 0),
+            'partidas_jugadas' => (int) ($stats['partidas_jugadas'] ?? 0),
             'iniciales'        => $this->iniciales($nombre),
             'foto_url'         => $this->appConfig['base_path_url'] . '/public/img/perfiles/' . $foto,
             'qr_url'           => $this->urlPerfilPublico($usuario['usuario'] ?? ''),
             'qr_alt'           => 'Código QR de tu perfil',
             'volver_url' => $this->appConfig['base_path_url'] . $this->appConfig['lobby_url'],
+            'editar_url' => $base . '/perfil/editar',
+            'eliminar_cuenta_url' => $base . '/perfil/eliminarCuenta',
 
             // foto de perfil (cambiar / eliminar)
             'tiene_foto'        => $foto !== \FotoPerfil::POR_DEFECTO,
             'subir_foto_url'    => $base . '/perfil/subirFoto',
             'eliminar_foto_url' => $base . '/perfil/eliminarFoto',
             //mensajes de resultado (llegan por ?foto=... o ?foto_error=...)
-            'success' => $this->mensajeExito($_GET['foto'] ?? ''),
-            'error'   => $this->mensajeError($_GET['foto_error'] ?? ''),
+            'success' => $this->mensajeExito($_GET['foto'] ?? '') ?? $this->mensajePerfil($_GET['perfil'] ?? ''),
+            'error' => $this->mensajeError($_GET['foto_error'] ?? '') ?? $this->mensajeCuenta($_GET['cuenta_error'] ?? ''),
 
             // Header (mismo patrón que RankingController)
             'base_url'         => $this->appConfig['base_path_url'],
@@ -122,14 +132,195 @@ class PerfilController
         $this->volverAlPerfil('?foto=eliminada');
     }
 
-
-    public function ver()
+    // POST /perfil/eliminarCuenta
+    public function eliminarCuenta()
     {
-        if (!isset($_SESSION['usuario_id'])) {
-            header('Location:' . $this->appConfig['base_path_url'] . $this->appConfig['login_show_url']);
+        $this->exigirSesion();
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            $this->volverAlPerfil();
+        }
+
+        $id = $_SESSION['usuario_id'];
+        $usuario = $this->usuarioModel->buscarPorId($id);
+
+        if (!$usuario) {
+            header('Location:' . $this->appConfig['base_path_url'] . $this->appConfig['logout_url']);
             exit();
         }
 
+        // Pedir la contraseña actual para confirmar
+        $password = $_POST['password_confirmacion'] ?? '';
+
+        if ($password === '' || !password_verify($password, $usuario['password'])) {
+            $this->volverAlPerfil('?cuenta_error=password');
+        }
+
+        // Borrar la foto del disco y los datos de la base
+        \FotoPerfil::eliminar($usuario['foto'] ?? null);
+        $this->usuarioModel->eliminarCuenta($id);
+
+        // Cerrar la sesión igual que el logout
+        $_SESSION = [];
+        session_destroy();
+
+        header('Location:' . $this->appConfig['base_path_url'] . $this->appConfig['login_show_url']);
+        exit();
+    }
+
+    private function mensajeCuenta($codigo)
+    {
+        $mensajes = [
+            'password' => 'La contraseña es incorrecta. Tu cuenta no se eliminó.',
+        ];
+        return $mensajes[$codigo] ?? null;
+    }
+
+    // GET /perfil/editar
+    public function editar()
+    {
+        $this->exigirSesion();
+
+        $usuario = $this->usuarioModel->buscarPorId($_SESSION['usuario_id']);
+
+        if (!$usuario) {
+            header('Location:' . $this->appConfig['base_path_url'] . $this->appConfig['logout_url']);
+            exit();
+        }
+
+        $this->mostrarFormularioEdicion($usuario, $usuario);
+    }
+
+// POST /perfil/actualizar
+    public function actualizar()
+    {
+        $this->exigirSesion();
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location:' . $this->appConfig['base_path_url'] . '/perfil/editar');
+            exit();
+        }
+
+        $id = $_SESSION['usuario_id'];
+        $actual = $this->usuarioModel->buscarPorId($id);
+
+        $nombre  = trim($_POST['nombre'] ?? '');
+        $usuario = trim($_POST['usuario'] ?? '');
+        $fecha   = trim($_POST['fecha_nacimiento'] ?? '');
+        $sexo    = $_POST['sexo'] ?? '';
+        $pais    = trim($_POST['pais'] ?? '');
+        $ciudad  = trim($_POST['ciudad'] ?? '');
+
+        // Si no tocó el mapa, se conserva la ubicación guardada
+        $latitud  = $this->coordenadaValida($_POST['latitud'] ?? '', 90) ?? $actual['latitud'];
+        $longitud = $this->coordenadaValida($_POST['longitud'] ?? '', 180) ?? $actual['longitud'];
+
+        // Lo que el usuario escribió, para no perderlo si hay un error
+        $enviado = [
+            'nombre' => $nombre, 'usuario' => $usuario, 'email' => $actual['email'],
+            'fecha_nacimiento' => $fecha, 'sexo' => $sexo,
+            'pais' => $pais, 'ciudad' => $ciudad,
+            'latitud' => $latitud, 'longitud' => $longitud,
+        ];
+
+        $error = $this->validarEdicion($id, $nombre, $usuario, $fecha, $sexo, $pais, $ciudad);
+
+        if ($error !== null) {
+            $this->mostrarFormularioEdicion($enviado, $actual, $error);
+            return;
+        }
+
+        $this->usuarioModel->actualizarPerfil($id, $nombre, $usuario, $fecha, $sexo, $pais, $ciudad, $latitud, $longitud);
+
+        // El header/lobby pueden usar el nombre de usuario de la sesión
+        $_SESSION['usuario'] = $usuario;
+
+        $this->volverAlPerfil('?perfil=ok');
+    }
+
+    private function validarEdicion($id, $nombre, $usuario, $fecha, $sexo, $pais, $ciudad)
+    {
+        if ($nombre === '' || mb_strlen($nombre) > 100) {
+            return 'Ingresá tu nombre completo (máximo 100 caracteres).';
+        }
+
+        if (!preg_match('/^\S{3,50}$/u', $usuario)) {
+            return 'El usuario debe tener entre 3 y 50 caracteres y no puede tener espacios.';
+        }
+
+        if ($this->usuarioModel->existeUsuarioDeOtro($usuario, $id)) {
+            return 'Ese nombre de usuario ya está en uso.';
+        }
+
+        $d = \DateTime::createFromFormat('Y-m-d', $fecha);
+        if (!$d || $d->format('Y-m-d') !== $fecha || $d > new \DateTime('today')) {
+            return 'La fecha de nacimiento no es válida.';
+        }
+
+        if (!in_array($sexo, ['MASCULINO', 'FEMENINO', 'OTRO', 'PREFIERO_NO_DECIR'], true)) {
+            return 'Elegí una opción de sexo válida.';
+        }
+
+        if ($pais === '' || $ciudad === '') {
+            return 'Seleccioná tu ubicación en el mapa.';
+        }
+
+        return null;
+    }
+
+// Devuelve el número si es una coordenada válida, o null
+    private function coordenadaValida($valor, $maximo)
+    {
+        if ($valor === '' || !is_numeric($valor) || abs((float) $valor) > $maximo) {
+            return null;
+        }
+        return $valor;
+    }
+
+    private function mostrarFormularioEdicion($datos, $actual, $error = null)
+    {
+        $latitud  = !empty($datos['latitud']) ? $datos['latitud'] : $this->mapConfig['default_lat'];
+        $longitud = !empty($datos['longitud']) ? $datos['longitud'] : $this->mapConfig['default_lng'];
+        $sexo     = $datos['sexo'] ?? '';
+
+        $data = array_merge($this->datosHeader(), [
+            'nombre'           => $datos['nombre'] ?? '',
+            'usuario'          => $datos['usuario'] ?? '',
+            'email'            => $actual['email'] ?? '',
+            'fecha_nacimiento' => $datos['fecha_nacimiento'] ?? '',
+            'fecha_max'        => date('Y-m-d'),
+            'sexo_masculino'   => $sexo === 'MASCULINO',
+            'sexo_femenino'    => $sexo === 'FEMENINO',
+            'sexo_otro'        => $sexo === 'OTRO',
+            'sexo_no_decir'    => $sexo === 'PREFIERO_NO_DECIR',
+            'pais'             => $datos['pais'] ?? '',
+            'ciudad'           => $datos['ciudad'] ?? '',
+            'error'            => $error,
+
+            'actualizar_url'   => $this->appConfig['base_path_url'] . '/perfil/actualizar',
+            'cancelar_url'     => $this->appConfig['base_path_url'] . $this->appConfig['perfil_url'],
+            'base_path_url'    => $this->appConfig['base_path_url'],
+
+            // Mapa centrado en la ubicación actual del usuario
+            'tile_layer'      => $this->mapConfig['tile_layer'],
+            'reverse_geocode' => $this->mapConfig['reverse_geocode'],
+            'default_lat'     => $latitud,
+            'default_lng'     => $longitud,
+            'default_zoom'    => $this->mapConfig['default_zoom'],
+            'modo_edicion'    => true,
+        ]);
+
+        $this->render->renderiza('perfilEditar', $data);
+    }
+
+    private function mensajePerfil($codigo)
+    {
+        return $codigo === 'ok' ? 'Tus datos se actualizaron correctamente.' : null;
+    }
+
+
+    public function ver()
+    {
         $nombreUsuario = trim($_GET['usuario'] ?? '');
 
         // Si el perfil pedido es el propio, se muestra la versión editable

@@ -9,6 +9,7 @@ use app\controller\LoginController;
 use app\controller\LugaresController;
 use app\controller\PartidaController;
 use app\controller\PerfilController;
+use app\controller\PreguntaController;
 use app\controller\RankingController;
 use app\controller\RegistroController;
 use app\controller\ReservaController;
@@ -18,6 +19,7 @@ use app\model\LobbyModel;
 use app\model\LoginModel;
 use app\model\LugaresModel;
 use app\model\PartidaModel;
+use app\model\PreguntaModel;
 use app\model\RankingModel;
 use app\model\ReservaModel;
 use app\model\UsuarioModel;
@@ -86,7 +88,17 @@ class Configuration
         return new PerfilController(
             $this->getRender(),        // para renderizar perfilView.mustache
             $this->getUsuarioModel(),  // para leer los datos del usuario (buscarPorId)
-            $this->getAppConfig()      // URLs (login, lobby, base_path_url)
+            $this->getAppConfig(),      // URLs (login, lobby, base_path_url)
+            $this->getMapConfig()
+        );
+    }
+
+    public function getPreguntaController()
+    {
+        return new PreguntaController(
+            $this->getRender(),
+            $this->getPreguntaModel(),
+            $this->getAppConfig()
         );
     }
 
@@ -135,7 +147,14 @@ class Configuration
             "ranking_show_url"=>$this->config["app"]["ranking_show_url"],
             "lobby_url" => $this->config["app"]["lobby_url"],
             "perfil_url" => $this->config["app"]["perfil_url"] ?? "/perfil/show",
+            "sugerir_pregunta_url" => $this->config["app"]["sugerir_pregunta_url"] ?? "/pregunta/show",
+            "guardar_pregunta_url" => $this->config["app"]["guardar_pregunta_url"] ?? "/pregunta/guardar",
         ];
+    }
+
+    private function getPreguntaModel()
+    {
+        return new PreguntaModel($this->getDatabase());
     }
 
     private function getRankingModel(){
