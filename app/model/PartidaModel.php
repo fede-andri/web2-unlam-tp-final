@@ -25,7 +25,7 @@ class PartidaModel
         return $this->database->queryOne(
             "SELECT id, puntaje, pregunta_actual_id
              FROM partidas
-             WHERE usuario_id = ? AND estado = 'EN_CURSO'
+             WHERE usuario_id = ? AND estado = 'EN_CURSO' AND pregunta_actual_id IS NOT NULL
              ORDER BY id DESC
              LIMIT 1",
             [$usuarioId]
@@ -151,6 +151,21 @@ class PartidaModel
             "UPDATE partidas SET estado = 'TERMINADA', pregunta_actual_id = NULL WHERE id = ?",
             [$partidaId]
         );
+    }
+
+    public function reportarPregunta(int $preguntaId, int $partidaId = 0): void
+    {
+        $this->database->execute(
+            "UPDATE preguntas SET estado = 'REPORTADA' WHERE id = ?",
+            [$preguntaId]
+        );
+
+        if ($partidaId > 0) {
+            $this->database->execute(
+                "DELETE FROM partida_pregunta WHERE partida_id = ? AND pregunta_id = ? AND respuesta_elegida_id IS NULL",
+                [$partidaId, $preguntaId]
+            );
+        }
     }
     public function getDetalleError(int $partidaId): ?array
     {

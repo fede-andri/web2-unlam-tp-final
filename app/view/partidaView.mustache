@@ -7,6 +7,26 @@
     <title>Jugando | Preguntones</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link href="/web2-unlam-tp-final/estilos/aplicacion.css" rel="stylesheet">
+    <style>
+        .btn-reportar {
+            display: inline-flex;
+            align-items: center;
+            gap: .4rem;
+            background: transparent;
+            border: 1px solid rgba(255, 122, 122, .3);
+            color: var(--danger-text);
+            padding: .35rem .85rem;
+            border-radius: 999px;
+            font-size: .8rem;
+            cursor: pointer;
+            transition: all .15s ease;
+        }
+        .btn-reportar:hover {
+            background: rgba(112, 39, 39, .35);
+            border-color: rgba(255, 122, 122, .6);
+            color: #fff;
+        }
+    </style>
 </head>
 <body class="game-page" style="--cat: {{categoria_color}}">
 
@@ -37,6 +57,19 @@
             </form>
 
             <p class="game-hint">Cada respuesta correcta suma un punto. Si te equivocás, la partida termina.</p>
+
+            <div class="game-report-wrap text-center pb-3">
+                <form method="POST" action="{{reportar_url}}" onsubmit="return confirm('¿Deseás reportar esta pregunta como inválida? Se pasará a la siguiente pregunta.');">
+                    <input type="hidden" name="pregunta_id" value="{{pregunta_id}}">
+                    <button type="submit" class="btn-reportar" title="Reportar pregunta si es incorrecta o confusa">
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path>
+                            <line x1="4" y1="22" x2="4" y2="15"></line>
+                        </svg>
+                        <span>Reportar pregunta</span>
+                    </button>
+                </form>
+            </div>
 
         </section>
 

@@ -31,4 +31,12 @@ class PreguntaModel
             );
         }
     }
+
+    public function reportarPregunta(int $preguntaId): void
+    {
+        $this->database->execute(
+            "UPDATE preguntas SET estado = 'REPORTADA' WHERE id = ?",
+            [$preguntaId]
+        );
+    }
 }
