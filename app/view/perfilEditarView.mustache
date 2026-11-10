@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#091411">
+
+    <title>Editar perfil | Preguntones</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+          crossorigin="anonymous">
+
+    <link href="/web2-unlam-tp-final/estilos/aplicacion.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+</head>
+
+<body class="register-page">
+
+{{> components/headerView}}
+
+<main class="auth-wrap">
+
+    <div class="auth-card">
+
+        <section class="auth-aside">
+            <div>
+                <div class="aside-mark" aria-hidden="true">✦</div>
+                <p class="eyebrow mb-0">Preguntones</p>
+                <h1 class="aside-title">Mantené tu perfil al día.</h1>
+                <p class="aside-copy mb-0">
+                    Podés cambiar tus datos cuando quieras. El email no se puede modificar.
+                </p>
+            </div>
+
+            <p class="aside-footnote">
+                Aprendé, competí y convertite en el mejor.
+            </p>
+        </section>
+
+        <section class="auth-content">
+            <div class="form-shell">
+
+                <div class="mb-4">
+                    <p class="eyebrow mb-0">Mi cuenta</p>
+                    <h2 class="form-title">Editar perfil</h2>
+                    <p class="form-intro">Modificá los datos que quieras y guardá los cambios.</p>
+                </div>
+
+                {{#error}}
+                    <div class="alert alert-danger mb-4" role="alert">{{error}}</div>
+                {{/error}}
+
+                <form method="POST" action="{{actualizar_url}}">
+
+                    <div class="row">
+
+                        <div class="col-md-6 mb-3">
+                            <label for="nombre" class="form-label">Nombre completo</label>
+                            <input type="text" class="form-control" id="nombre" name="nombre"
+                                   value="{{nombre}}" autocomplete="name" required>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="usuario" class="form-label">Usuario</label>
+                            <input type="text" class="form-control" id="usuario" name="usuario"
+                                   value="{{usuario}}" autocomplete="username" required>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-6 mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email"
+                                   value="{{email}}" disabled>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="fecha_nacimiento" class="form-label">Fecha de nacimiento</label>
+                            <input type="date" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento"
+                                   value="{{fecha_nacimiento}}" max="{{fecha_max}}" required>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-4 mb-3">
+                            <label for="sexo" class="form-label">Sexo</label>
+                            <select class="form-select" id="sexo" name="sexo" required>
+                                <option value="">Seleccionar</option>
+                                <option value="MASCULINO" {{#sexo_masculino}}selected{{/sexo_masculino}}>Masculino</option>
+                                <option value="FEMENINO" {{#sexo_femenino}}selected{{/sexo_femenino}}>Femenino</option>
+                                <option value="OTRO" {{#sexo_otro}}selected{{/sexo_otro}}>Otro</option>
+                                <option value="PREFIERO_NO_DECIR" {{#sexo_no_decir}}selected{{/sexo_no_decir}}>Prefiero no decir</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label for="pais" class="form-label">País</label>
+                            <input type="text" class="form-control" id="pais" name="pais"
+                                   value="{{pais}}" required readonly>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label for="ciudad" class="form-label">Ciudad</label>
+                            <input type="text" class="form-control" id="ciudad" name="ciudad"
+                                   value="{{ciudad}}" required readonly>
+                        </div>
+
+                    </div>
+
+                    <div class="mb-4">
+                        <p class="form-text mb-2">Hacé clic en el mapa para cambiar tu ubicación.</p>
+                        {{> components/mapaUbicacionView}}
+                    </div>
+
+                    <button type="submit" class="btn btn-accent btn-lg w-100 mb-3">
+                        Guardar cambios
+                    </button>
+
+                    <a href="{{cancelar_url}}" class="btn btn-outline-accent btn-lg w-100">
+                        Cancelar
+                    </a>
+
+                </form>
+
+                <p class="form-footer">Sistema de Preguntas y Respuestas</p>
+            </div>
+        </section>
+
+    </div>
+
+</main>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+    const MAP_CONFIG = {
+        defaultLat: {{default_lat}},
+        defaultLng: {{default_lng}},
+        defaultZoom: {{default_zoom}},
+        tileLayer: "{{tile_layer}}",
+        reverseGeocode: "{{reverse_geocode}}",
+        modoEdicion: true
+    };
+</script>
+
+<script src="{{base_path_url}}/public/js/mapaUbicacion.js"></script>
+
+</body>
+</html>

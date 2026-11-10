@@ -88,7 +88,8 @@ class Configuration
         return new PerfilController(
             $this->getRender(),        // para renderizar perfilView.mustache
             $this->getUsuarioModel(),  // para leer los datos del usuario (buscarPorId)
-            $this->getAppConfig()      // URLs (login, lobby, base_path_url)
+            $this->getAppConfig(),      // URLs (login, lobby, base_path_url)
+            $this->getMapConfig()
         );
     }
 

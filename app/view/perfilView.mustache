@@ -70,6 +70,12 @@
                 <h1 class="aside-title">{{nombre}}</h1>
                 <p class="aside-copy mb-3">@{{usuario}}</p>
 
+                <dt>Puntaje total</dt>
+                <dd>{{puntaje_total}}</dd>
+
+                <dt>Partidas realizadas</dt>
+                <dd>{{partidas_jugadas}}</dd>
+
                 <form method="POST"
                       action="{{subir_foto_url}}"
                       enctype="multipart/form-data"
@@ -159,6 +165,37 @@
                              aria-label="Mapa con tu ubicación: {{ciudad}}, {{pais}}"></div>
                     </div>
                 {{/tiene_ubicacion}}
+
+                <a href="{{editar_url}}" class="btn btn-accent btn-lg w-100 mb-3">
+                    Editar perfil
+                </a>
+
+                <div class="border border-danger rounded p-3 mb-4">
+                    <h3 class="h6 text-danger mb-1">Eliminar cuenta</h3>
+                    <p class="small mb-3">
+                        Se borrarán tu perfil, tu foto y todas tus partidas. Esta acción no se puede deshacer.
+                    </p>
+
+                    <form method="POST"
+                          action="{{eliminar_cuenta_url}}"
+                          onsubmit="return confirm('¿Seguro que querés eliminar tu cuenta? No se puede deshacer.');">
+
+                        <label for="password_confirmacion" class="form-label small">
+                            Ingresá tu contraseña para confirmar
+                        </label>
+
+                        <input type="password"
+                               class="form-control mb-2"
+                               id="password_confirmacion"
+                               name="password_confirmacion"
+                               autocomplete="current-password"
+                               required>
+
+                        <button type="submit" class="btn btn-danger w-100">
+                            Eliminar mi cuenta definitivamente
+                        </button>
+                    </form>
+                </div>
 
                 <a href="{{volver_url}}" class="btn btn-outline-accent btn-lg w-100">
                     Volver al lobby
