@@ -78,6 +78,8 @@ class PartidaController
             'puntaje' => (int) $partida['puntaje'],
             'numero_pregunta' => (int) $partida['puntaje'] + 1,
             'responder_url' => $this->appConfig['base_path_url'] . '/partida/responder',
+            'reportar_url' => $this->appConfig['base_path_url'] . '/partida/reportar',
+            'pregunta_id' => (int) $partida['pregunta_actual_id'],
         ]));
     }
 
@@ -118,6 +120,35 @@ class PartidaController
             // Respondio todas las preguntas disponibles: la partida termina igual
         }
 
+        $this->model->terminarPartida($partidaId);
+        $this->redirigir('/partida/resultado?id=' . $partidaId);
+    }
+
+    public function reportar()
+    {
+        $usuarioId = $this->requiereLogin();
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            $this->redirigir('/partida/jugar');
+        }
+
+        $partida = $this->model->getPartidaEnCurso($usuarioId);
+        if ($partida === null || empty($partida['pregunta_actual_id'])) {
+            $this->redirigir($this->appConfig['lobby_url']);
+        }
+
+        $partidaId = (int) $partida['id'];
+        $preguntaId = (int) Request::post('pregunta_id', (int) $partida['pregunta_actual_id']);
+
+        // Marcar la pregunta como 'REPORTADA' y desvincularla de la partida actual
+        $this->model->reportarPregunta($preguntaId, $partidaId);
+
+        // Asignar inmediatamente la siguiente pregunta para que el usuario continúe jugando
+        if ($this->model->asignarSiguientePregunta($partidaId)) {
+            $this->redirigir('/partida/jugar');
+        }
+
+        // Si ya no quedan más preguntas activas, se finaliza la partida
         $this->model->terminarPartida($partidaId);
         $this->redirigir('/partida/resultado?id=' . $partidaId);
     }

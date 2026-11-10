@@ -4,9 +4,73 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#091411">
-    <title>Sugerir Pregunta | Preguntones</title>
+    <title>Sugerir pregunta | Preguntones</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link href="/web2-unlam-tp-final/estilos/aplicacion.css" rel="stylesheet">
+    <style>
+        .opcion-row {
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+            padding: .45rem .75rem;
+            border: 1px solid var(--border);
+            border-radius: .75rem;
+            background: var(--surface-raised);
+            margin-bottom: .65rem;
+            transition: border-color .15s ease, background-color .15s ease;
+        }
+        .opcion-row:focus-within {
+            border-color: var(--accent);
+        }
+        .opcion-letter {
+            flex: 0 0 2rem;
+            height: 2rem;
+            display: grid;
+            place-items: center;
+            border-radius: .5rem;
+            background: rgba(98, 212, 184, .18);
+            color: var(--accent);
+            font-weight: 800;
+            font-size: .88rem;
+        }
+        .opcion-row .form-control {
+            background: transparent;
+            border: none;
+            box-shadow: none;
+            min-height: auto;
+            padding: .35rem .2rem;
+            color: var(--text);
+        }
+        .opcion-row .form-control:focus {
+            background: transparent;
+            border: none;
+            box-shadow: none;
+        }
+        .opcion-radio-label {
+            display: flex;
+            align-items: center;
+            gap: .35rem;
+            color: var(--muted);
+            font-size: .8rem;
+            cursor: pointer;
+            white-space: nowrap;
+            user-select: none;
+        }
+        .opcion-radio-label input[type="radio"] {
+            accent-color: var(--accent);
+            width: 1.15rem;
+            height: 1.15rem;
+            cursor: pointer;
+        }
+        .opcion-row:has(input[type="radio"]:checked) {
+            border-color: var(--accent);
+            background: rgba(98, 212, 184, .08);
+        }
+        .opcion-row:has(input[type="radio"]:checked) .opcion-radio-label {
+            color: var(--accent);
+            font-weight: 600;
+        }
+    </style>
 </head>
 <body class="register-page">
 
@@ -14,38 +78,46 @@
 
     <main class="auth-wrap">
         <div class="auth-card">
-
             <section class="auth-aside">
                 <div>
                     <div class="aside-mark" aria-hidden="true">✦</div>
                     <p class="eyebrow mb-0">Comunidad</p>
-                    <h1 class="aside-title">Proponé tus propios desafíos.</h1>
-                    <p class="aside-copy mb-0">Ayudá a expandir el conocimiento de la comunidad sugiriendo nuevas preguntas sobre League of Legends.</p>
+                    <h1 class="aside-title">Sugerir nueva pregunta</h1>
+                    <p class="aside-copy mb-0">
+                        Proponé nuevos desafíos sobre League of Legends para que otros invocadores demuestren lo que saben.
+                    </p>
                 </div>
-                <p class="aside-footnote">Las preguntas sugeridas serán revisadas por un editor.</p>
+                <p class="aside-footnote">
+                    Las preguntas sugeridas quedarán en revisión para ser evaluadas y aprobadas por un editor antes de sumarse a las partidas.
+                </p>
             </section>
 
             <section class="auth-content">
                 <div class="form-shell">
                     <div class="mb-4">
                         <p class="eyebrow mb-0">Colaboración</p>
-                        <h2 class="form-title">Sugerir pregunta</h2>
-                        <p class="form-intro">Completá los datos y definí las opciones de respuesta.</p>
+                        <h2 class="form-title">Nueva propuesta</h2>
+                        <p class="form-intro">
+                            Completá la categoría, el enunciado y las opciones de respuesta marcando cuál es la correcta.
+                        </p>
                     </div>
 
                     {{#error}}
-                        <div class="alert alert-danger mb-4" role="alert">{{error}}</div>
+                        <div class="alert alert-danger mb-4" role="alert">
+                            {{error}}
+                        </div>
                     {{/error}}
 
                     {{#success}}
-                        <div class="alert alert-success mb-4" role="alert">{{success}}</div>
+                        <div class="alert alert-success mb-4" role="alert">
+                            {{success}}
+                        </div>
                     {{/success}}
 
                     <form method="POST" action="{{guardar_pregunta_url}}">
-                        
                         <div class="mb-3">
                             <label for="categoria_id" class="form-label">Categoría</label>
-                            <select class="form-control" id="categoria_id" name="categoria_id" required>
+                            <select class="form-select" id="categoria_id" name="categoria_id" required>
                                 <option value="">Seleccioná una categoría...</option>
                                 {{#categorias}}
                                     <option value="{{id}}">{{nombre}}</option>
@@ -55,46 +127,58 @@
 
                         <div class="mb-3">
                             <label for="enunciado" class="form-label">Enunciado de la pregunta</label>
-                            <textarea class="form-control" id="enunciado" name="enunciado" rows="3" required placeholder="Ej: ¿Qué objeto otorga velocidad de ataque y crítico?"></textarea>
+                            <textarea class="form-control" id="enunciado" name="enunciado" rows="3" placeholder="Ej: ¿Qué objeto otorga velocidad de ataque y probabilidad de golpe crítico?" required></textarea>
                         </div>
 
-                        <label class="form-label mb-2">Respuestas (marcá cuál es la correcta)</label>
+                        <div class="mb-4">
+                            <label class="form-label mb-2">Opciones de respuesta</label>
+                            <p class="small text-muted mb-2">Ingresá las opciones y marcá el círculo de la respuesta correcta.</p>
 
-                        <div class="input-group mb-2">
-                            <div class="input-group-text bg-transparent border-secondary text-white">
-                                <input class="form-check-input mt-0" type="radio" name="correcta" value="0" required title="Marcar como correcta">
+                            <div class="opcion-row">
+                                <span class="opcion-letter">A</span>
+                                <input type="text" class="form-control" name="respuestas[]" placeholder="Opción A" required autocomplete="off">
+                                <label class="opcion-radio-label">
+                                    <input type="radio" name="correcta" value="0" required title="Marcar como correcta">
+                                    <span>Correcta</span>
+                                </label>
                             </div>
-                            <input type="text" class="form-control" name="respuestas[]" placeholder="Opción A" required>
-                        </div>
 
-                        <div class="input-group mb-2">
-                            <div class="input-group-text bg-transparent border-secondary text-white">
-                                <input class="form-check-input mt-0" type="radio" name="correcta" value="1" title="Marcar como correcta">
+                            <div class="opcion-row">
+                                <span class="opcion-letter">B</span>
+                                <input type="text" class="form-control" name="respuestas[]" placeholder="Opción B" required autocomplete="off">
+                                <label class="opcion-radio-label">
+                                    <input type="radio" name="correcta" value="1" title="Marcar como correcta">
+                                    <span>Correcta</span>
+                                </label>
                             </div>
-                            <input type="text" class="form-control" name="respuestas[]" placeholder="Opción B" required>
-                        </div>
 
-                        <div class="input-group mb-2">
-                            <div class="input-group-text bg-transparent border-secondary text-white">
-                                <input class="form-check-input mt-0" type="radio" name="correcta" value="2" title="Marcar como correcta">
+                            <div class="opcion-row">
+                                <span class="opcion-letter">C</span>
+                                <input type="text" class="form-control" name="respuestas[]" placeholder="Opción C" autocomplete="off">
+                                <label class="opcion-radio-label">
+                                    <input type="radio" name="correcta" value="2" title="Marcar como correcta">
+                                    <span>Correcta</span>
+                                </label>
                             </div>
-                            <input type="text" class="form-control" name="respuestas[]" placeholder="Opción C">
-                        </div>
 
-                        <div class="input-group mb-4">
-                            <div class="input-group-text bg-transparent border-secondary text-white">
-                                <input class="form-check-input mt-0" type="radio" name="correcta" value="3" title="Marcar como correcta">
+                            <div class="opcion-row">
+                                <span class="opcion-letter">D</span>
+                                <input type="text" class="form-control" name="respuestas[]" placeholder="Opción D" autocomplete="off">
+                                <label class="opcion-radio-label">
+                                    <input type="radio" name="correcta" value="3" title="Marcar como correcta">
+                                    <span>Correcta</span>
+                                </label>
                             </div>
-                            <input type="text" class="form-control" name="respuestas[]" placeholder="Opción D">
                         </div>
 
                         <button type="submit" class="btn btn-accent btn-lg w-100 mb-2">Enviar sugerencia</button>
+                        <div class="form-divider">o</div>
                         <a href="{{lobby_url}}" class="btn btn-outline-accent btn-lg w-100">Volver al lobby</a>
-
                     </form>
+
+                    <p class="form-footer">Sistema de Preguntas y Respuestas</p>
                 </div>
             </section>
-
         </div>
     </main>
 
