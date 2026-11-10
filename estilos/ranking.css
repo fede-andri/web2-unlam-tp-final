@@ -1,0 +1,241 @@
+
+.ranking-page {
+    --rk-pad: 1.5rem;
+}
+
+.ranking-page .panel-heading {
+    padding-inline: var(--rk-pad);
+    flex-wrap: wrap;
+    row-gap: .35rem;
+}
+
+.ranking-page .ranking-table thead th:first-child,
+.ranking-page .ranking-table tbody td:first-child {
+    padding-left: var(--rk-pad);
+}
+
+.ranking-page .ranking-table thead th:last-child,
+.ranking-page .ranking-table tbody td:last-child {
+    padding-right: var(--rk-pad);
+}
+
+.ranking-page .empty-state {
+    margin-inline: var(--rk-pad);
+}
+
+.ranking-page .page-title,
+.ranking-page .page-subtitle {
+    overflow-wrap: anywhere;
+}
+
+.ranking-page .ranking-table thead th:first-child,
+.ranking-page .ranking-table tbody td:first-child {
+    width: 1%;
+    white-space: nowrap;
+}
+
+.ranking-page .ranking-table td.text-end,
+.ranking-page .ranking-table th.text-end {
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+.ranking-page .player-name {
+    display: inline-block;
+    max-width: 22rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+.ranking-page .ranking-table tbody tr.ranking-row:first-child .position {
+    border-color: rgba(200, 170, 110, .5);
+    color: var(--gold);
+}
+
+.ranking-page .ranking-table tbody tr.ranking-row {
+    transition: background-color .15s ease;
+}
+
+.ranking-page .aside-panel {
+    position: sticky;
+    top: 1.5rem;
+}
+
+
+
+@media (max-width: 768px) {
+
+    .ranking-page {
+        --rk-pad: 1.25rem;
+    }
+
+    .ranking-page .page-content {
+        padding-block: 2rem 2.5rem;
+    }
+
+    .ranking-page .page-title {
+        font-size: 2.3rem;
+    }
+
+    .ranking-page .page-subtitle {
+        font-size: 1rem;
+    }
+
+    .ranking-page .ranking-layout {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+
+    .ranking-page .aside-panel {
+        position: static;
+        padding: 1.25rem;
+    }
+
+    .ranking-page .panel-heading {
+        padding-block: 1.25rem .9rem;
+    }
+
+    .ranking-page .ranking-table thead th,
+    .ranking-page .ranking-table tbody td {
+        padding-inline: .5rem;
+        padding-block: .85rem;
+    }
+
+    .ranking-page .ranking-table thead th:first-child,
+    .ranking-page .ranking-table tbody td:first-child {
+        padding-left: var(--rk-pad);
+    }
+
+    .ranking-page .ranking-table thead th:last-child,
+    .ranking-page .ranking-table tbody td:last-child {
+        padding-right: var(--rk-pad);
+    }
+
+    .ranking-page .player-name {
+        max-width: 16rem;
+    }
+
+    .ranking-page .site-footer {
+        padding-top: 1.5rem;
+    }
+}
+
+
+
+@media (max-width: 425px) {
+
+    .ranking-page {
+        --rk-pad: 1rem;
+    }
+
+    .ranking-page .header-inner {
+        min-height: 60px;
+        flex-wrap: wrap;
+        justify-content: center;
+        row-gap: .15rem;
+        padding-block: .4rem;
+    }
+
+    .ranking-page .header-inner nav {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: .1rem;
+    }
+
+    .ranking-page .header-link {
+        padding: .45rem .6rem;
+        font-size: .82rem;
+    }
+
+    .ranking-page .page-content {
+        padding-block: 1rem 1.5rem;
+    }
+
+    .ranking-page .page-title {
+        margin: .4rem 0 .5rem;
+        font-size: 1.8rem;
+        line-height: 1.1;
+    }
+
+    .ranking-page .page-subtitle {
+        font-size: .92rem;
+    }
+
+    .ranking-page .ranking-layout {
+        gap: .75rem;
+        margin-top: 1.25rem;
+    }
+
+    .ranking-page .panel-heading {
+        padding-block: 1.1rem .8rem;
+    }
+
+    .ranking-page .panel-heading h2,
+    .ranking-page .aside-panel h2 {
+        font-size: 1.05rem;
+    }
+
+    /* Tabla */
+    .ranking-page .ranking-table thead th,
+    .ranking-page .ranking-table tbody td {
+        padding-inline: .4rem;
+        padding-block: .7rem;
+        font-size: .88rem;
+    }
+
+    .ranking-page .ranking-table thead th {
+        font-size: .63rem;
+        letter-spacing: .06em;
+    }
+
+    .ranking-page .ranking-table thead th:first-child,
+    .ranking-page .ranking-table tbody td:first-child {
+        padding-left: var(--rk-pad);
+    }
+
+    .ranking-page .ranking-table thead th:last-child,
+    .ranking-page .ranking-table tbody td:last-child {
+        padding-right: var(--rk-pad);
+    }
+
+    .ranking-page .position {
+        width: 1.8rem;
+        height: 1.8rem;
+        font-size: .8rem;
+    }
+
+    .ranking-page .player-name {
+        max-width: 7.5rem;
+    }
+
+    .ranking-page .you-badge {
+        margin-left: .3rem;
+        padding: .15rem .4rem;
+        font-size: .64rem;
+    }
+
+    .ranking-page .ranking-table tbody tr.ranking-gap td {
+        padding-block: .1rem;
+    }
+
+    .ranking-page .empty-state {
+        padding: 2.5rem 1rem;
+    }
+
+    .ranking-page .aside-panel {
+        padding: 1.15rem;
+    }
+
+    .ranking-page .aside-panel .header-link {
+        min-height: 2.75rem;
+        align-items: center;
+    }
+
+    .ranking-page .site-footer {
+        padding: 1.25rem .5rem .5rem;
+    }
+}

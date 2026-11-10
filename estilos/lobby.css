@@ -1,0 +1,338 @@
+
+.lobby-page {
+    --lobby-pad: 1.5rem;
+}
+
+.lobby-page .panel-heading {
+    padding-inline: var(--lobby-pad);
+    flex-wrap: wrap;
+    row-gap: .35rem;
+}
+
+.lobby-page .stat-grid {
+    margin-inline: var(--lobby-pad);
+}
+
+.lobby-page .category-list {
+    padding-inline: var(--lobby-pad);
+}
+
+.lobby-page .mini-ranking li {
+    padding-inline: var(--lobby-pad);
+}
+
+.lobby-page .locked-body {
+    padding-inline: var(--lobby-pad);
+}
+
+.lobby-page .ranking-table thead th:first-child,
+.lobby-page .ranking-table tbody td:first-child {
+    padding-left: var(--lobby-pad);
+}
+
+.lobby-page .ranking-table thead th:last-child,
+.lobby-page .ranking-table tbody td:last-child {
+    padding-right: var(--lobby-pad);
+}
+
+
+.lobby-page .lobby-hero .page-title {
+    overflow-wrap: anywhere;
+}
+
+.lobby-page .lobby-hero-action small {
+    text-align: center;
+}
+
+.lobby-page .player-score,
+.lobby-page .category-value {
+    font-variant-numeric: tabular-nums;
+}
+
+.lobby-page .mini-ranking .player-score {
+    white-space: nowrap;
+}
+
+.lobby-page .mini-ranking li[data-href] {
+    cursor: pointer;
+    transition: background-color .15s ease;
+}
+
+.lobby-page .mini-ranking li[data-href]:hover {
+    background: rgba(98, 212, 184, .07);
+}
+
+.lobby-page .mini-ranking li.current-player[data-href]:hover {
+    background: rgba(98, 212, 184, .14);
+}
+
+.lobby-page .mini-ranking li.ranking-gap {
+    display: block;
+    padding-block: .2rem;
+    border-top: 0;
+    color: var(--muted);
+    line-height: 1.2;
+    letter-spacing: .3em;
+    text-align: center;
+    cursor: default;
+}
+
+.lobby-page .mini-ranking li.ranking-gap:hover {
+    background: transparent;
+}
+
+
+
+@media (max-width: 768px) {
+
+    .lobby-page {
+        --lobby-pad: 1.25rem;
+    }
+
+    .lobby-page .page-content {
+        padding-block: 2rem 2.5rem;
+    }
+
+    .lobby-page .lobby-hero {
+        grid-template-columns: auto minmax(0, 1fr);
+        gap: 1.25rem 1.5rem;
+        justify-items: stretch;
+        padding: 1.5rem 1.25rem;
+        text-align: left;
+    }
+
+    .lobby-page .level-ring {
+        width: 6.5rem;
+        height: 6.5rem;
+    }
+
+    .lobby-page .level-ring-value {
+        font-size: 2rem;
+    }
+
+    .lobby-page .lobby-hero .page-title {
+        margin-bottom: .6rem;
+        font-size: 1.9rem;
+    }
+
+    .lobby-page .hero-meta {
+        justify-content: flex-start;
+        margin-bottom: .75rem;
+    }
+
+    .lobby-page .lobby-hero-action {
+        grid-column: 1 / -1;
+        width: 100%;
+    }
+
+    .lobby-page .lobby-hero-action .btn {
+        min-height: 3.1rem;
+        font-size: 1.05rem;
+    }
+
+    .lobby-page .lobby-grid {
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .lobby-page .panel-heading {
+        padding-block: 1.25rem .9rem;
+    }
+
+    .lobby-page .ranking-table thead th,
+    .lobby-page .ranking-table tbody td {
+        padding-inline: .5rem;
+        padding-block: .85rem;
+    }
+
+    .lobby-page .ranking-table thead th:first-child,
+    .lobby-page .ranking-table tbody td:first-child {
+        padding-left: var(--lobby-pad);
+    }
+
+    .lobby-page .ranking-table thead th:last-child,
+    .lobby-page .ranking-table tbody td:last-child {
+        padding-right: var(--lobby-pad);
+    }
+
+    .lobby-page .ranking-table tbody td:nth-child(2) {
+        overflow-wrap: anywhere;
+    }
+
+    .lobby-page .mini-ranking li {
+        padding-block: .75rem;
+    }
+
+    .lobby-page .site-footer {
+        padding-top: 1.5rem;
+    }
+}
+
+
+
+@media (max-width: 425px) {
+
+    .lobby-page {
+        --lobby-pad: 1rem;
+    }
+
+    .lobby-page .header-inner {
+        min-height: 60px;
+        flex-wrap: wrap;
+        justify-content: center;
+        row-gap: .15rem;
+        padding-block: .4rem;
+    }
+
+    .lobby-page .header-inner nav {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: .1rem;
+    }
+
+    .lobby-page .header-link {
+        padding: .45rem .6rem;
+        font-size: .82rem;
+    }
+
+    .lobby-page .page-content {
+        padding-block: 1rem 1.5rem;
+    }
+
+    .lobby-page .lobby-hero {
+        grid-template-columns: 1fr;
+        justify-items: center;
+        gap: 1rem;
+        padding: 1.25rem 1rem;
+        text-align: center;
+    }
+
+    .lobby-page .level-ring {
+        width: 5.75rem;
+        height: 5.75rem;
+    }
+
+    .lobby-page .level-ring-value {
+        font-size: 1.85rem;
+    }
+
+    .lobby-page .lobby-hero .page-title {
+        margin-bottom: .5rem;
+        font-size: 1.6rem;
+        line-height: 1.15;
+    }
+
+    .lobby-page .hero-meta {
+        justify-content: center;
+        gap: .4rem .7rem;
+        margin-bottom: .7rem;
+        font-size: .85rem;
+    }
+
+    .lobby-page .lobby-hero-action {
+        grid-column: auto;
+    }
+
+    .lobby-page .lobby-grid {
+        gap: .75rem;
+        margin-top: .75rem;
+    }
+
+    .lobby-page .panel-heading {
+        padding-block: 1.1rem .8rem;
+    }
+
+    .lobby-page .panel-heading h2,
+    .lobby-page .aside-panel h2 {
+        font-size: 1.05rem;
+    }
+
+    .lobby-page .panel-link {
+        padding-block: .3rem;
+    }
+
+    .lobby-page .stat-grid {
+        gap: .6rem;
+        margin-bottom: 1rem;
+    }
+
+    .lobby-page .stat-tile {
+        padding: .85rem;
+    }
+
+    .lobby-page .stat-tile dt {
+        font-size: .66rem;
+    }
+
+    .lobby-page .stat-tile dd {
+        font-size: 1.4rem;
+    }
+
+    .lobby-page .category-list {
+        padding-block: 1rem;
+    }
+
+    .lobby-page .category-row {
+        font-size: .88rem;
+    }
+
+    .lobby-page .mini-ranking li {
+        gap: .65rem;
+        min-height: 3rem;
+        padding-block: .7rem;
+    }
+
+    .lobby-page .mini-ranking li.ranking-gap {
+        min-height: 0;
+        padding-block: .15rem;
+    }
+
+    .lobby-page .you-badge {
+        margin-left: .35rem;
+    }
+
+    .lobby-page .ranking-table thead th,
+    .lobby-page .ranking-table tbody td {
+        padding-inline: .4rem;
+        padding-block: .75rem;
+        font-size: .85rem;
+    }
+
+    .lobby-page .ranking-table thead th {
+        font-size: .63rem;
+        letter-spacing: .06em;
+    }
+
+    .lobby-page .ranking-table thead th:first-child,
+    .lobby-page .ranking-table tbody td:first-child {
+        padding-left: var(--lobby-pad);
+    }
+
+    .lobby-page .ranking-table thead th:last-child,
+    .lobby-page .ranking-table tbody td:last-child {
+        padding-right: var(--lobby-pad);
+    }
+
+    .lobby-page .result-badge {
+        min-width: 4.4rem;
+        padding: .15rem .4rem;
+        font-size: .68rem;
+    }
+
+    .lobby-page .match-date {
+        font-size: .7rem;
+    }
+
+    .lobby-page .locked-body {
+        padding-bottom: 1.1rem;
+    }
+
+    .lobby-page .locked-body .btn {
+        min-height: 3rem;
+    }
+
+    .lobby-page .site-footer {
+        padding: 1.25rem .5rem .5rem;
+    }
+}
