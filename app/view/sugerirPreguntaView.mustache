@@ -8,67 +8,179 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link href="/web2-unlam-tp-final/estilos/aplicacion.css" rel="stylesheet">
     <style>
-        .opcion-row {
+        .sugerir-shell {
+            width: 100%;
+            max-width: 520px;
+            margin-inline: auto;
+        }
+
+        .sugerir-opcion {
             display: flex;
             align-items: center;
-            gap: .75rem;
-            padding: .45rem .75rem;
+            gap: .65rem;
+            padding: .45rem .65rem;
             border: 1px solid var(--border);
-            border-radius: .75rem;
+            border-radius: .85rem;
             background: var(--surface-raised);
-            margin-bottom: .65rem;
             transition: border-color .15s ease, background-color .15s ease;
+            min-width: 0;
+            flex-wrap: nowrap;
         }
-        .opcion-row:focus-within {
+
+        .sugerir-opcion:focus-within {
             border-color: var(--accent);
+            background: rgba(98, 212, 184, .04);
         }
-        .opcion-letter {
+
+        .sugerir-letra {
             flex: 0 0 2rem;
+            width: 2rem;
             height: 2rem;
             display: grid;
             place-items: center;
-            border-radius: .5rem;
-            background: rgba(98, 212, 184, .18);
+            border-radius: .55rem;
+            background: rgba(98, 212, 184, .12);
             color: var(--accent);
             font-weight: 800;
-            font-size: .88rem;
+            font-size: .9rem;
+            flex-shrink: 0;
         }
-        .opcion-row .form-control {
+
+        .sugerir-opcion .form-control {
+            flex: 1 1 auto;
+            min-width: 0;
+            border: 0;
             background: transparent;
-            border: none;
-            box-shadow: none;
-            min-height: auto;
-            padding: .35rem .2rem;
+            padding: .35rem .4rem;
+            box-shadow: none !important;
+            min-height: 2.4rem;
             color: var(--text);
+            font-size: .95rem;
         }
-        .opcion-row .form-control:focus {
+
+        .sugerir-opcion .form-control:focus {
             background: transparent;
-            border: none;
-            box-shadow: none;
+            color: var(--text);
+            box-shadow: none !important;
         }
-        .opcion-radio-label {
-            display: flex;
+
+        .sugerir-radio-label {
+            display: inline-flex;
             align-items: center;
             gap: .35rem;
+            padding: .35rem .6rem;
+            border-radius: .5rem;
+            border: 1px solid transparent;
             color: var(--muted);
             font-size: .8rem;
-            cursor: pointer;
-            white-space: nowrap;
-            user-select: none;
-        }
-        .opcion-radio-label input[type="radio"] {
-            accent-color: var(--accent);
-            width: 1.15rem;
-            height: 1.15rem;
-            cursor: pointer;
-        }
-        .opcion-row:has(input[type="radio"]:checked) {
-            border-color: var(--accent);
-            background: rgba(98, 212, 184, .08);
-        }
-        .opcion-row:has(input[type="radio"]:checked) .opcion-radio-label {
-            color: var(--accent);
             font-weight: 600;
+            cursor: pointer;
+            user-select: none;
+            white-space: nowrap;
+            flex-shrink: 0;
+            transition: all .15s ease;
+        }
+
+        .sugerir-radio-label:hover {
+            color: var(--text);
+            background: rgba(200, 170, 110, .1);
+            border-color: rgba(200, 170, 110, .25);
+        }
+
+        .sugerir-radio-label input[type="radio"] {
+            accent-color: var(--gold);
+            cursor: pointer;
+            width: 1rem;
+            height: 1rem;
+            margin: 0;
+        }
+
+        .sugerir-opcion:has(input[type="radio"]:checked) {
+            border-color: var(--gold);
+            background: rgba(200, 170, 110, .07);
+        }
+
+        .sugerir-opcion:has(input[type="radio"]:checked) .sugerir-radio-label {
+            color: var(--gold);
+            border-color: rgba(200, 170, 110, .4);
+            background: rgba(200, 170, 110, .15);
+        }
+
+        /* ── Adaptabilidad Responsive Mobile (< 768px) ── */
+        @media (max-width: 768px) {
+            .auth-wrap {
+                width: min(100% - 1rem, 1240px) !important;
+                padding-block: 1rem 2rem !important;
+            }
+
+            .auth-card,
+            .register-page .auth-card {
+                grid-template-columns: 1fr !important;
+                border-radius: 1rem;
+            }
+
+            .auth-aside {
+                padding: 1.25rem 1rem !important;
+                min-height: auto !important;
+            }
+
+            .aside-mark {
+                width: 2.2rem;
+                height: 2.2rem;
+                margin-bottom: .6rem;
+                font-size: .95rem;
+            }
+
+            .aside-title {
+                font-size: 1.4rem !important;
+                line-height: 1.2 !important;
+                margin-bottom: .35rem !important;
+            }
+
+            .aside-copy {
+                font-size: .85rem !important;
+                line-height: 1.4 !important;
+            }
+
+            .aside-footnote {
+                display: none !important;
+            }
+
+            .auth-content {
+                padding: 1.25rem 1rem !important;
+            }
+
+            .form-title {
+                font-size: 1.35rem !important;
+            }
+
+            .form-intro {
+                font-size: .85rem !important;
+                margin-bottom: 1rem !important;
+            }
+        }
+
+        /* ── Pantallas extra angostas (< 380px como 320px) ── */
+        @media (max-width: 380px) {
+            .sugerir-opcion {
+                gap: .35rem;
+                padding: .35rem .45rem;
+            }
+
+            .sugerir-letra {
+                flex: 0 0 1.75rem;
+                width: 1.75rem;
+                height: 1.75rem;
+                font-size: .85rem;
+            }
+
+            .sugerir-radio-label {
+                padding: .2rem .35rem;
+            }
+
+            .sugerir-radio-label span {
+                display: none;
+            }
         }
     </style>
 </head>
@@ -78,107 +190,127 @@
 
     <main class="auth-wrap">
         <div class="auth-card">
+
             <section class="auth-aside">
                 <div>
                     <div class="aside-mark" aria-hidden="true">✦</div>
-                    <p class="eyebrow mb-0">Comunidad</p>
-                    <h1 class="aside-title">Sugerir nueva pregunta</h1>
-                    <p class="aside-copy mb-0">
-                        Proponé nuevos desafíos sobre League of Legends para que otros invocadores demuestren lo que saben.
-                    </p>
+                    <p class="eyebrow mb-0">Preguntones</p>
+                    <h1 class="aside-title">Sugerí tu propia pregunta.</h1>
+                    <p class="aside-copy mb-0">Compartí tus conocimientos de League of Legends con toda la comunidad y sumá nuevos desafíos para los invocadores.</p>
                 </div>
-                <p class="aside-footnote">
-                    Las preguntas sugeridas quedarán en revisión para ser evaluadas y aprobadas por un editor antes de sumarse a las partidas.
-                </p>
+                <p class="aside-footnote">Tu pregunta será enviada a revisión y un editor la evaluará antes de publicarla.</p>
             </section>
 
             <section class="auth-content">
-                <div class="form-shell">
+                <div class="sugerir-shell">
+
                     <div class="mb-4">
-                        <p class="eyebrow mb-0">Colaboración</p>
-                        <h2 class="form-title">Nueva propuesta</h2>
-                        <p class="form-intro">
-                            Completá la categoría, el enunciado y las opciones de respuesta marcando cuál es la correcta.
-                        </p>
+                        <p class="eyebrow mb-0">Comunidad</p>
+                        <h2 class="form-title">Nueva pregunta</h2>
+                        <p class="form-intro">Completá los datos y seleccioná cuál de las opciones es la correcta.</p>
                     </div>
 
                     {{#error}}
-                        <div class="alert alert-danger mb-4" role="alert">
-                            {{error}}
+                        <div class="alert alert-danger d-flex align-items-start gap-2 mb-4" role="alert">
+                            <span class="fw-bold" aria-hidden="true">!</span>
+                            <span>{{error}}</span>
                         </div>
                     {{/error}}
 
                     {{#success}}
-                        <div class="alert alert-success mb-4" role="alert">
-                            {{success}}
+                        <div class="alert alert-success d-flex align-items-start gap-2 mb-4" role="status">
+                            <span class="fw-bold" aria-hidden="true">✓</span>
+                            <span>{{success}}</span>
                         </div>
                     {{/success}}
 
                     <form method="POST" action="{{guardar_pregunta_url}}">
+
                         <div class="mb-3">
                             <label for="categoria_id" class="form-label">Categoría</label>
                             <select class="form-select" id="categoria_id" name="categoria_id" required>
-                                <option value="">Seleccioná una categoría...</option>
+                                <option value="" disabled selected>Seleccioná una categoría</option>
                                 {{#categorias}}
                                     <option value="{{id}}">{{nombre}}</option>
                                 {{/categorias}}
                             </select>
                         </div>
 
-                        <div class="mb-3">
+                        <div class="mb-4">
                             <label for="enunciado" class="form-label">Enunciado de la pregunta</label>
-                            <textarea class="form-control" id="enunciado" name="enunciado" rows="3" placeholder="Ej: ¿Qué objeto otorga velocidad de ataque y probabilidad de golpe crítico?" required></textarea>
+                            <textarea
+                                class="form-control"
+                                id="enunciado"
+                                name="enunciado"
+                                rows="3"
+                                placeholder="Ej: ¿Qué objeto mítico otorga robo de vida e inmunidad temporal?"
+                                required
+                                style="resize: vertical;"
+                            ></textarea>
                         </div>
 
                         <div class="mb-4">
-                            <label class="form-label mb-2">Opciones de respuesta</label>
-                            <p class="small text-muted mb-2">Ingresá las opciones y marcá el círculo de la respuesta correcta.</p>
-
-                            <div class="opcion-row">
-                                <span class="opcion-letter">A</span>
-                                <input type="text" class="form-control" name="respuestas[]" placeholder="Opción A" required autocomplete="off">
-                                <label class="opcion-radio-label">
-                                    <input type="radio" name="correcta" value="0" required title="Marcar como correcta">
-                                    <span>Correcta</span>
-                                </label>
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <label class="form-label mb-0">Opciones de respuesta</label>
+                                <span class="small" style="color: var(--muted);">Marcá la opción correcta</span>
                             </div>
 
-                            <div class="opcion-row">
-                                <span class="opcion-letter">B</span>
-                                <input type="text" class="form-control" name="respuestas[]" placeholder="Opción B" required autocomplete="off">
-                                <label class="opcion-radio-label">
-                                    <input type="radio" name="correcta" value="1" title="Marcar como correcta">
-                                    <span>Correcta</span>
-                                </label>
-                            </div>
+                            <div class="d-flex flex-column gap-2">
+                                <div class="sugerir-opcion">
+                                    <span class="sugerir-letra">A</span>
+                                    <input type="text" class="form-control" name="respuestas[]" placeholder="Opción A" required autocomplete="off">
+                                    <label class="sugerir-radio-label" title="Marcar como correcta">
+                                        <input type="radio" name="correcta" value="0" required>
+                                        <span>Correcta</span>
+                                    </label>
+                                </div>
 
-                            <div class="opcion-row">
-                                <span class="opcion-letter">C</span>
-                                <input type="text" class="form-control" name="respuestas[]" placeholder="Opción C" autocomplete="off">
-                                <label class="opcion-radio-label">
-                                    <input type="radio" name="correcta" value="2" title="Marcar como correcta">
-                                    <span>Correcta</span>
-                                </label>
-                            </div>
+                                <div class="sugerir-opcion">
+                                    <span class="sugerir-letra">B</span>
+                                    <input type="text" class="form-control" name="respuestas[]" placeholder="Opción B" required autocomplete="off">
+                                    <label class="sugerir-radio-label" title="Marcar como correcta">
+                                        <input type="radio" name="correcta" value="1">
+                                        <span>Correcta</span>
+                                    </label>
+                                </div>
 
-                            <div class="opcion-row">
-                                <span class="opcion-letter">D</span>
-                                <input type="text" class="form-control" name="respuestas[]" placeholder="Opción D" autocomplete="off">
-                                <label class="opcion-radio-label">
-                                    <input type="radio" name="correcta" value="3" title="Marcar como correcta">
-                                    <span>Correcta</span>
-                                </label>
+                                <div class="sugerir-opcion">
+                                    <span class="sugerir-letra">C</span>
+                                    <input type="text" class="form-control" name="respuestas[]" placeholder="Opción C" autocomplete="off">
+                                    <label class="sugerir-radio-label" title="Marcar como correcta">
+                                        <input type="radio" name="correcta" value="2">
+                                        <span>Correcta</span>
+                                    </label>
+                                </div>
+
+                                <div class="sugerir-opcion">
+                                    <span class="sugerir-letra">D</span>
+                                    <input type="text" class="form-control" name="respuestas[]" placeholder="Opción D" autocomplete="off">
+                                    <label class="sugerir-radio-label" title="Marcar como correcta">
+                                        <input type="radio" name="correcta" value="3">
+                                        <span>Correcta</span>
+                                    </label>
+                                </div>
                             </div>
                         </div>
 
-                        <button type="submit" class="btn btn-accent btn-lg w-100 mb-2">Enviar sugerencia</button>
+                        <button type="submit" class="btn btn-accent btn-lg w-100">
+                            Enviar sugerencia
+                        </button>
+
                         <div class="form-divider">o</div>
-                        <a href="{{lobby_url}}" class="btn btn-outline-accent btn-lg w-100">Volver al lobby</a>
+
+                        <a href="{{lobby_url}}" class="btn btn-outline-accent btn-lg w-100">
+                            Volver al lobby
+                        </a>
+
                     </form>
 
                     <p class="form-footer">Sistema de Preguntas y Respuestas</p>
+
                 </div>
             </section>
+
         </div>
     </main>
 
