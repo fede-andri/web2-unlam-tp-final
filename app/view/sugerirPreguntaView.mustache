@@ -4,9 +4,185 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#091411">
-    <title>Sugerir Pregunta | Preguntones</title>
+    <title>Sugerir pregunta | Preguntones</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link href="/web2-unlam-tp-final/estilos/aplicacion.css" rel="stylesheet">
+    <style>
+        .sugerir-shell {
+            width: 100%;
+            max-width: 520px;
+            margin-inline: auto;
+        }
+
+        .sugerir-opcion {
+            display: flex;
+            align-items: center;
+            gap: .65rem;
+            padding: .45rem .65rem;
+            border: 1px solid var(--border);
+            border-radius: .85rem;
+            background: var(--surface-raised);
+            transition: border-color .15s ease, background-color .15s ease;
+            min-width: 0;
+            flex-wrap: nowrap;
+        }
+
+        .sugerir-opcion:focus-within {
+            border-color: var(--accent);
+            background: rgba(98, 212, 184, .04);
+        }
+
+        .sugerir-letra {
+            flex: 0 0 2rem;
+            width: 2rem;
+            height: 2rem;
+            display: grid;
+            place-items: center;
+            border-radius: .55rem;
+            background: rgba(98, 212, 184, .12);
+            color: var(--accent);
+            font-weight: 800;
+            font-size: .9rem;
+            flex-shrink: 0;
+        }
+
+        .sugerir-opcion .form-control {
+            flex: 1 1 auto;
+            min-width: 0;
+            border: 0;
+            background: transparent;
+            padding: .35rem .4rem;
+            box-shadow: none !important;
+            min-height: 2.4rem;
+            color: var(--text);
+            font-size: .95rem;
+        }
+
+        .sugerir-opcion .form-control:focus {
+            background: transparent;
+            color: var(--text);
+            box-shadow: none !important;
+        }
+
+        .sugerir-radio-label {
+            display: inline-flex;
+            align-items: center;
+            gap: .35rem;
+            padding: .35rem .6rem;
+            border-radius: .5rem;
+            border: 1px solid transparent;
+            color: var(--muted);
+            font-size: .8rem;
+            font-weight: 600;
+            cursor: pointer;
+            user-select: none;
+            white-space: nowrap;
+            flex-shrink: 0;
+            transition: all .15s ease;
+        }
+
+        .sugerir-radio-label:hover {
+            color: var(--text);
+            background: rgba(200, 170, 110, .1);
+            border-color: rgba(200, 170, 110, .25);
+        }
+
+        .sugerir-radio-label input[type="radio"] {
+            accent-color: var(--gold);
+            cursor: pointer;
+            width: 1rem;
+            height: 1rem;
+            margin: 0;
+        }
+
+        .sugerir-opcion:has(input[type="radio"]:checked) {
+            border-color: var(--gold);
+            background: rgba(200, 170, 110, .07);
+        }
+
+        .sugerir-opcion:has(input[type="radio"]:checked) .sugerir-radio-label {
+            color: var(--gold);
+            border-color: rgba(200, 170, 110, .4);
+            background: rgba(200, 170, 110, .15);
+        }
+
+        /* ── Adaptabilidad Responsive Mobile (< 768px) ── */
+        @media (max-width: 768px) {
+            .auth-wrap {
+                width: min(100% - 1rem, 1240px) !important;
+                padding-block: 1rem 2rem !important;
+            }
+
+            .auth-card,
+            .register-page .auth-card {
+                grid-template-columns: 1fr !important;
+                border-radius: 1rem;
+            }
+
+            .auth-aside {
+                padding: 1.25rem 1rem !important;
+                min-height: auto !important;
+            }
+
+            .aside-mark {
+                width: 2.2rem;
+                height: 2.2rem;
+                margin-bottom: .6rem;
+                font-size: .95rem;
+            }
+
+            .aside-title {
+                font-size: 1.4rem !important;
+                line-height: 1.2 !important;
+                margin-bottom: .35rem !important;
+            }
+
+            .aside-copy {
+                font-size: .85rem !important;
+                line-height: 1.4 !important;
+            }
+
+            .aside-footnote {
+                display: none !important;
+            }
+
+            .auth-content {
+                padding: 1.25rem 1rem !important;
+            }
+
+            .form-title {
+                font-size: 1.35rem !important;
+            }
+
+            .form-intro {
+                font-size: .85rem !important;
+                margin-bottom: 1rem !important;
+            }
+        }
+
+        /* ── Pantallas extra angostas (< 380px como 320px) ── */
+        @media (max-width: 380px) {
+            .sugerir-opcion {
+                gap: .35rem;
+                padding: .35rem .45rem;
+            }
+
+            .sugerir-letra {
+                flex: 0 0 1.75rem;
+                width: 1.75rem;
+                height: 1.75rem;
+                font-size: .85rem;
+            }
+
+            .sugerir-radio-label {
+                padding: .2rem .35rem;
+            }
+
+            .sugerir-radio-label span {
+                display: none;
+            }
+        }
+    </style>
 </head>
 <body class="register-page">
 
@@ -18,80 +194,120 @@
             <section class="auth-aside">
                 <div>
                     <div class="aside-mark" aria-hidden="true">✦</div>
-                    <p class="eyebrow mb-0">Comunidad</p>
-                    <h1 class="aside-title">Proponé tus propios desafíos.</h1>
-                    <p class="aside-copy mb-0">Ayudá a expandir el conocimiento de la comunidad sugiriendo nuevas preguntas sobre League of Legends.</p>
+                    <p class="eyebrow mb-0">Preguntones</p>
+                    <h1 class="aside-title">Sugerí tu propia pregunta.</h1>
+                    <p class="aside-copy mb-0">Compartí tus conocimientos de League of Legends con toda la comunidad y sumá nuevos desafíos para los invocadores.</p>
                 </div>
-                <p class="aside-footnote">Las preguntas sugeridas serán revisadas por un editor.</p>
+                <p class="aside-footnote">Tu pregunta será enviada a revisión y un editor la evaluará antes de publicarla.</p>
             </section>
 
             <section class="auth-content">
-                <div class="form-shell">
+                <div class="sugerir-shell">
+
                     <div class="mb-4">
-                        <p class="eyebrow mb-0">Colaboración</p>
-                        <h2 class="form-title">Sugerir pregunta</h2>
-                        <p class="form-intro">Completá los datos y definí las opciones de respuesta.</p>
+                        <p class="eyebrow mb-0">Comunidad</p>
+                        <h2 class="form-title">Nueva pregunta</h2>
+                        <p class="form-intro">Completá los datos y seleccioná cuál de las opciones es la correcta.</p>
                     </div>
 
                     {{#error}}
-                        <div class="alert alert-danger mb-4" role="alert">{{error}}</div>
+                        <div class="alert alert-danger d-flex align-items-start gap-2 mb-4" role="alert">
+                            <span class="fw-bold" aria-hidden="true">!</span>
+                            <span>{{error}}</span>
+                        </div>
                     {{/error}}
 
                     {{#success}}
-                        <div class="alert alert-success mb-4" role="alert">{{success}}</div>
+                        <div class="alert alert-success d-flex align-items-start gap-2 mb-4" role="status">
+                            <span class="fw-bold" aria-hidden="true">✓</span>
+                            <span>{{success}}</span>
+                        </div>
                     {{/success}}
 
                     <form method="POST" action="{{guardar_pregunta_url}}">
-                        
+
                         <div class="mb-3">
                             <label for="categoria_id" class="form-label">Categoría</label>
-                            <select class="form-control" id="categoria_id" name="categoria_id" required>
-                                <option value="">Seleccioná una categoría...</option>
+                            <select class="form-select" id="categoria_id" name="categoria_id" required>
+                                <option value="" disabled selected>Seleccioná una categoría</option>
                                 {{#categorias}}
                                     <option value="{{id}}">{{nombre}}</option>
                                 {{/categorias}}
                             </select>
                         </div>
 
-                        <div class="mb-3">
+                        <div class="mb-4">
                             <label for="enunciado" class="form-label">Enunciado de la pregunta</label>
-                            <textarea class="form-control" id="enunciado" name="enunciado" rows="3" required placeholder="Ej: ¿Qué objeto otorga velocidad de ataque y crítico?"></textarea>
+                            <textarea
+                                class="form-control"
+                                id="enunciado"
+                                name="enunciado"
+                                rows="3"
+                                placeholder="Ej: ¿Qué objeto mítico otorga robo de vida e inmunidad temporal?"
+                                required
+                                style="resize: vertical;"
+                            ></textarea>
                         </div>
 
-                        <label class="form-label mb-2">Respuestas (marcá cuál es la correcta)</label>
-
-                        <div class="input-group mb-2">
-                            <div class="input-group-text bg-transparent border-secondary text-white">
-                                <input class="form-check-input mt-0" type="radio" name="correcta" value="0" required title="Marcar como correcta">
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <label class="form-label mb-0">Opciones de respuesta</label>
+                                <span class="small" style="color: var(--muted);">Marcá la opción correcta</span>
                             </div>
-                            <input type="text" class="form-control" name="respuestas[]" placeholder="Opción A" required>
-                        </div>
 
-                        <div class="input-group mb-2">
-                            <div class="input-group-text bg-transparent border-secondary text-white">
-                                <input class="form-check-input mt-0" type="radio" name="correcta" value="1" title="Marcar como correcta">
+                            <div class="d-flex flex-column gap-2">
+                                <div class="sugerir-opcion">
+                                    <span class="sugerir-letra">A</span>
+                                    <input type="text" class="form-control" name="respuestas[]" placeholder="Opción A" required autocomplete="off">
+                                    <label class="sugerir-radio-label" title="Marcar como correcta">
+                                        <input type="radio" name="correcta" value="0" required>
+                                        <span>Correcta</span>
+                                    </label>
+                                </div>
+
+                                <div class="sugerir-opcion">
+                                    <span class="sugerir-letra">B</span>
+                                    <input type="text" class="form-control" name="respuestas[]" placeholder="Opción B" required autocomplete="off">
+                                    <label class="sugerir-radio-label" title="Marcar como correcta">
+                                        <input type="radio" name="correcta" value="1">
+                                        <span>Correcta</span>
+                                    </label>
+                                </div>
+
+                                <div class="sugerir-opcion">
+                                    <span class="sugerir-letra">C</span>
+                                    <input type="text" class="form-control" name="respuestas[]" placeholder="Opción C" autocomplete="off">
+                                    <label class="sugerir-radio-label" title="Marcar como correcta">
+                                        <input type="radio" name="correcta" value="2">
+                                        <span>Correcta</span>
+                                    </label>
+                                </div>
+
+                                <div class="sugerir-opcion">
+                                    <span class="sugerir-letra">D</span>
+                                    <input type="text" class="form-control" name="respuestas[]" placeholder="Opción D" autocomplete="off">
+                                    <label class="sugerir-radio-label" title="Marcar como correcta">
+                                        <input type="radio" name="correcta" value="3">
+                                        <span>Correcta</span>
+                                    </label>
+                                </div>
                             </div>
-                            <input type="text" class="form-control" name="respuestas[]" placeholder="Opción B" required>
                         </div>
 
-                        <div class="input-group mb-2">
-                            <div class="input-group-text bg-transparent border-secondary text-white">
-                                <input class="form-check-input mt-0" type="radio" name="correcta" value="2" title="Marcar como correcta">
-                            </div>
-                            <input type="text" class="form-control" name="respuestas[]" placeholder="Opción C">
-                        </div>
+                        <button type="submit" class="btn btn-accent btn-lg w-100">
+                            Enviar sugerencia
+                        </button>
 
-                        <div class="input-group mb-4">
-                            <div class="input-group-text bg-transparent border-secondary text-white">
-                                <input class="form-check-input mt-0" type="radio" name="correcta" value="3" title="Marcar como correcta">
-                            </div>
-                            <input type="text" class="form-control" name="respuestas[]" placeholder="Opción D">
-                        </div>
+                        <div class="form-divider">o</div>
 
-                        <button type="submit" class="btn btn-accent btn-lg w-100 mb-2">Enviar sugerencia</button>
-                        <a href="{{lobby_url}}" class="btn btn-outline-accent btn-lg w-100">Volver al lobby</a>
+                        <a href="{{lobby_url}}" class="btn btn-outline-accent btn-lg w-100">
+                            Volver al lobby
+                        </a>
 
                     </form>
+
+                    <p class="form-footer">Sistema de Preguntas y Respuestas</p>
+
                 </div>
             </section>
 

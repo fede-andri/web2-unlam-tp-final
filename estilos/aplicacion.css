@@ -1051,7 +1051,9 @@ body.lobby-page {
         min-height: auto;
     }
 
-    .auth-card {
+    .auth-card,
+    .login-page .auth-card,
+    .register-page .auth-card {
         grid-template-columns: 1fr;
     }
 
