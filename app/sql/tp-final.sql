@@ -47,6 +47,12 @@ CREATE TABLE partidas (
 );
 
 /*
+ALTER TABLE partidas
+    ADD pregunta_expira_en DATETIME NULL,
+    ADD motivo_fin VARCHAR(20) NULL;
+*/
+
+/*
 ALTER TABLE usuarios
 ADD latitud DECIMAL(10,8) NULL,
 ADD longitud DECIMAL(11,8) NULL;

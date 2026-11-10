@@ -10,25 +10,38 @@
 </head>
 <body class="game-page" style="--cat: {{categoria_color}}">
 
-    {{> components/headerView}}
+{{> components/headerView}}
 
-    <main class="game-wrap">
+<main class="game-wrap">
 
-        <section class="game-card game-result" aria-labelledby="resultado-titulo">
+    <section class="game-card game-result" aria-labelledby="resultado-titulo">
 
-            <div class="game-cat-band">
-                <span class="game-cat-chip">{{#perdio}}Fin de la partida{{/perdio}}{{^perdio}}¡Partida completa!{{/perdio}}</span>
-            </div>
+        <div class="game-cat-band">
+                <span class="game-cat-chip">
+                    {{#tiempo_agotado}}Tiempo agotado{{/tiempo_agotado}}
+                    {{^tiempo_agotado}}{{#perdio}}Fin de la partida{{/perdio}}{{^perdio}}¡Partida completa!{{/perdio}}{{/tiempo_agotado}}
+                </span>
+        </div>
 
-            <h1 id="resultado-titulo" class="game-result-title">
+        <h1 id="resultado-titulo" class="game-result-title">
+            {{#tiempo_agotado}}¡Se acabó el tiempo!{{/tiempo_agotado}}
+            {{^tiempo_agotado}}
                 {{#perdio}}¡Perdiste!{{/perdio}}
                 {{^perdio}}¡Respondiste todas las preguntas!{{/perdio}}
-            </h1>
+            {{/tiempo_agotado}}
+        </h1>
 
-            <p class="game-result-score">
-                Ganaste <strong>{{puntaje}}</strong> {{#singular}}punto{{/singular}}{{^singular}}puntos{{/singular}}
-            </p>
+        <p class="game-result-score">
+            Ganaste <strong>{{puntaje}}</strong> {{#singular}}punto{{/singular}}{{^singular}}puntos{{/singular}}
+        </p>
 
+        {{#tiempo_agotado}}
+            <div class="game-result-detail">
+                <p class="game-result-question">No respondiste a tiempo y la partida terminó.</p>
+            </div>
+        {{/tiempo_agotado}}
+
+        {{^tiempo_agotado}}
             {{#perdio}}
                 <div class="game-result-detail">
                     <p class="game-result-cat">{{categoria}}</p>
@@ -44,15 +57,16 @@
                     </p>
                 </div>
             {{/perdio}}
+        {{/tiempo_agotado}}
 
-            <div class="game-result-actions">
-                <form method="POST" action="{{jugar_url}}">
-                    <button type="submit" class="btn btn-accent btn-lg w-100">Jugar otra vez</button>
-                </form>
-                <a href="{{lobby_url}}" class="btn btn-outline-accent btn-lg w-100">Volver al lobby</a>
-            </div>
+        <div class="game-result-actions">
+            <form method="POST" action="{{jugar_url}}">
+                <button type="submit" class="btn btn-accent btn-lg w-100">Jugar otra vez</button>
+            </form>
+            <a href="{{lobby_url}}" class="btn btn-outline-accent btn-lg w-100">Volver al lobby</a>
+        </div>
 
-        </section>
+    </section>
 
     </main>
 
