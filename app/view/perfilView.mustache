@@ -13,44 +13,12 @@
           crossorigin="anonymous">
 
     <link href="/web2-unlam-tp-final/estilos/aplicacion.css" rel="stylesheet">
+    <link href="/web2-unlam-tp-final/estilos/perfil.css" rel="stylesheet">
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-
-    <style>
-        .perfil-foto-wrap {
-            width: 140px;
-            height: 140px;
-            border-radius: 50%;
-            overflow: hidden;
-            background-color: #244038;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 140 140'%3E%3Ccircle cx='70' cy='54' r='24' fill='%2390b5a8'/%3E%3Cellipse cx='70' cy='120' rx='42' ry='34' fill='%2390b5a8'/%3E%3C/svg%3E");
-            background-size: cover;
-            background-position: center;
-        }
-        .perfil-foto {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-        .perfil-dato dt {
-            font-weight: 500;
-            opacity: .7;
-            font-size: .9rem;
-            margin-bottom: .15rem;
-        }
-        .perfil-dato dd {
-            margin-bottom: 1.1rem;
-            font-size: 1.05rem;
-        }
-        #mapa-perfil {
-            height: 240px;
-            border-radius: .5rem;
-        }
-    </style>
 </head>
 
-<body class="register-page">
+<body class="register-page perfil-page">
 
 {{> components/headerView}}
 
@@ -70,11 +38,16 @@
                 <h1 class="aside-title">{{nombre}}</h1>
                 <p class="aside-copy mb-3">@{{usuario}}</p>
 
-                <dt>Puntaje total</dt>
-                <dd>{{puntaje_total}}</dd>
-
-                <dt>Partidas realizadas</dt>
-                <dd>{{partidas_jugadas}}</dd>
+                <dl class="perfil-stats">
+                    <div>
+                        <dt>Puntaje total</dt>
+                        <dd>{{puntaje_total}}</dd>
+                    </div>
+                    <div>
+                        <dt>Partidas</dt>
+                        <dd>{{partidas_jugadas}}</dd>
+                    </div>
+                </dl>
 
                 <form method="POST"
                       action="{{subir_foto_url}}"

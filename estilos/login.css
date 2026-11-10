@@ -1,0 +1,190 @@
+
+
+.login-page .auth-card {
+    width: 100%;
+}
+
+.login-page .aside-title,
+.login-page .aside-copy,
+.login-page .form-intro,
+.login-page .alert {
+    overflow-wrap: anywhere;
+}
+
+.login-page .btn-lg {
+    min-height: 3rem;
+}
+
+.login-page .form-control:-webkit-autofill,
+.login-page .form-control:-webkit-autofill:hover,
+.login-page .form-control:-webkit-autofill:focus {
+    -webkit-text-fill-color: var(--text);
+    caret-color: var(--text);
+    box-shadow: 0 0 0 1000px #0b1915 inset;
+    transition: background-color 9999s ease-in-out 0s;
+}
+
+
+
+@media (max-width: 768px) {
+
+    .login-page .auth-wrap {
+        min-height: auto;
+        padding-block: 1.5rem 2rem;
+    }
+
+    .login-page .auth-card {
+        grid-template-columns: 1fr;
+        width: 100%;
+        max-width: 620px;
+        margin-inline: auto;
+    }
+
+    .login-page .auth-aside {
+        min-height: auto;
+        padding: 1.75rem 2rem;
+    }
+
+    .login-page .aside-mark {
+        width: 2.5rem;
+        height: 2.5rem;
+        margin-bottom: 1rem;
+        font-size: 1.2rem;
+    }
+
+    .login-page .aside-title {
+        max-width: none;
+        margin: .4rem 0 .6rem;
+        font-size: 1.7rem;
+    }
+
+    .login-page .aside-copy {
+        margin-bottom: 0;
+        font-size: .95rem;
+        line-height: 1.55;
+    }
+
+    .login-page .aside-footnote {
+        display: none;
+    }
+
+    .login-page .auth-aside::after {
+        right: -6rem;
+        bottom: -7rem;
+        width: 14rem;
+        height: 14rem;
+    }
+
+    .login-page .auth-content {
+        padding: 2rem;
+    }
+
+    .login-page .form-shell {
+        max-width: none;
+    }
+
+    .login-page .form-title {
+        font-size: 1.6rem;
+    }
+
+    .login-page .form-intro {
+        margin-bottom: 1.5rem;
+    }
+}
+
+
+
+@media (max-width: 425px) {
+
+    .login-page .header-inner {
+        min-height: 60px;
+        flex-wrap: wrap;
+        row-gap: .25rem;
+        padding-block: .4rem;
+    }
+
+    .login-page .header-inner nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: .15rem;
+    }
+
+    .login-page .auth-wrap {
+        width: min(100% - 1rem, 1120px);
+        padding-block: .75rem 1.5rem;
+    }
+
+    .login-page .auth-card {
+        max-width: none;
+        border-radius: .9rem;
+    }
+
+    .login-page .auth-aside {
+        padding: 1.15rem 1.25rem;
+    }
+
+    .login-page .aside-mark {
+        width: 2.25rem;
+        height: 2.25rem;
+        margin-bottom: .75rem;
+        font-size: 1.05rem;
+        border-radius: .7rem;
+    }
+
+    .login-page .aside-title {
+        margin: .25rem 0 0;
+        font-size: 1.3rem;
+        line-height: 1.15;
+    }
+
+    .login-page .aside-copy,
+    .login-page .auth-aside::after {
+        display: none;
+    }
+
+    .login-page .auth-content {
+        padding: 1.5rem 1.25rem 1.75rem;
+    }
+
+    .login-page .form-title {
+        margin: .35rem 0 .4rem;
+        font-size: 1.4rem;
+    }
+
+    .login-page .form-intro {
+        margin-bottom: 1.25rem;
+        font-size: .9rem;
+    }
+
+    .login-page .form-label {
+        font-size: .88rem;
+    }
+
+    .login-page .form-control {
+        min-height: 3rem;
+        font-size: 16px;
+    }
+
+    .login-page .btn-lg {
+        min-height: 3rem;
+        padding: .65rem 1rem;
+        font-size: 1rem;
+    }
+
+    .login-page .form-divider {
+        margin-block: 1rem;
+    }
+
+    .login-page .alert {
+        padding: .7rem .85rem;
+        font-size: .86rem;
+    }
+
+    .login-page .form-footer {
+        margin-top: 1.25rem;
+    }
+
+    .login-page .site-footer {
+        padding: 1.25rem 1rem 1.5rem;
+    }
+}

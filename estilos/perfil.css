@@ -1,0 +1,343 @@
+
+.perfil-page .auth-aside > div {
+    position: relative;
+    z-index: 1;
+}
+
+.perfil-page .perfil-foto-wrap {
+    width: 140px;
+    height: 140px;
+    flex-shrink: 0;
+    overflow: hidden;
+    border: 2px solid rgba(98, 212, 184, .38);
+    border-radius: 50%;
+    background-color: #244038;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 140 140'%3E%3Ccircle cx='70' cy='54' r='24' fill='%2390b5a8'/%3E%3Cellipse cx='70' cy='120' rx='42' ry='34' fill='%2390b5a8'/%3E%3C/svg%3E");
+    background-size: cover;
+    background-position: center;
+}
+
+.perfil-page .perfil-foto {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.perfil-page .aside-title,
+.perfil-page .aside-copy {
+    overflow-wrap: anywhere;
+}
+
+.perfil-page .auth-aside dt {
+    margin: 0;
+    color: var(--muted);
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.perfil-page .auth-aside dd {
+    margin: .15rem 0 .9rem;
+    color: var(--accent);
+    font-size: 1.5rem;
+    font-weight: 750;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.1;
+}
+
+
+.perfil-page .perfil-stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .6rem;
+    margin: 0 0 1.25rem;
+}
+
+.perfil-page .perfil-stats > div {
+    padding: .75rem;
+    border: 1px solid rgba(98, 212, 184, .22);
+    border-radius: .75rem;
+    background: rgba(0, 0, 0, .14);
+}
+
+.perfil-page .perfil-stats dd {
+    margin-bottom: 0;
+}
+
+.perfil-page .auth-aside form .form-control {
+    font-size: .9rem;
+}
+
+.perfil-page .auth-aside form .btn-sm {
+    min-height: 2.5rem;
+}
+
+
+.perfil-page .qr-box {
+    max-width: 100%;
+}
+
+
+.perfil-page .perfil-dato {
+    margin-bottom: 1.5rem;
+}
+
+.perfil-page .perfil-dato dt {
+    margin: 0;
+    font-size: .9rem;
+    font-weight: 500;
+    opacity: .7;
+}
+
+.perfil-page .perfil-dato dd {
+    margin: 0;
+    padding-bottom: .8rem;
+    border-bottom: 1px solid rgba(160, 178, 172, .12);
+    font-size: 1.05rem;
+    overflow-wrap: anywhere;
+}
+
+.perfil-page .perfil-dato dt:not(:first-child) {
+    padding-top: .8rem;
+}
+
+
+.perfil-page #mapa-perfil {
+    height: 240px;
+    border: 1px solid var(--border);
+    border-radius: .8rem;
+    isolation: isolate;
+}
+
+
+.perfil-page .border-danger {
+    border-color: rgba(255, 122, 122, .35) !important;
+    background: rgba(112, 39, 39, .12);
+}
+
+.perfil-page .border-danger .text-danger {
+    color: var(--danger-text) !important;
+}
+
+.perfil-page .btn-danger {
+    min-height: 2.9rem;
+    font-weight: 650;
+}
+
+
+
+@media (max-width: 768px) {
+
+    .perfil-page .auth-wrap {
+        min-height: auto;
+        padding-block: 1.5rem 2rem;
+    }
+
+    .perfil-page .auth-card {
+        grid-template-columns: 1fr;
+        max-width: 680px;
+        margin-inline: auto;
+    }
+
+    .perfil-page .auth-aside {
+        min-height: auto;
+        padding: 1.75rem 2rem;
+        text-align: center;
+    }
+
+    .perfil-page .perfil-foto-wrap {
+        width: 120px;
+        height: 120px;
+        margin-inline: auto;
+    }
+
+    .perfil-page .aside-title {
+        max-width: none;
+        margin: .4rem 0 .4rem;
+        font-size: 1.7rem;
+    }
+
+    .perfil-page .auth-aside form {
+        max-width: 22rem;
+        margin-inline: auto;
+    }
+
+    .perfil-page .perfil-stats {
+        max-width: 22rem;
+        margin-inline: auto;
+    }
+
+    .perfil-page .aside-footnote {
+        display: none;
+    }
+
+    .perfil-page .auth-aside::after {
+        right: -6rem;
+        bottom: -7rem;
+        width: 14rem;
+        height: 14rem;
+    }
+
+    .perfil-page .auth-content {
+        padding: 2rem;
+    }
+
+    .perfil-page .form-shell {
+        max-width: none;
+    }
+
+    .perfil-page .form-title {
+        font-size: 1.6rem;
+    }
+
+    .perfil-page .perfil-dato {
+        display: grid;
+        grid-template-columns: minmax(7rem, 11rem) minmax(0, 1fr);
+        column-gap: 1.25rem;
+    }
+
+    .perfil-page .perfil-dato dt,
+    .perfil-page .perfil-dato dd {
+        padding-block: .7rem;
+        border-bottom: 1px solid rgba(160, 178, 172, .12);
+    }
+
+    .perfil-page .perfil-dato dt:not(:first-child) {
+        padding-top: .7rem;
+    }
+
+    .perfil-page .perfil-dato dd {
+        padding-bottom: .7rem;
+    }
+
+    .perfil-page #mapa-perfil {
+        height: 260px;
+    }
+}
+
+
+
+@media (max-width: 425px) {
+
+    .perfil-page .header-inner {
+        min-height: 60px;
+        flex-wrap: wrap;
+        justify-content: center;
+        row-gap: .15rem;
+        padding-block: .4rem;
+    }
+
+    .perfil-page .header-inner nav {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: .1rem;
+    }
+
+    .perfil-page .header-link {
+        padding: .45rem .6rem;
+        font-size: .82rem;
+    }
+
+    .perfil-page .auth-wrap {
+        width: min(100% - 1rem, 1240px);
+        padding-block: .75rem 1.5rem;
+    }
+
+    .perfil-page .auth-card {
+        max-width: none;
+        border-radius: .9rem;
+    }
+
+    .perfil-page .auth-aside {
+        padding: 1.25rem 1.1rem;
+    }
+
+    .perfil-page .perfil-foto-wrap {
+        width: 104px;
+        height: 104px;
+    }
+
+    .perfil-page .aside-title {
+        font-size: 1.35rem;
+        line-height: 1.15;
+    }
+
+    .perfil-page .auth-aside dd {
+        font-size: 1.3rem;
+    }
+
+    .perfil-page .perfil-stats {
+        max-width: none;
+    }
+
+    .perfil-page .auth-aside form {
+        max-width: none;
+    }
+
+    .perfil-page .auth-aside form .form-control,
+    .perfil-page .form-control {
+        font-size: 16px;
+    }
+
+    .perfil-page .qr-code svg {
+        width: 144px;
+        height: 144px;
+    }
+
+    .perfil-page .auth-content {
+        padding: 1.5rem 1.1rem 1.75rem;
+    }
+
+    .perfil-page .form-title {
+        margin: .35rem 0 .4rem;
+        font-size: 1.4rem;
+    }
+
+    .perfil-page .form-intro {
+        margin-bottom: 1rem;
+        font-size: .9rem;
+    }
+
+    .perfil-page .perfil-dato {
+        display: block;
+    }
+
+    .perfil-page .perfil-dato dt {
+        padding-block: .7rem 0;
+        border-bottom: 0;
+    }
+
+    .perfil-page .perfil-dato dt:not(:first-child) {
+        padding-top: .7rem;
+    }
+
+    .perfil-page .perfil-dato dd {
+        padding-block: .1rem .7rem;
+    }
+
+    .perfil-page #mapa-perfil {
+        height: 200px;
+    }
+
+    .perfil-page .btn-lg {
+        min-height: 3rem;
+        padding: .65rem 1rem;
+        font-size: 1rem;
+    }
+
+    .perfil-page .btn-danger {
+        min-height: 3rem;
+    }
+
+    .perfil-page .alert {
+        padding: .7rem .85rem;
+        font-size: .86rem;
+    }
+
+    .perfil-page .form-footer {
+        margin-top: 1.25rem;
+    }
+}
