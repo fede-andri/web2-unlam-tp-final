@@ -1239,6 +1239,50 @@ body.lobby-page {
     font-size: .85rem;
     text-align: center;
 }
+/* Temporizador de la pregunta */
+.game-timer {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    padding: .9rem 1.25rem 0;
+}
+
+.game-timer-bar {
+    flex: 1;
+    height: .5rem;
+    overflow: hidden;
+    border-radius: 999px;
+    background: var(--border);
+}
+
+.game-timer-bar span {
+    display: block;
+    height: 100%;
+    width: 100%;
+    border-radius: inherit;
+    background: var(--cat, var(--accent));
+    transition: width .25s linear, background-color .25s ease;
+}
+
+.game-timer-text {
+    min-width: 3.25rem;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    text-align: right;
+}
+
+.game-timer.is-urgent .game-timer-bar span {
+    background: #ff7a7a;
+}
+
+.game-timer.is-urgent .game-timer-text {
+    color: var(--danger-text);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .game-timer-bar span { transition: none; }
+}
 
 /* Resultado */
 
