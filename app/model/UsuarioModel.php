@@ -128,9 +128,55 @@ class UsuarioModel
             [$token]
         );
     }
+
     public function actualizarFoto($id, $foto)
     {
         $sql = "UPDATE usuarios SET foto = ? WHERE id = ?";
         return $this->database->execute($sql, [$foto, $id]);
     }
+
+    // Para validar que el nuevo nombre de usuario no lo tenga OTRA persona
+    public function existeUsuarioDeOtro($usuario, $id)
+    {
+        $sql = "SELECT id FROM usuarios WHERE usuario = ? AND id <> ?";
+        return $this->database->queryOne($sql, [$usuario, $id]);
+    }
+
+    public function actualizarPerfil($id, $nombre, $usuario, $fechaNacimiento, $sexo, $pais, $ciudad, $latitud, $longitud)
+    {
+        $sql = "
+        UPDATE usuarios
+        SET nombre = ?,
+            usuario = ?,
+            fecha_nacimiento = ?,
+            sexo = ?,
+            pais = ?,
+            ciudad = ?,
+            latitud = ?,
+            longitud = ?
+        WHERE id = ?
+    ";
+
+        return $this->database->execute(
+            $sql,
+            [$nombre, $usuario, $fechaNacimiento, $sexo, $pais, $ciudad, $latitud, $longitud, $id]
+        );
+    }
+
+    // Borra el usuario y todo lo que depende de él
+    public function eliminarCuenta($id)
+    {
+        $this->database->execute(
+            "DELETE pp FROM partida_pregunta pp
+         JOIN partidas p ON p.id = pp.partida_id
+         WHERE p.usuario_id = ?",
+            [$id]
+        );
+
+        $this->database->execute("DELETE FROM partidas WHERE usuario_id = ?", [$id]);
+
+        return $this->database->execute("DELETE FROM usuarios WHERE id = ?", [$id]);
+    }
 }
+
+
