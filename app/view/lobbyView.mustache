@@ -102,25 +102,25 @@
                         </li>
                     {{/ranking}}
 
-                    {{#mi_posicion}}
-                        <li class="ranking-gap" aria-hidden="true">···</li>
-                        <li class="current-player" data-href="{{perfil_url}}?id={{id}}">
+                {{#mi_posicion}}
+                    <li class="ranking-gap" aria-hidden="true">···</li>
+                    <li class="current-player" data-href="{{perfil_url}}">
                         <span class="position">{{posicion}}</span>
                         <span class="player-name">
-                <a href="{{perfil_url}}?id={{id}}" class="player-link">{{usuario}}</a>
+                <a href="{{perfil_url}}" class="player-link">{{usuario}}</a>
                             <span class="you-badge">Vos</span>
             </span>
-                        <span class="player-score">{{puntaje}}</span>
-                        </li>
-                    {{/mi_posicion}}
-                </ol>
-            </section>
+                        <span class="player-score">{{puntaje_total}}</span>
+                    </li>
+                {{/mi_posicion}}
+            </ol>
+        </section>
 
-            <section class="panel" aria-labelledby="partidas-heading">
-                <div class="panel-heading">
-                    <h2 id="partidas-heading">Últimas partidas</h2>
-                    <span class="live-label">Últimas 5</span>
-                </div>
+        <section class="panel" aria-labelledby="partidas-heading">
+            <div class="panel-heading">
+                <h2 id="partidas-heading">Últimas partidas</h2>
+                <span class="live-label">Últimas 5</span>
+            </div>
 
                 <div class="table-responsive">
                     <table class="table ranking-table align-middle">

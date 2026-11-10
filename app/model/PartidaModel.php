@@ -5,7 +5,7 @@ namespace app\model;
 class PartidaModel
 {
     private $database;
-
+    const SEGUNDOS_POR_PREGUNTA = 10;
     public function __construct($database)
     {
         $this->database = $database;
@@ -20,7 +20,46 @@ class PartidaModel
         return $this->database->queryAll($sql, [$usuario_id]);
     }
 
-    public function getPartidaEnCurso(int $usuarioId): ?array
+    public function iniciarTemporizador(int $partida_id){
+        $sql =     "UPDATE partidas
+                    SET pregunta_actual_id = ?,
+                    pregunta_expira_en = DATE_ADD(NOW(), INTERVAL " . self::SEGUNDOS_POR_PREGUNTA . " SECOND)
+                    WHERE id = ?";
+        $this->database->execute($sql, [$partida_id]);
+    }
+
+    public function segundosRestantes(int $partida_id){
+        $sql = "SELECT pregunta_expira_en IS NULL AS sin_temporizador,
+                   GREATEST(TIMESTAMPDIFF(SECOND, NOW(), pregunta_expira_en), 0) AS restantes
+            FROM partidas WHERE id = ?";
+        $fila = $this->database->queryOne($sql, [$partida_id]);
+
+        if ($fila === null || !empty($fila['sin_temporizador'])) {
+            return null;
+        }
+        return (int) $fila['restantes'];
+    }
+
+    public function tiempoAgotado(int $partidaId): bool
+    {
+        $sql = "SELECT (pregunta_expira_en IS NOT NULL
+                    AND NOW() > DATE_ADD(pregunta_expira_en, INTERVAL 1 SECOND)) AS vencida
+            FROM partidas WHERE id = ?";
+        $fila = $this->database->queryOne($sql, [$partidaId]);
+        return !empty($fila['vencida']);
+    }
+    public function terminarPorTiempo(int $partidaId)
+    {
+        $this->terminarPartida($partidaId);   // reutiliza lo que ya hace al terminar una partida
+
+        $this->database->execute(
+            "UPDATE partidas 
+             SET motivo_fin = 'TIEMPO', pregunta_expira_en = NULL 
+             WHERE id = ?",
+            [$partidaId]
+        );
+    }
+    public function getPartidaEnCurso(int $usuarioId)
     {
         return $this->database->queryOne(
             "SELECT id, puntaje, pregunta_actual_id
@@ -31,10 +70,10 @@ class PartidaModel
             [$usuarioId]
         );
     }
-    public function getPartida(int $partidaId, int $usuarioId): ?array
+    public function getPartida(int $partidaId, int $usuarioId)
     {
         return $this->database->queryOne(
-            "SELECT id, puntaje, estado, pregunta_actual_id, fecha
+            "SELECT id, puntaje, estado, pregunta_actual_id, fecha, motivo_fin
              FROM partidas
              WHERE id = ? AND usuario_id = ?",
             [$partidaId, $usuarioId]
@@ -77,13 +116,15 @@ class PartidaModel
             [$partidaId, $preguntaId]
         );
         $this->database->execute(
-            "UPDATE partidas SET pregunta_actual_id = ? WHERE id = ?",
+            "UPDATE partidas
+            SET pregunta_actual_id = ?,
+            pregunta_expira_en = DATE_ADD(NOW(), INTERVAL " . self::SEGUNDOS_POR_PREGUNTA . " SECOND)
+            WHERE id = ?",
             [$preguntaId, $partidaId]
         );
-
         return true;
     }
-    public function getPregunta(int $preguntaId): ?array
+    public function getPregunta(int $preguntaId)
     {
         $pregunta = $this->database->queryOne(
             "SELECT p.id, p.enunciado, c.nombre AS categoria, c.color
@@ -137,7 +178,7 @@ class PartidaModel
         return $acerto === 1;
     }
 
-    public function sumarPunto(int $partidaId): void
+    public function sumarPunto(int $partidaId)
     {
         $this->database->execute(
             "UPDATE partidas SET puntaje = puntaje + 1 WHERE id = ?",
@@ -145,14 +186,14 @@ class PartidaModel
         );
     }
 
-    public function terminarPartida(int $partidaId): void
+    public function terminarPartida(int $partidaId)
     {
         $this->database->execute(
             "UPDATE partidas SET estado = 'TERMINADA', pregunta_actual_id = NULL WHERE id = ?",
             [$partidaId]
         );
     }
-    public function getDetalleError(int $partidaId): ?array
+    public function getDetalleError(int $partidaId)
     {
         return $this->database->queryOne(
             "SELECT p.enunciado,
