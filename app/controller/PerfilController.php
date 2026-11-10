@@ -131,6 +131,12 @@ class PerfilController
         }
 
         $nombreUsuario = trim($_GET['usuario'] ?? '');
+
+        // Si el perfil pedido es el propio, se muestra la versión editable
+        if ($nombreUsuario !== '' && strcasecmp($nombreUsuario, $_SESSION['usuario'] ?? '') === 0) {
+            header('Location:' . $this->appConfig['base_path_url'] . $this->appConfig['perfil_url']);
+            exit();
+        }
         $jugador = $nombreUsuario === '' ? null : $this->usuarioModel->buscarPerfilPublico($nombreUsuario);
 
         $data = $this->datosHeader();
