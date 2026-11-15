@@ -336,3 +336,44 @@
         padding: 1.25rem .5rem .5rem;
     }
 }
+
+/* Color del rango: se define en el hero y lo heredan insignia, anillo, numero y barra */
+.lobby-page .lobby-hero {
+    --rank: var(--gold);
+    background-image: radial-gradient(ellipse at 0% 0%, color-mix(in srgb, var(--rank) 12%, transparent), transparent 22rem);
+}
+
+.lobby-page .lobby-hero.rank-hierro       { --rank: #c6c6c6; }
+.lobby-page .lobby-hero.rank-bronce       { --rank: #c27a4a; }
+.lobby-page .lobby-hero.rank-plata        { --rank: #d0e2ea; }
+.lobby-page .lobby-hero.rank-oro          { --rank: #e0b84a; }
+.lobby-page .lobby-hero.rank-platino      { --rank: #4fc3b8; }
+.lobby-page .lobby-hero.rank-esmeralda    { --rank: #3fcf7e; }
+.lobby-page .lobby-hero.rank-diamante     { --rank: #6f9cff; }
+.lobby-page .lobby-hero.rank-maestro      { --rank: #b878f0; }
+.lobby-page .lobby-hero.rank-gran-maestro { --rank: #f06a6a; }
+.lobby-page .lobby-hero.rank-retador      { --rank: #f4d27a; }
+
+.lobby-page .rank-badge {
+    border-color: color-mix(in srgb, var(--rank) 50%, transparent);
+    background: color-mix(in srgb, var(--rank) 14%, transparent);
+    color: var(--rank);
+}
+
+.lobby-page .level-ring {
+    background: conic-gradient(var(--rank) calc(var(--xp) * 1%), var(--border) 0);
+}
+
+.lobby-page .level-ring-value {
+    color: var(--rank);
+}
+
+.lobby-page .xp-bar span {
+    background: linear-gradient(90deg, color-mix(in srgb, var(--rank) 55%, #000), var(--rank));
+}
+
+/* Retador: un brillo extra en la insignia y el anillo */
+.lobby-page .lobby-hero.rank-retador .rank-badge,
+.lobby-page .lobby-hero.rank-retador .level-ring {
+    box-shadow: 0 0 1rem color-mix(in srgb, var(--rank) 35%, transparent);
+}

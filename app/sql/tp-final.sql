@@ -43,6 +43,8 @@ CREATE TABLE partidas (
                           usuario_id INT NOT NULL,
                           puntaje INT NOT NULL DEFAULT 0,
                           fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                          pregunta_expira_en DATETIME NULL,
+                          motivo_fin VARCHAR(20) NULL,
                           FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
 );
 

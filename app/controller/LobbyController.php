@@ -29,7 +29,8 @@ class LobbyController
         $datos = $this->model->obtenerDatosLobby($usuario);
         $basePath = $this->appConfig['base_path_url'];
 
-        $nivel = $datos['nivel'];
+        $xp = $this->model->getDatosExperiencia($usuarioIdActual);
+        $nivel = $xp['nivel'];
         $nivelRequerido = $datos['nivel_requerido_crear_pregunta'];
         $ranking = $this->rankingModel->getRanking(5);
         $estaEnTop = false;
@@ -61,16 +62,17 @@ class LobbyController
         }
         unset($partida);
 
-        $estadisticas = $datos['estadisticas'];
+        $estadisticas = $this->model->getEstadisticas($usuarioIdActual);
         $estadisticas['puntaje_total'] = $this->formatearNumero($estadisticas['puntaje_total']);
 
         $this->render->renderiza('lobby', [
             'usuario' => $usuario,
             'nivel' => $nivel,
-            'rango' => $datos['rango'],
-            'xp_actual' => $this->formatearNumero($datos['xp_actual']),
-            'xp_siguiente_nivel' => $this->formatearNumero($datos['xp_siguiente_nivel']),
-            'xp_porcentaje' => (int) round($datos['xp_actual'] / $datos['xp_siguiente_nivel'] * 100),
+            'rango' => $xp['rango'],
+            'rango_clase' => $xp['rango_clase'],
+            'xp_actual' => $this->formatearNumero($xp['xp_actual']),
+            'xp_siguiente_nivel' => $this->formatearNumero($xp['xp_necesaria']),
+            'xp_porcentaje' => $xp['xp_porcentaje'],
             'estadisticas' => $estadisticas,
             'categorias' => $datos['categorias'],
             'ultimas_partidas' => $datos['ultimas_partidas'],
