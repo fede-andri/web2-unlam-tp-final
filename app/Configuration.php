@@ -122,7 +122,7 @@ class Configuration
     }
 
     private function getLobbyModel(){
-        return new LobbyModel();
+        return new LobbyModel( $this->getDatabase());
     }
 
     public function getMailService()

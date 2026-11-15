@@ -15,7 +15,7 @@
 
     <main class="page-content">
 
-        <section class="panel lobby-hero" aria-labelledby="lobby-heading">
+        <section class="panel lobby-hero rank-{{rango_clase}}" aria-labelledby="lobby-heading">
             <div class="level-ring" style="--xp: {{xp_porcentaje}}" role="img" aria-label="Nivel {{nivel}}, {{xp_porcentaje}}% hacia el siguiente nivel">
                 <div class="level-ring-inner">
                     <span class="level-ring-label">Nivel</span>
@@ -105,13 +105,13 @@
 
                 {{#mi_posicion}}
                     <li class="ranking-gap" aria-hidden="true">···</li>
-                    <li class="current-player" data-href="{{perfil_url}}">
+                    <li class="current-player" data-href="{{url_perfil}}">
                         <span class="position">{{posicion}}</span>
                         <span class="player-name">
-                <a href="{{perfil_url}}" class="player-link">{{usuario}}</a>
+                <a href="{{url_perfil}}" class="player-link">{{usuario}}</a>
                             <span class="you-badge">Vos</span>
             </span>
-                        <span class="player-score">{{puntaje_total}}</span>
+                        <span class="player-score">{{puntaje}}</span>
                     </li>
                 {{/mi_posicion}}
             </ol>
