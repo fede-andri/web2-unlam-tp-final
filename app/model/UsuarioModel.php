@@ -177,6 +177,70 @@ class UsuarioModel
 
         return $this->database->execute("DELETE FROM usuarios WHERE id = ?", [$id]);
     }
+
+    public function buscarPorEmail($email)
+    {
+        $sql = "SELECT *
+        FROM usuarios
+        WHERE email = ?";
+
+        return $this->database->queryOne(
+            $sql,
+            [$email]
+        );
+    }
+
+    public function guardarTokenRecuperacion($usuarioId, $token){
+        $sql = "UPDATE usuarios
+        SET token_recuperacion = ?
+        WHERE id = ?";
+
+        return $this->database->execute(
+            $sql,
+            [
+                $token,
+                $usuarioId
+            ]
+        );
+    }
+
+    public function buscarPorTokenRecuperacion($token)
+    {
+        $sql = "SELECT *
+        FROM usuarios
+        WHERE token_recuperacion = ?";
+
+        return $this->database->queryOne(
+            $sql,
+            [$token]
+        );
+    }
+
+    public function actualizarPassword($usuarioId, $passwordHash){
+        $sql = "UPDATE usuarios
+        SET password = ?
+        WHERE id = ?";
+
+        return $this->database->execute(
+            $sql,
+            [
+                $passwordHash,
+                $usuarioId
+            ]
+        );
+    }
+
+    public function limpiarTokenRecuperacion($usuarioId){
+        $sql = "UPDATE usuarios
+        SET token_recuperacion = NULL
+        WHERE id = ?";
+
+        return $this->database->execute(
+            $sql,
+            [$usuarioId]
+        );
+    }
+
 }
 
 
