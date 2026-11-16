@@ -2,6 +2,7 @@
 
 namespace app;
 
+use app\controller\AdminController;
 use app\controller\EventoController;
 use app\controller\HomeController;
 use app\controller\LobbyController;
@@ -104,6 +105,15 @@ class Configuration
         );
     }
 
+    public function getAdminController()
+    {
+        return new AdminController(
+            $this->getRender(),
+            $this->getUsuarioModel(),
+            $this->getAppConfig()
+        );
+    }
+
     // Los privados
     private function getLoginModel()
     {
@@ -155,6 +165,7 @@ class Configuration
             "enviar_recuperacion_url" => $this->config["app"]["enviar_recuperacion_url"],
             "restablecer_password_url" => $this->config["app"]["restablecer_password_url"],
             "guardar_password_url" => $this->config["app"]["guardar_password_url"],
+            "admin_show_url" => $this->config["app"]["admin_show_url"],
         ];
     }
 

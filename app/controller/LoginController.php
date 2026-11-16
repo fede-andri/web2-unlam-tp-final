@@ -24,7 +24,8 @@ class LoginController
     public function show()
     {
         if (isset($_SESSION['usuario_id'])) {
-            Redirect::toIndex();
+            header('Location:' . $this->appConfig['base_path_url'] .$this->appConfig['lobby_url']);
+            exit();
         }
 
         $registroExitoso = false;
@@ -58,6 +59,17 @@ class LoginController
 //        session_regenerate_id(true);
         $_SESSION['usuario_id'] = $datosUsuario['id'];
         $_SESSION['usuario'] = $datosUsuario['usuario'];
+        $_SESSION['rol'] = $datosUsuario['rol'];
+
+        if ($datosUsuario['rol'] === 'ADMIN') {
+            header(
+                'Location:' .
+                $this->appConfig['base_path_url'] .
+                $this->appConfig["admin_show_url"]
+            );
+            exit();
+        }
+
         header('Location:' . $this->appConfig['base_path_url'] .$this->appConfig['lobby_url']);
         exit();
     }
