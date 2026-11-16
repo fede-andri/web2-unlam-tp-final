@@ -51,6 +51,12 @@
                         </div>
                     {{/registro_exitoso}}
 
+                    {{#password_reset}}
+                        <div class="alert alert-success" role="alert">
+                            Tu contraseña fue actualizada correctamente. Ya podés iniciar sesión.
+                        </div>
+                    {{/password_reset}}
+
                     <form method="POST" action="{{login_url}}">
                         <div class="mb-3">
                             <label for="usuario" class="form-label">Usuario</label>
@@ -80,6 +86,11 @@
                         </div>
 
                         <button type="submit" class="btn btn-accent btn-lg w-100">Ingresar</button>
+
+                        <div class="text-center mt-3">
+                            <a href="{{olvide_password_url}}" class="text-decoration-none">¿Olvidaste tu contraseña?</a>
+                        </div>
+
                         <div class="form-divider">o</div>
                         <a href="{{registro_url}}" class="btn btn-outline-accent btn-lg w-100">Registrarse</a>
                     </form>

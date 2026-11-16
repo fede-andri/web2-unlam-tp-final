@@ -72,6 +72,68 @@ class MailService
         }
     }
 
+    public function enviarRecuperacionPassword(
+        string $email,
+        string $nombre,
+        string $linkRecuperacion
+    ): bool
+    {
+        $mail = new PHPMailer(true);
+
+        try {
+
+            $mail->isSMTP();
+
+            $mail->Host = $this->config['host'];
+            $mail->SMTPAuth = true;
+
+            $mail->Username = $this->config['username'];
+            $mail->Password = $this->config['password'];
+
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->Port = $this->config['port'];
+
+            $mail->CharSet = 'UTF-8';
+
+            $mail->setFrom(
+                $this->config['from_email'],
+                $this->config['from_name']
+            );
+
+            $mail->addAddress(
+                $email,
+                $nombre
+            );
+
+            $mail->isHTML(true);
+
+            $mail->Subject =
+                'Recuperación de contraseña - Preguntones';
+
+            $mail->Body = $this->cargarTemplate(
+                __DIR__ . '/../mail/recuperacionPassword.html',
+                [
+                    'nombre' => $nombre,
+                    'link_recuperacion' => $linkRecuperacion
+                ]
+            );
+            $mail->AltBody =
+                "Hola {$nombre}
+                Recibimos una solicitud para restablecer la contraseña de tu cuenta en Preguntones.
+                Utilizá el siguiente enlace:
+                {$linkRecuperacion}
+                Si no realizaste esta solicitud, podés ignorar este correo.";
+            return $mail->send();
+
+        } catch (Exception $e) {
+
+            error_log($mail->ErrorInfo);
+
+            return false;
+        }
+    }
+
+
     private function cargarTemplate(
         string $archivo,
         array $variables

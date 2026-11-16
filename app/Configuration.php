@@ -47,7 +47,9 @@ class Configuration
         return new LoginController(
           $this->getLoginModel(),
           $this->getRender(),
-          $this->getAppConfig()
+          $this->getAppConfig(),
+          $this->getMailService(),
+          $this->getUsuarioModel(),
       );
     }
     public function getRegistroController(){
@@ -149,6 +151,10 @@ class Configuration
             "perfil_url" => $this->config["app"]["perfil_url"] ?? "/perfil/show",
             "sugerir_pregunta_url" => $this->config["app"]["sugerir_pregunta_url"] ?? "/pregunta/show",
             "guardar_pregunta_url" => $this->config["app"]["guardar_pregunta_url"] ?? "/pregunta/guardar",
+            "olvide_password_url" => $this->config["app"]["olvide_password_url"],
+            "enviar_recuperacion_url" => $this->config["app"]["enviar_recuperacion_url"],
+            "restablecer_password_url" => $this->config["app"]["restablecer_password_url"],
+            "guardar_password_url" => $this->config["app"]["guardar_password_url"],
         ];
     }
 
