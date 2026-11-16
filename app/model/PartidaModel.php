@@ -22,8 +22,7 @@ class PartidaModel
 
     public function iniciarTemporizador(int $partida_id){
         $sql =     "UPDATE partidas
-                    SET pregunta_actual_id = ?,
-                    pregunta_expira_en = DATE_ADD(NOW(), INTERVAL " . self::SEGUNDOS_POR_PREGUNTA . " SECOND)
+                    SET pregunta_expira_en = DATE_ADD(NOW(), INTERVAL " . self::SEGUNDOS_POR_PREGUNTA . " SECOND)
                     WHERE id = ?";
         $this->database->execute($sql, [$partida_id]);
     }
