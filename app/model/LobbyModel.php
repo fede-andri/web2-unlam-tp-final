@@ -4,6 +4,8 @@ namespace app\model;
 
 // Datos hardcodeados hasta que existan las tablas de partidas/preguntas/niveles.
 // Ranking, la experiencia, el nivel y el rango salen de las partidas reales.
+use app\service\ExperienciaService;
+
 class LobbyModel
 {
     private $database;
@@ -21,7 +23,7 @@ class LobbyModel
             [$usuarioId]
         );
 
-        return ExperienciaModel::calcularExperiencia((int) ($fila['puntos'] ?? 0));
+        return ExperienciaService::calcularExperiencia((int) ($fila['puntos'] ?? 0));
     }
 
     public function getEstadisticas(int $usuarioId)
