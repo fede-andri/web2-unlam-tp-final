@@ -23,26 +23,66 @@ class PartidaController
 
     public function iniciar()
     {
-        $usuarioId = $this->requiereLogin();
+        $this->requiereLogin();
 
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             $this->redirigir($this->appConfig['lobby_url']);
         }
 
+        $this->redirigir('/partida/ruleta');
+    }
+
+    public function ruleta()
+    {
+        $this->requiereLogin();
+
+        $categorias = $this->model->getCategorias();
+
+        $this->render->renderiza(
+            'ruleta',
+            array_merge(
+                $this->datosHeader(),
+                [
+                    'categorias_json' => json_encode($categorias),
+                    'confirmar_categoria_url' =>
+                        $this->appConfig['base_path_url']
+                        . '/partida/confirmarCategoria'
+                ]
+            )
+        );
+    }
+
+    public function confirmarCategoria()
+    {
+        $usuarioId = $this->requiereLogin();
+
+        $categoriaId =
+            (int) Request::post('categoria_id', 0);
+
+        if ($categoriaId <= 0) {
+            $this->redirigir('/partida/ruleta');
+        }
+
         if ($this->model->getPartidaEnCurso($usuarioId) === null) {
-            $partidaId = $this->model->crearPartida($usuarioId);
+
+            $partidaId =
+                $this->model->crearPartida(
+                    $usuarioId,
+                    $categoriaId
+                );
 
             if (!$this->model->asignarSiguientePregunta($partidaId)) {
-                // No hay preguntas activas cargadas
+
                 $this->model->terminarPartida($partidaId);
-                $this->redirigir($this->appConfig['lobby_url']);
+
+                $this->redirigir(
+                    $this->appConfig['lobby_url']
+                );
             }
         }
 
         $this->redirigir('/partida/jugar');
     }
-
-   
     public function jugar()
     {
         $usuarioId = $this->requiereLogin();
