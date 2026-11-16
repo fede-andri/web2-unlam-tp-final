@@ -64,4 +64,8 @@ ADD longitud DECIMAL(11,8) NULL;
  ALTER TABLE usuarios
 ADD token_validacion VARCHAR(255) NULL;
  */
+-- Datos de ejemplo (opcional): requiere que existan los usuarios con esos id.
+-- Descomentar solo si ya cargaste usuarios con id 1, 2 y 3, si no falla por la FK usuario_id.
+/*
 INSERT INTO partidas (usuario_id, puntaje) VALUES (1, 5),(1,9), (2, 8), (3, 3);
+*/
