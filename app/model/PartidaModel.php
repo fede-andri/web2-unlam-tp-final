@@ -79,29 +79,54 @@ class PartidaModel
         );
     }
 
-    public function crearPartida(int $usuarioId): int
+    public function crearPartida(
+        int $usuarioId,
+        int $categoriaId
+    ): int
     {
         $this->database->execute(
-            "INSERT INTO partidas (usuario_id, puntaje, estado) VALUES (?, 0, 'EN_CURSO')",
-            [$usuarioId]
+            "INSERT INTO partidas
+        (usuario_id, puntaje, estado, categoria_id)
+        VALUES (?, 0, 'EN_CURSO', ?)",
+            [
+                $usuarioId,
+                $categoriaId
+            ]
         );
-        return (int) $this->database->lastInsertId();
+
+        return (int)$this->database->lastInsertId();
     }
 
-   
+
     public function asignarSiguientePregunta(int $partidaId): bool
     {
+        $partida = $this->database->queryOne(
+            "SELECT categoria_id
+         FROM partidas
+         WHERE id = ?",
+            [$partidaId]
+        );
+
+        if (!$partida) {
+            return false;
+        }
+
+        $categoriaId = (int)$partida['categoria_id'];
+
         $fila = $this->database->queryOne(
             "SELECT p.id
-             FROM preguntas p
-             WHERE p.estado = 'ACTIVA'
-               AND NOT EXISTS (
-                   SELECT 1 FROM partida_pregunta pp
-                   WHERE pp.partida_id = ? AND pp.pregunta_id = p.id
-               )
-             ORDER BY RAND()
-             LIMIT 1",
-            [$partidaId]
+         FROM preguntas p
+         WHERE p.estado='ACTIVA'
+           AND p.categoria_id = ?
+           AND NOT EXISTS (
+                SELECT 1
+                FROM partida_pregunta pp
+                WHERE pp.partida_id = ?
+                AND pp.pregunta_id = p.id
+           )
+         ORDER BY RAND()
+         LIMIT 1",
+            [$categoriaId,$partidaId]
         );
 
         if ($fila === null) {
@@ -234,5 +259,23 @@ class PartidaModel
         );
 
         return $this->asignarSiguientePregunta($partidaId);
+    }
+
+    public function getCategorias()
+    {
+        return $this->database->queryAll(
+            "SELECT id,nombre,color,imagen
+         FROM categorias"
+        );
+    }
+
+    public function getCategoriaPorId(int $id)
+    {
+        return $this->database->queryOne(
+            "SELECT id,nombre,color,imagen
+         FROM categorias
+         WHERE id = ?",
+            [$id]
+        );
     }
 }

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#091411">
+    <title>Ruleta | Preguntones</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link href="/web2-unlam-tp-final/estilos/aplicacion.css" rel="stylesheet">
+    <link href="/web2-unlam-tp-final/estilos/ruleta.css" rel="stylesheet">
+</head>
+<body class="ruleta-page">
+
+{{> components/headerView}}
+
+<main class="page-content">
+    <section class="panel ruleta-panel" aria-labelledby="ruleta-heading">
+        <div class="ruleta-header">
+            <p class="eyebrow mb-0">Nueva partida</p>
+            <h1 id="ruleta-heading" class="page-title">Ruleta de Categorías</h1>
+        </div>
+
+        <div class="ruleta-stage">
+            <div class="ruleta-container">
+                <div class="flecha" aria-hidden="true"></div>
+                <canvas
+                        id="ruleta"
+                        width="600"
+                        height="600">
+                </canvas>
+            </div>
+        </div>
+
+        <div class="ruleta-resultado" aria-live="polite">
+            <h2 id="nombreCategoria" class="ruleta-cat-nombre">Girando...</h2>
+            <p id="estadoRuleta" class="ruleta-estado">Definiremos tu temática en segundos</p>
+        </div>
+
+        <form
+                id="formCategoria"
+                method="POST"
+                action="{{confirmar_categoria_url}}">
+            <input
+                    type="hidden"
+                    id="categoria_id"
+                    name="categoria_id">
+        </form>
+    </section>
+
+    <script id="categorias-data" type="application/json">{{{categorias_json}}}</script>
+</main>
+
+{{> components/footerView}}
+
+<script src="/web2-unlam-tp-final/public/js/ruleta.js"></script>
+</body>
+</html>
