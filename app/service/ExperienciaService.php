@@ -1,8 +1,8 @@
 <?php
 
-namespace app\model;
+namespace app\service;
 
-class ExperienciaModel{
+class ExperienciaService{
 
     const XP_POR_PUNTO = 10;
     const XP_POR_NIVEL = 100;
