@@ -110,7 +110,8 @@ class Configuration
         return new AdminController(
             $this->getRender(),
             $this->getUsuarioModel(),
-            $this->getAppConfig()
+            $this->getAppConfig(),
+            $this->getPreguntaModel()
         );
     }
 
