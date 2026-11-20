@@ -43,7 +43,7 @@ class PartidaModel
         return (int) $fila['restantes'];
     }
 
-    public function tiempoAgotado(int $partidaId): bool
+    public function tiempoAgotado(int $partidaId)
     {
         $sql = "SELECT (pregunta_expira_en IS NOT NULL
                     AND NOW() > DATE_ADD(pregunta_expira_en, INTERVAL 1 SECOND)) AS vencida
@@ -150,7 +150,7 @@ class PartidaModel
         return true;
     }
 
-    private function elegirPregunta(int $partidaId, ?int $categoriaId): ?int
+    private function elegirPregunta(int $partidaId, $categoriaId)
     {
         // Ultima vez que el usuario de esta partida vio cada pregunta (incluye esta partida)
         $historial = "SELECT pp.pregunta_id, MAX(pa.fecha) AS ultima_vez
@@ -159,10 +159,9 @@ class PartidaModel
                       WHERE pa.usuario_id = (SELECT usuario_id FROM partidas WHERE id = ?)
                       GROUP BY pp.pregunta_id";
 
-        // Si la partida tiene categoria, se agrega ese filtro (y su valor, en el mismo orden)
         $filtroCategoria = $categoriaId !== null ? " AND p.categoria_id = ?" : "";
 
-        // 1) Nunca vistas, o vistas hace mas de 30 dias
+        // Nunca vistas, o vistas hace mas de 30 dias
         $valores = [$partidaId];
         if ($categoriaId !== null) {
             $valores[] = $categoriaId;
@@ -188,7 +187,7 @@ class PartidaModel
             return null;
         }
 
-        // 2) Ya vio todas: la que hace mas tiempo no ve
+        // la que hace mas tiempo no ve
         $valores = [$partidaId];
         if ($categoriaId !== null) {
             $valores[] = $categoriaId;
