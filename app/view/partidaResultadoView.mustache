@@ -7,6 +7,9 @@
     <title>Resultado | Preguntones</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link href="/web2-unlam-tp-final/estilos/aplicacion.css" rel="stylesheet">
+    <link href="/web2-unlam-tp-final/estilos/partidaResultado.css" rel="stylesheet">
+
+
 </head>
 <body class="game-page" style="--cat: {{categoria_color}}">
 
@@ -18,57 +21,109 @@
 
         <div class="game-cat-band">
                 <span class="game-cat-chip">
-                    {{#tiempo_agotado}}Tiempo agotado{{/tiempo_agotado}}
-                    {{^tiempo_agotado}}{{#perdio}}Fin de la partida{{/perdio}}{{^perdio}}¡Partida completa!{{/perdio}}{{/tiempo_agotado}}
+                    {{#sin_preguntas}}Sin preguntas nuevas{{/sin_preguntas}}
+                    {{^sin_preguntas}}
+                        {{#tiempo_agotado}}Tiempo agotado{{/tiempo_agotado}}
+                        {{^tiempo_agotado}}{{#perdio}}Fin de la partida{{/perdio}}{{^perdio}}¡Partida completa!{{/perdio}}{{/tiempo_agotado}}
+                    {{/sin_preguntas}}
                 </span>
         </div>
 
         <h1 id="resultado-titulo" class="game-result-title">
-            {{#tiempo_agotado}}¡Se acabó el tiempo!{{/tiempo_agotado}}
-            {{^tiempo_agotado}}
-                {{#perdio}}¡Perdiste!{{/perdio}}
-                {{^perdio}}¡Respondiste todas las preguntas!{{/perdio}}
-            {{/tiempo_agotado}}
+            {{#sin_preguntas}}¡Ya respondiste todas las preguntas!{{/sin_preguntas}}
+            {{^sin_preguntas}}
+                {{#tiempo_agotado}}¡Se acabó el tiempo!{{/tiempo_agotado}}
+                {{^tiempo_agotado}}
+                    {{#perdio}}¡Perdiste!{{/perdio}}
+                    {{^perdio}}¡Respondiste todas las preguntas!{{/perdio}}
+                {{/tiempo_agotado}}
+            {{/sin_preguntas}}
         </h1>
 
-        <p class="game-result-score">
-            Ganaste <strong>{{puntaje}}</strong> {{#singular}}punto{{/singular}}{{^singular}}puntos{{/singular}}
-        </p>
-
-        {{#tiempo_agotado}}
+        {{#sin_preguntas}}
             <div class="game-result-detail">
-                <p class="game-result-question">No respondiste a tiempo y la partida terminó.</p>
+                <p class="game-result-question">No quedan preguntas nuevas para vos por ahora. Volvé más adelante: vamos a sumar más y algunas vuelven a estar disponibles con el tiempo.</p>
             </div>
-        {{/tiempo_agotado}}
+            {{#estadisticas}}
+                <dl class="game-result-stats" aria-label="Tus estadísticas">
+                    <div>
+                        <dt>Partidas jugadas</dt>
+                        <dd>{{partidas_jugadas}}</dd>
+                    </div>
+                    <div>
+                        <dt>Puntaje total</dt>
+                        <dd>{{puntaje_total}}</dd>
+                    </div>
+                    <div>
+                        <dt>Mejor racha</dt>
+                        <dd>{{mejor_racha}}</dd>
+                    </div>
+                </dl>
+            {{/estadisticas}}
 
-        {{^tiempo_agotado}}
-            {{#perdio}}
+            <div class="game-result-actions">
+                <a href="{{lobby_url}}" class="btn btn-accent btn-lg w-100">Volver al lobby</a>
+                <a href="{{ranking_show_url}}" class="btn btn-outline-accent btn-lg w-100">Ver ranking</a>
+            </div>
+        {{/sin_preguntas}}
+
+        {{^sin_preguntas}}
+            <p class="game-result-score">
+                Ganaste <strong>{{puntaje}}</strong> {{#singular}}punto{{/singular}}{{^singular}}puntos{{/singular}}
+            </p>
+
+            {{#tiempo_agotado}}
                 <div class="game-result-detail">
-                    <p class="game-result-cat">{{categoria}}</p>
-                    <p class="game-result-question">{{enunciado}}</p>
-
-                    <p class="game-result-line game-result-wrong">
-                        <span>Tu respuesta</span>
-                        <strong>{{elegida}}</strong>
-                    </p>
-                    <p class="game-result-line game-result-right">
-                        <span>La respuesta correcta era</span>
-                        <strong>{{correcta}}</strong>
-                    </p>
+                    <p class="game-result-question">No respondiste a tiempo y la partida terminó.</p>
                 </div>
-            {{/perdio}}
-        {{/tiempo_agotado}}
+            {{/tiempo_agotado}}
 
-        <div class="game-result-actions">
-            <form method="POST" action="{{jugar_url}}">
-                <button type="submit" class="btn btn-accent btn-lg w-100">Jugar otra vez</button>
-            </form>
-            <a href="{{lobby_url}}" class="btn btn-outline-accent btn-lg w-100">Volver al lobby</a>
-        </div>
+            {{^tiempo_agotado}}
+                {{#perdio}}
+                    <div class="game-result-detail">
+                        <p class="game-result-cat">{{categoria}}</p>
+                        <p class="game-result-question">{{enunciado}}</p>
+
+                        <p class="game-result-line game-result-wrong">
+                            <span>Tu respuesta</span>
+                            <strong>{{elegida}}</strong>
+                        </p>
+                        <p class="game-result-line game-result-right">
+                            <span>La respuesta correcta era</span>
+                            <strong>{{correcta}}</strong>
+                        </p>
+                    </div>
+                {{/perdio}}
+            {{/tiempo_agotado}}
+
+            {{#estadisticas}}
+                <dl class="game-result-stats" aria-label="Tus estadísticas">
+                    <div>
+                        <dt>Partidas jugadas</dt>
+                        <dd>{{partidas_jugadas}}</dd>
+                    </div>
+                    <div>
+                        <dt>Puntaje de partida</dt>
+                        <dd>{{puntaje}}</dd>
+                    </div>
+                    <div>
+                        <dt>Mejor racha</dt>
+                        <dd>{{mejor_racha}}</dd>
+                    </div>
+                </dl>
+            {{/estadisticas}}
+
+            <div class="game-result-actions">
+                <form method="POST" action="{{jugar_url}}">
+                    <button type="submit" class="btn btn-accent btn-lg w-100">Jugar otra vez</button>
+                </form>
+                <a href="{{lobby_url}}" class="btn btn-outline-accent btn-lg w-100">Volver al lobby</a>
+            </div>
+        {{/sin_preguntas}}
 
     </section>
 
-    </main>
+</main>
 
 </body>
 </html>

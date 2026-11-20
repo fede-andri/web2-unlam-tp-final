@@ -4,8 +4,11 @@ namespace app\model;
 
 class PartidaModel
 {
-    private $database;
     const SEGUNDOS_POR_PREGUNTA = 10;
+    const DIAS_SIN_REPETIR = 30;
+    const REPETIR_SI_SE_AGOTAN = false;
+
+    private $database;
     public function __construct($database)
     {
         $this->database = $database;
@@ -20,15 +23,17 @@ class PartidaModel
         return $this->database->queryAll($sql, [$usuario_id]);
     }
 
-    public function iniciarTemporizador(int $partida_id){
-        $sql =     "UPDATE partidas
-                    SET pregunta_actual_id = ?,
-                    pregunta_expira_en = DATE_ADD(NOW(), INTERVAL " . self::SEGUNDOS_POR_PREGUNTA . " SECOND)
-                    WHERE id = ?";
-        $this->database->execute($sql, [$partida_id]);
+    //Temporizador
+    public function iniciarTemporizador(int $partidaId){
+
+        $sql = "UPDATE partidas
+                SET pregunta_expira_en = DATE_ADD(NOW(), INTERVAL " . self::SEGUNDOS_POR_PREGUNTA . " SECOND)
+                WHERE id = ?";
+        $this->database->execute($sql, [$partidaId]);
     }
 
     public function segundosRestantes(int $partida_id){
+
         $sql = "SELECT pregunta_expira_en IS NULL AS sin_temporizador,
                    GREATEST(TIMESTAMPDIFF(SECOND, NOW(), pregunta_expira_en), 0) AS restantes
             FROM partidas WHERE id = ?";
@@ -40,6 +45,7 @@ class PartidaModel
         return (int) $fila['restantes'];
     }
 
+    // true si ya venció (con 1 segundo de tolerancia por la demora de red)
     public function tiempoAgotado(int $partidaId): bool
     {
         $sql = "SELECT (pregunta_expira_en IS NOT NULL
@@ -50,7 +56,7 @@ class PartidaModel
     }
     public function terminarPorTiempo(int $partidaId)
     {
-        $this->terminarPartida($partidaId);   // reutiliza lo que ya hace al terminar una partida
+        $this->terminarPartida($partidaId);
 
         $this->database->execute(
             "UPDATE partidas 
@@ -59,12 +65,14 @@ class PartidaModel
             [$partidaId]
         );
     }
+
+    // Partidas
     public function getPartidaEnCurso(int $usuarioId)
     {
         return $this->database->queryOne(
             "SELECT id, puntaje, pregunta_actual_id
              FROM partidas
-             WHERE usuario_id = ? AND estado = 'EN_CURSO' AND pregunta_actual_id IS NOT NULL
+             WHERE usuario_id = ? AND estado = 'EN_CURSO'
              ORDER BY id DESC
              LIMIT 1",
             [$usuarioId]
@@ -79,6 +87,23 @@ class PartidaModel
             [$partidaId, $usuarioId]
         );
     }
+    public function getEstadisticas(int $usuarioId): array
+    {
+        $fila = $this->database->queryOne(
+            "SELECT COUNT(*) AS partidas_jugadas,
+                    COALESCE(SUM(puntaje), 0) AS puntaje_total,
+                    COALESCE(MAX(puntaje), 0) AS mejor_racha
+             FROM partidas
+             WHERE usuario_id = ? AND estado = 'TERMINADA'",
+            [$usuarioId]
+        );
+
+        return [
+            'partidas_jugadas' => (int) ($fila['partidas_jugadas'] ?? 0),
+            'puntaje_total'    => (int) ($fila['puntaje_total'] ?? 0),
+            'mejor_racha'      => (int) ($fila['mejor_racha'] ?? 0),
+        ];
+    }
 
     public function crearPartida(int $usuarioId): int
     {
@@ -89,27 +114,13 @@ class PartidaModel
         return (int) $this->database->lastInsertId();
     }
 
-   
     public function asignarSiguientePregunta(int $partidaId): bool
     {
-        $fila = $this->database->queryOne(
-            "SELECT p.id
-             FROM preguntas p
-             WHERE p.estado = 'ACTIVA'
-               AND NOT EXISTS (
-                   SELECT 1 FROM partida_pregunta pp
-                   WHERE pp.partida_id = ? AND pp.pregunta_id = p.id
-               )
-             ORDER BY RAND()
-             LIMIT 1",
-            [$partidaId]
-        );
+        $preguntaId = $this->elegirPregunta($partidaId);
 
-        if ($fila === null) {
+        if ($preguntaId === null) {
             return false;
         }
-
-        $preguntaId = (int) $fila['id'];
 
         $this->database->execute(
             "INSERT INTO partida_pregunta (partida_id, pregunta_id) VALUES (?, ?)",
@@ -122,8 +133,59 @@ class PartidaModel
             WHERE id = ?",
             [$preguntaId, $partidaId]
         );
+
         return true;
     }
+
+
+    private function elegirPregunta(int $partidaId)
+    {
+        // Ultima vez que el usuario de esta partida vio cada pregunta (incluye esta partida)
+        $historial = "SELECT pp.pregunta_id, MAX(pa.fecha) AS ultima_vez
+                      FROM partida_pregunta pp
+                      JOIN partidas pa ON pa.id = pp.partida_id
+                      WHERE pa.usuario_id = (SELECT usuario_id FROM partidas WHERE id = ?)
+                      GROUP BY pp.pregunta_id";
+
+        // Nunca vistas, o vistas hace mas de 30 dias
+        $fila = $this->database->queryOne(
+            "SELECT p.id
+             FROM preguntas p
+             LEFT JOIN ($historial) h ON h.pregunta_id = p.id
+             WHERE p.estado = 'ACTIVA'
+               AND (h.ultima_vez IS NULL
+                    OR h.ultima_vez < DATE_SUB(NOW(), INTERVAL " . self::DIAS_SIN_REPETIR . " DAY))
+             ORDER BY RAND()
+             LIMIT 1",
+            [$partidaId]
+        );
+
+        if ($fila !== null) {
+            return (int) $fila['id'];
+        }
+
+        if (!self::REPETIR_SI_SE_AGOTAN) {
+            return null;
+        }
+
+        // Ya vio todas: la que hace mas tiempo no ve
+        $fila = $this->database->queryOne(
+            "SELECT p.id
+             FROM preguntas p
+             JOIN ($historial) h ON h.pregunta_id = p.id
+             WHERE p.estado = 'ACTIVA'
+               AND NOT EXISTS (
+                   SELECT 1 FROM partida_pregunta x
+                   WHERE x.partida_id = ? AND x.pregunta_id = p.id
+               )
+             ORDER BY h.ultima_vez ASC, RAND()
+             LIMIT 1",
+            [$partidaId, $partidaId]
+        );
+
+        return $fila !== null ? (int) $fila['id'] : null;
+    }
+
     public function getPregunta(int $preguntaId)
     {
         $pregunta = $this->database->queryOne(
@@ -151,7 +213,7 @@ class PartidaModel
             'respuestas' => $respuestas,
         ];
     }
-    public function registrarRespuesta(int $partidaId, int $preguntaId, int $respuestaId): ?bool
+    public function registrarRespuesta(int $partidaId, int $preguntaId, int $respuestaId)
     {
         $respuesta = $this->database->queryOne(
             "SELECT es_correcta FROM respuestas WHERE id = ? AND pregunta_id = ?",
@@ -185,7 +247,13 @@ class PartidaModel
             [$partidaId]
         );
     }
-
+    public function cancelarPartida(int $partidaId)
+    {
+        $this->database->execute(
+            "DELETE FROM partidas WHERE id = ? AND estado = 'EN_CURSO' AND puntaje = 0",
+            [$partidaId]
+        );
+    }
     public function terminarPartida(int $partidaId)
     {
         $this->database->execute(
@@ -212,28 +280,5 @@ class PartidaModel
              LIMIT 1",
             [$partidaId]
         );
-    }
-
-    public function reportarPregunta(int $preguntaId, int $usuarioId, string $motivo): void
-    {
-        $this->database->execute(
-            "UPDATE preguntas SET estado = 'REPORTADA' WHERE id = ?",
-            [$preguntaId]
-        );
-
-        $this->database->execute(
-            "INSERT INTO reportes (pregunta_id, usuario_id, motivo) VALUES (?, ?, ?)",
-            [$preguntaId, $usuarioId, $motivo]
-        );
-    }
-
-    public function reemplazarPreguntaReportada(int $partidaId, int $preguntaId): bool
-    {
-        $this->database->execute(
-            "DELETE FROM partida_pregunta WHERE partida_id = ? AND pregunta_id = ? AND respuesta_elegida_id IS NULL",
-            [$partidaId, $preguntaId]
-        );
-
-        return $this->asignarSiguientePregunta($partidaId);
     }
 }

@@ -25,24 +25,21 @@ class PartidaController
     {
         $usuarioId = $this->requiereLogin();
 
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            $this->redirigir($this->appConfig['lobby_url']);
-        }
+        $this->soloPost();
 
         if ($this->model->getPartidaEnCurso($usuarioId) === null) {
             $partidaId = $this->model->crearPartida($usuarioId);
 
             if (!$this->model->asignarSiguientePregunta($partidaId)) {
-                // No hay preguntas activas cargadas
-                $this->model->terminarPartida($partidaId);
-                $this->redirigir($this->appConfig['lobby_url']);
+                // No hay preguntas disponibles: la partida vacia no se guarda
+                $this->model->cancelarPartida($partidaId);
+                $this->redirigir('/partida/sinPreguntas');
             }
         }
 
         $this->redirigir('/partida/jugar');
     }
 
-   
     public function jugar()
     {
         $usuarioId = $this->requiereLogin();
@@ -54,21 +51,16 @@ class PartidaController
 
         $partidaId = (int) $partida['id'];
 
-        //lo que hace que se pierda la partida si el usuario se va y vuelve
-        if($this->model->tiempoAgotado($partidaId)){
-            $this->model->terminarPorTiempo($partidaId);
-            $this->redirigir('/partida/resultado?id=' . $partidaId);
-        }
+        $this->terminarPartidaPorTiempo($partidaId);
 
         $pregunta = $this->model->getPregunta((int) $partida['pregunta_actual_id']);
         if ($pregunta === null) {
             $this->model->terminarPartida($partidaId);
-            $this->redirigir('/partida/resultado?id=' . $partidaId);
+            $this->irAResultado($partidaId);
         }
 
-        //partida en curso que no tenia temp, se lo arranca ahora
         $restantes = $this->model->segundosRestantes($partidaId);
-        if($restantes === null){
+        if ($restantes === null) {
             $this->model->iniciarTemporizador($partidaId);
             $restantes = PartidaModel::SEGUNDOS_POR_PREGUNTA;
         }
@@ -96,50 +88,14 @@ class PartidaController
             'tiempo_url' => $this->appConfig['base_path_url'] . '/partida/tiempoAgotado',
             'segundos_totales' => PartidaModel::SEGUNDOS_POR_PREGUNTA,
             'segundos_restantes' => $restantes,
-            'reportar_url' => $this->appConfig['base_path_url'] . '/partida/reportar',
-            'reportada' => Request::get('reportada') !== null,
         ]));
     }
-
-    public function reportar()
-    {
-        $usuarioId = $this->requiereLogin();
-
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            $this->redirigir('/partida/jugar');
-        }
-
-        $partida = $this->model->getPartidaEnCurso($usuarioId);
-        if ($partida === null || empty($partida['pregunta_actual_id'])) {
-            $this->redirigir($this->appConfig['lobby_url']);
-        }
-
-        $preguntaId = (int) $partida['pregunta_actual_id'];
-        $motivo = trim(Request::post('motivo', 'Pregunta reportada por el usuario'));
-        if (empty($motivo)) {
-            $motivo = 'Pregunta inválida';
-        }
-
-        $this->model->reportarPregunta($preguntaId, $usuarioId, $motivo);
-
-        $reemplazada = $this->model->reemplazarPreguntaReportada((int) $partida['id'], $preguntaId);
-
-        if (!$reemplazada) {
-            $this->model->terminarPartida((int) $partida['id']);
-            $this->redirigir('/partida/resultado?id=' . (int) $partida['id']);
-        }
-
-        $this->redirigir('/partida/jugar?reportada=1');
-    }
-
 
     public function responder()
     {
         $usuarioId = $this->requiereLogin();
 
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            $this->redirigir('/partida/jugar');
-        }
+        $this->soloPost();
 
         $partida = $this->model->getPartidaEnCurso($usuarioId);
         if ($partida === null || empty($partida['pregunta_actual_id'])) {
@@ -147,11 +103,7 @@ class PartidaController
         }
 
         $partidaId = (int) $partida['id'];
-        //una respuesta fuera de término no se registra
-        if ($this->model->tiempoAgotado($partidaId)) {
-            $this->model->terminarPorTiempo($partidaId);
-            $this->redirigir('/partida/resultado?id=' . $partidaId);
-        }
+        $this->terminarPartidaPorTiempo($partidaId);
 
         $respuestaId = (int) Request::post('respuesta_id', 0);
 
@@ -161,7 +113,7 @@ class PartidaController
             $respuestaId
         );
 
-        // Respuesta inválida o repetida: se vuelve a mostrar la pregunta
+        // Respuesta inválida se vuelve a mostrar la pregunta
         if ($acerto === null) {
             $this->redirigir('/partida/jugar');
         }
@@ -172,13 +124,11 @@ class PartidaController
             if ($this->model->asignarSiguientePregunta($partidaId)) {
                 $this->redirigir('/partida/jugar');
             }
-            // Respondio todas las preguntas disponibles: la partida termina igual
         }
 
         $this->model->terminarPartida($partidaId);
-        $this->redirigir('/partida/resultado?id=' . $partidaId);
+        $this->irAResultado($partidaId);
     }
-    // avisa que el contador llegó a 0
     public function tiempoAgotado()
     {
         $usuarioId = $this->requiereLogin();
@@ -194,12 +144,27 @@ class PartidaController
 
         $partidaId = (int) $partida['id'];
 
-        if ($this->model->tiempoAgotado($partidaId)) {
-            $this->model->terminarPorTiempo($partidaId);
-            $this->redirigir('/partida/resultado?id=' . $partidaId);
-        }
+        $this->terminarPartidaPorTiempo($partidaId);
+
+        // Todavía no venció de verdad (el reloj del navegador iba adelantado)
         $this->redirigir('/partida/jugar');
     }
+
+    // cuando no quedan mas preguntas para el jugador
+    public function sinPreguntas()
+    {
+        $usuarioId = $this->requiereLogin();
+
+        $estadisticas = $this->getEstadisticasFomateadas($usuarioId);
+
+        $this->render->renderiza('partidaResultado', array_merge($this->datosHeader(), [
+            'sin_preguntas' => true,
+            'estadisticas' => $estadisticas,
+            'categoria_color' => self::COLOR_POR_DEFECTO,
+            'lobby_url' => $this->appConfig['base_path_url'] . $this->appConfig['lobby_url'],
+        ]));
+    }
+
     public function resultado()
     {
         $usuarioId = $this->requiereLogin();
@@ -213,12 +178,14 @@ class PartidaController
         $puntaje = (int) $partida['puntaje'];
         $tiempoAgotado = ($partida['motivo_fin'] ?? null) === 'TIEMPO';
 
+        $estadisticas = $this->getEstadisticasFomateadas($usuarioId);
 
         $data = array_merge($this->datosHeader(), [
             'puntaje' => $puntaje,
             'singular' => $puntaje === 1,
             'perdio' => $detalle !== null || $tiempoAgotado,
             'tiempo_agotado' => $tiempoAgotado,
+            'estadisticas' => $estadisticas,
             'jugar_url' => $this->appConfig['base_path_url'] . '/partida/iniciar',
             'lobby_url' => $this->appConfig['base_path_url'] . $this->appConfig['lobby_url'],
             'categoria_color' => self::COLOR_POR_DEFECTO,
@@ -279,5 +246,31 @@ class PartidaController
     private function colorValido($color): string
     {
         return preg_match('/^#[0-9a-fA-F]{6}$/', (string) $color) ? $color : self::COLOR_POR_DEFECTO;
+    }
+
+    private function terminarPartidaPorTiempo(int $partidaId)
+    {
+        if ($this->model->tiempoAgotado($partidaId)) {
+            $this->model->terminarPorTiempo($partidaId);
+            $this->irAResultado($partidaId);
+        }
+    }
+
+    public function getEstadisticasFomateadas(int $usuarioId)
+    {
+        $estadisticas = $this->model->getEstadisticas($usuarioId);
+        $estadisticas['puntaje_total'] = number_format($estadisticas['puntaje_total'], 0, ',', '.');
+        return $estadisticas;
+    }
+
+    public function soloPost()
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            $this->redirigir($this->appConfig['lobby_url']);
+        }
+    }
+    public function irAResultado(int $partidaId)
+    {
+        $this->redirigir('/partida/resultado?id=' . $partidaId);
     }
 }
