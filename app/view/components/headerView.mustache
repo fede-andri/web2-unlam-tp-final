@@ -46,6 +46,17 @@
                 </a>
             {{/mostrar_registro}}
 
+            {{#es_admin}}
+                <a href="{{admin_url}}" class="header-link">
+                    Administración
+                </a>
+                {{#sugerencias_url}}
+                    <a href="{{sugerencias_url}}" class="header-link">
+                        Sugerencias
+                    </a>
+                {{/sugerencias_url}}
+            {{/es_admin}}
+
             {{#mostrar_logout}}
                 <a href="{{logout_url}}" class="header-link">
                     Cerrar sesión

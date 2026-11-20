@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#091411">
+
+    <title>Preguntas Sugeridas | Administración | Preguntones</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link href="/web2-unlam-tp-final/estilos/aplicacion.css" rel="stylesheet">
+    <style>
+        .sugerencia-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 1rem;
+            padding: 1.5rem;
+        }
+        .sugerencia-cat {
+            display: inline-block;
+            padding: .25rem .75rem;
+            border-radius: 999px;
+            font-size: .78rem;
+            font-weight: 700;
+            background: color-mix(in srgb, var(--cat, var(--accent)) 22%, transparent);
+            color: var(--cat, var(--accent));
+            border: 1px solid color-mix(in srgb, var(--cat, var(--accent)) 45%, transparent);
+        }
+        .sugerencia-enunciado {
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 1.25rem;
+            color: var(--text);
+            margin: .75rem 0 1rem;
+        }
+        .sugerencia-opciones {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 1.25rem;
+            display: grid;
+            gap: .5rem;
+        }
+        .sugerencia-opcion {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: .75rem;
+            padding: .65rem .9rem;
+            border-radius: .65rem;
+            background: var(--surface-raised);
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-size: .95rem;
+        }
+        .sugerencia-opcion.es-correcta {
+            border-color: var(--accent);
+            background: rgba(98, 212, 184, .12);
+        }
+        .badge-correcta {
+            font-size: .72rem;
+            font-weight: 700;
+            color: #082019;
+            background: var(--accent);
+            padding: .2rem .55rem;
+            border-radius: 999px;
+            white-space: nowrap;
+        }
+        .btn-rechazar {
+            min-height: 3.1rem;
+            border: 1px solid rgba(255, 122, 122, .4);
+            background: rgba(112, 39, 39, .22);
+            color: var(--danger-text);
+            font-weight: 650;
+        }
+        .btn-rechazar:hover,
+        .btn-rechazar:focus-visible {
+            border-color: rgba(255, 122, 122, .75);
+            background: rgba(112, 39, 39, .45);
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+{{> components/headerView}}
+
+<main class="page-content">
+
+    <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
+        <div>
+            <p class="eyebrow mb-1">Panel Administrativo</p>
+            <h1 class="page-title mb-1">Preguntas Sugeridas</h1>
+            <p class="page-subtitle mb-0">Revisá las preguntas propuestas por los jugadores antes de sumarlas a las partidas.</p>
+        </div>
+        <a href="{{admin_url}}" class="btn btn-outline-accent px-4">Volver al panel</a>
+    </div>
+
+    {{#error}}
+        <div class="alert alert-danger mb-4" role="alert">{{error}}</div>
+    {{/error}}
+
+    {{#success}}
+        <div class="alert alert-success mb-4" role="alert">{{success}}</div>
+    {{/success}}
+
+    {{#hay_preguntas}}
+        <div class="d-grid gap-4">
+            {{#preguntas}}
+                <article class="sugerencia-card" style="--cat: {{color}}">
+                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+                        <span class="sugerencia-cat">{{categoria}}</span>
+                        <span class="small" style="color: var(--muted);">ID #{{id}} · {{fecha_creacion}}</span>
+                    </div>
+
+                    <h2 class="sugerencia-enunciado">{{enunciado}}</h2>
+
+                    <ul class="sugerencia-opciones">
+                        {{#respuestas}}
+                            <li class="sugerencia-opcion {{#es_correcta}}es-correcta{{/es_correcta}}">
+                                <span>{{texto}}</span>
+                                {{#es_correcta}}<span class="badge-correcta">Correcta</span>{{/es_correcta}}
+                            </li>
+                        {{/respuestas}}
+                    </ul>
+
+                    <div class="d-flex flex-wrap gap-2">
+                        <form method="POST" action="{{aprobar_url}}" class="flex-fill">
+                            <input type="hidden" name="pregunta_id" value="{{id}}">
+                            <button type="submit" class="btn btn-accent w-100">Aprobar y activar</button>
+                        </form>
+                        <form method="POST" action="{{rechazar_url}}" class="flex-fill" onsubmit="return confirm('¿Seguro que querés rechazar esta pregunta sugerida?');">
+                            <input type="hidden" name="pregunta_id" value="{{id}}">
+                            <button type="submit" class="btn btn-rechazar w-100">Rechazar</button>
+                        </form>
+                    </div>
+                </article>
+            {{/preguntas}}
+        </div>
+    {{/hay_preguntas}}
+
+    {{^hay_preguntas}}
+        <div class="sugerencia-card text-center py-5">
+            <h2 class="h4 mb-2" style="color: var(--text);">No hay preguntas sugeridas pendientes</h2>
+            <p class="mb-4" style="color: var(--muted);">Todas las propuestas enviadas por los jugadores ya fueron revisadas.</p>
+            <a href="{{admin_url}}" class="btn btn-outline-accent px-4">Volver al panel</a>
+        </div>
+    {{/hay_preguntas}}
+
+</main>
+
+{{> components/footerView}}
+
+</body>
+</html>
+

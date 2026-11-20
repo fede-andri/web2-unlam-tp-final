@@ -27,11 +27,51 @@ class PartidaController
 
         $this->soloPost();
 
+        // La partida se crea recien cuando el jugador elige categoria (confirmarCategoria).
+        // Si ya tiene una en curso, la retoma; si no, pasa por la ruleta.
+        if ($this->model->getPartidaEnCurso($usuarioId) !== null) {
+            $this->redirigir('/partida/jugar');
+        }
+
+        $this->redirigir('/partida/ruleta');
+    }
+
+    public function ruleta()
+    {
+        $this->requiereLogin();
+
+        $categorias = $this->model->getCategorias();
+
+        $this->render->renderiza(
+            'ruleta',
+            array_merge(
+                $this->datosHeader(),
+                [
+                    'categorias_json' => json_encode($categorias),
+                    'confirmar_categoria_url' =>
+                        $this->appConfig['base_path_url']
+                        . '/partida/confirmarCategoria'
+                ]
+            )
+        );
+    }
+
+    public function confirmarCategoria()
+    {
+        $usuarioId = $this->requiereLogin();
+
+        $categoriaId = (int) Request::post('categoria_id', 0);
+
+        // La categoria tiene que existir
+        if ($categoriaId <= 0 || $this->model->getCategoriaPorId($categoriaId) === null) {
+            $this->redirigir('/partida/ruleta');
+        }
+
         if ($this->model->getPartidaEnCurso($usuarioId) === null) {
-            $partidaId = $this->model->crearPartida($usuarioId);
+            $partidaId = $this->model->crearPartida($usuarioId, $categoriaId);
 
             if (!$this->model->asignarSiguientePregunta($partidaId)) {
-                // No hay preguntas disponibles: la partida vacia no se guarda
+                // No quedan preguntas nuevas en esa categoria: la partida vacia no se guarda
                 $this->model->cancelarPartida($partidaId);
                 $this->redirigir('/partida/sinPreguntas');
             }
@@ -59,6 +99,7 @@ class PartidaController
             $this->irAResultado($partidaId);
         }
 
+        //partida en curso que no tenia temp, se lo arranca ahora
         $restantes = $this->model->segundosRestantes($partidaId);
         if ($restantes === null) {
             $this->model->iniciarTemporizador($partidaId);
@@ -88,8 +129,42 @@ class PartidaController
             'tiempo_url' => $this->appConfig['base_path_url'] . '/partida/tiempoAgotado',
             'segundos_totales' => PartidaModel::SEGUNDOS_POR_PREGUNTA,
             'segundos_restantes' => $restantes,
+            'reportar_url' => $this->appConfig['base_path_url'] . '/partida/reportar',
+            'reportada' => Request::get('reportada') !== null,
         ]));
     }
+
+    public function reportar()
+    {
+        $usuarioId = $this->requiereLogin();
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            $this->redirigir('/partida/jugar');
+        }
+
+        $partida = $this->model->getPartidaEnCurso($usuarioId);
+        if ($partida === null || empty($partida['pregunta_actual_id'])) {
+            $this->redirigir($this->appConfig['lobby_url']);
+        }
+
+        $preguntaId = (int) $partida['pregunta_actual_id'];
+        $motivo = trim(Request::post('motivo', 'Pregunta reportada por el usuario'));
+        if (empty($motivo)) {
+            $motivo = 'Pregunta inválida';
+        }
+
+        $this->model->reportarPregunta($preguntaId, $usuarioId, $motivo);
+
+        $reemplazada = $this->model->reemplazarPreguntaReportada((int) $partida['id'], $preguntaId);
+
+        if (!$reemplazada) {
+            $this->model->terminarPartida((int) $partida['id']);
+            $this->redirigir('/partida/resultado?id=' . (int) $partida['id']);
+        }
+
+        $this->redirigir('/partida/jugar?reportada=1');
+    }
+
 
     public function responder()
     {
