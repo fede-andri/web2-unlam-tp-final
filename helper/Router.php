@@ -15,8 +15,18 @@ class Router
 
     public function dispatch($controllerName, $method)
     {
+        $this->autorizar(
+            $controllerName,
+            $method
+        );
+
         $controller = $this->getController($controllerName);
-        $method     = $this->getMethod($controller, $method);
+
+        $method = $this->getMethod(
+            $controller,
+            $method
+        );
+
         $controller->{$method}();
     }
 
@@ -40,4 +50,34 @@ class Router
     {
         return method_exists($controller, $method) ? $method : $this->defaultMethod;
     }
+
+    private function autorizar($controller, $method){
+        $controllersPublicos = [
+            'home',
+            'login',
+            'registro'
+        ];
+
+        $metodosPublicos = [
+            'perfil' => [
+                'ver'
+            ]
+        ];
+
+        if (in_array($controller, $controllersPublicos)) {
+            return;
+        }
+
+        if (isset($metodosPublicos[$controller]) && in_array($method, $metodosPublicos[$controller])) {
+            return;
+        }
+
+        if (!isset($_SESSION['usuario_id'])) {
+            header(
+                'Location: /web2-unlam-tp-final/login/show'
+            );
+            exit();
+        }
+    }
+
 }
