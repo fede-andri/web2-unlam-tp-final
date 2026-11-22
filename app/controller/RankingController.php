@@ -2,7 +2,9 @@
 
 namespace app\controller;
 
+use app\model\RankingModel;
 use Redirect;
+use Request;
 
 class RankingController{
 
@@ -23,13 +25,22 @@ class RankingController{
         }
         $base      = $this->appConfig['base_path_url'];
         $usuarioId = (int) $_SESSION['usuario_id'];
-        $ranking   = $this->model->getRanking();
+        // Periodo elegido en la pestaña (?periodo=hoy|semana|anio|total)
+        $periodo = Request::get('periodo', RankingModel::PERIODO_POR_DEFECTO);
+        if (!RankingModel::esPeriodoValido($periodo)) {
+            $periodo = RankingModel::PERIODO_POR_DEFECTO;
+        }
+
+        $ranking   = $this->model->getRanking(20, $periodo);
+
+        $anteriores = $this->model->getPosicionesAnteriores($periodo);
 
         $estaEnLista = false;
         foreach ($ranking as $i => &$fila) {
             $fila['posicion']       = $i + 1;
             $fila['usuario_actual'] = ((int) $fila['id'] === $usuarioId);
             $fila['url_perfil']     = $this->urlPerfil($fila['usuario']);
+            $fila = array_merge($fila, $this->movimiento((int) $fila['id'], $fila['posicion'], $anteriores));
 
             if ($fila['usuario_actual']) {
                 $estaEnLista = true;
@@ -47,10 +58,20 @@ class RankingController{
             }
         }
 
+        $periodos = [];
+        foreach (RankingModel::PERIODOS as $clave => $datos) {
+            $periodos[] = [
+                'nombre' => $datos['nombre'],
+                'url'    => $base . $this->appConfig['ranking_show_url'] . '?periodo=' . $clave,
+                'activo' => $clave === $periodo,
+            ];
+        }
         $this->render->renderiza('ranking', [
             'ranking'          => $ranking,
             'hay_jugadores'    => count($ranking) > 0,
             'mi_posicion'      => $miPosicion,
+            'periodos'         => $periodos,
+            'periodo_etiqueta' => RankingModel::PERIODOS[$periodo]['etiqueta'],
             'base_url'         => $base,
             'ranking_show_url' => $base . $this->appConfig['ranking_show_url'],
             'mostrar_inicio'   => true,
@@ -62,6 +83,21 @@ class RankingController{
         ]);
     }
 
+    private function movimiento(int $usuarioId, int $posicionActual, array $anteriores): array
+    {
+        if (!isset($anteriores[$usuarioId])) {
+            // Sin posicion previa: no jugaba en este periodo hasta ayer
+            return ['mov_sube' => false, 'mov_baja' => false, 'mov_nuevo' => !empty($anteriores), 'mov_cantidad' => 0];
+        }
+
+        $cambio = $anteriores[$usuarioId] - $posicionActual; // positivo = subio
+        return [
+            'mov_sube'     => $cambio > 0,
+            'mov_baja'     => $cambio < 0,
+            'mov_nuevo'    => false,
+            'mov_cantidad' => abs($cambio),
+        ];
+    }
     private function urlPerfil($usuario)
     {
         return $this->appConfig['base_path_url'] . '/perfil/ver?usuario=' . rawurlencode($usuario);
