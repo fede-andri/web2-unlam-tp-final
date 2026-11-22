@@ -11,21 +11,27 @@
 </head>
 <body class="ranking-page">
 
-    {{> components/headerView}}
+{{> components/headerView}}
 
-    <main class="page-content">
-        <div>
-            <p class="eyebrow mb-0">Clasificación de jugadores</p>
-            <h1 class="page-title">Ranking de la comunidad</h1>
-            <p class="page-subtitle mb-0">Cada partida cuenta. Consultá los puntajes y descubrí quién lidera la tabla.</p>
-        </div>
+<main class="page-content">
+    <div>
+        <p class="eyebrow mb-0">Clasificación de jugadores</p>
+        <h1 class="page-title">Ranking de la comunidad</h1>
+        <p class="page-subtitle mb-0">Cada partida cuenta. Consultá los puntajes y descubrí quién lidera la tabla.</p>
+    </div>
 
-        <div class="ranking-layout">
-            <section class="panel" aria-labelledby="ranking-heading">
-                <div class="panel-heading">
-                    <h2 id="ranking-heading">Puntajes destacados</h2>
-                    <span class="live-label">Clasificación general</span>
-                </div>
+    <div class="ranking-layout">
+        <section class="panel" aria-labelledby="ranking-heading">
+            <div class="panel-heading">
+                <h2 id="ranking-heading">Puntajes destacados</h2>
+                <span class="live-label">{{periodo_etiqueta}}</span>
+            </div>
+
+            <nav class="ranking-tabs" aria-label="Período del ranking">
+                {{#periodos}}
+                    <a href="{{url}}" class="ranking-tab{{#activo}} is-active{{/activo}}"{{#activo}} aria-current="page"{{/activo}}>{{nombre}}</a>
+                {{/periodos}}
+            </nav>
 
             {{#hay_jugadores}}
                 <div class="table-responsive">
@@ -41,13 +47,18 @@
                         <tbody>
                         {{#ranking}}
                             <tr class="ranking-row {{#usuario_actual}}current-player{{/usuario_actual}}" data-href="{{url_perfil}}">
-                            <td><span class="position">{{posicion}}</span></td>
-                            <td>
-                                <a href="{{url_perfil}}" class="player-name player-link">{{usuario}}</a>
-                                {{#usuario_actual}}<span class="you-badge">Vos</span>{{/usuario_actual}}
-                            </td>
-                            <td class="text-end">{{partidas_jugadas}}</td>
-                            <td class="text-end player-score">{{puntaje_total}}</td>
+                                <td>
+                                    <span class="position">{{posicion}}</span>
+                                    {{#mov_sube}}<span class="mov mov-up" title="Subió {{mov_cantidad}}"><span aria-hidden="true">▲</span> {{mov_cantidad}}<span class="visually-hidden"> puestos arriba</span></span>{{/mov_sube}}
+                                    {{#mov_baja}}<span class="mov mov-down" title="Bajó {{mov_cantidad}}"><span aria-hidden="true">▼</span> {{mov_cantidad}}<span class="visually-hidden"> puestos abajo</span></span>{{/mov_baja}}
+                                    {{#mov_nuevo}}<span class="mov mov-new">Nuevo</span>{{/mov_nuevo}}
+                                </td>
+                                <td>
+                                    <a href="{{url_perfil}}" class="player-name player-link">{{usuario}}</a>
+                                    {{#usuario_actual}}<span class="you-badge">Vos</span>{{/usuario_actual}}
+                                </td>
+                                <td class="text-end">{{partidas_jugadas}}</td>
+                                <td class="text-end player-score">{{puntaje_total}}</td>
                             </tr>
                         {{/ranking}}
 
@@ -56,13 +67,18 @@
                                 <td colspan="4" class="text-center py-1">···</td>
                             </tr>
                             <tr class="ranking-row current-player" data-href="{{url_perfil}}">
-                            <td><span class="position">{{posicion}}</span></td>
-                            <td>
-                                <a href="{{url_perfil}}" class="player-name player-link">{{usuario}}</a>
-                                <span class="you-badge">Vos</span>
-                            </td>
-                            <td class="text-end">{{partidas_jugadas}}</td>
-                            <td class="text-end player-score">{{puntaje_total}}</td>
+                                <td>
+                                    <span class="position">{{posicion}}</span>
+                                    {{#mov_sube}}<span class="mov mov-up" title="Subió {{mov_cantidad}}"><span aria-hidden="true">▲</span> {{mov_cantidad}}<span class="visually-hidden"> puestos arriba</span></span>{{/mov_sube}}
+                                    {{#mov_baja}}<span class="mov mov-down" title="Bajó {{mov_cantidad}}"><span aria-hidden="true">▼</span> {{mov_cantidad}}<span class="visually-hidden"> puestos abajo</span></span>{{/mov_baja}}
+                                    {{#mov_nuevo}}<span class="mov mov-new">Nuevo</span>{{/mov_nuevo}}
+                                </td>
+                                <td>
+                                    <a href="{{url_perfil}}" class="player-name player-link">{{usuario}}</a>
+                                    <span class="you-badge">Vos</span>
+                                </td>
+                                <td class="text-end">{{partidas_jugadas}}</td>
+                                <td class="text-end player-score">{{puntaje_total}}</td>
                             </tr>
                         {{/mi_posicion}}
                         </tbody>
@@ -70,21 +86,21 @@
                 </div>
             {{/hay_jugadores}}
 
-                {{^hay_jugadores}}
-                    <div class="empty-state">
-                        <h3>Todavía no hay jugadores en el ranking</h3>
-                        <p>Jugá una partida para inaugurar la clasificación.</p>
-                    </div>
-                {{/hay_jugadores}}
-            </section>
+            {{^hay_jugadores}}
+                <div class="empty-state">
+                    <h3>Todavía no hay partidas en este período</h3>
+                    <p>Jugá una partida para inaugurar la clasificación.</p>
+                </div>
+            {{/hay_jugadores}}
+        </section>
 
-            <aside class="panel aside-panel">
-                <div class="aside-icon" aria-hidden="true">✦</div>
-                <h2>Tu próxima victoria</h2>
-                <p>Sumá puntos en cada partida y escalá posiciones en la clasificación. ¡El primer puesto está esperando!</p>
-                <a href="/web2-unlam-tp-final/" class="header-link d-inline-flex mt-3 px-0">Volver al inicio <span aria-hidden="true">&nbsp;→</span></a>
-            </aside>
-        </div>
+        <aside class="panel aside-panel">
+            <div class="aside-icon" aria-hidden="true">✦</div>
+            <h2>Tu próxima victoria</h2>
+            <p>Sumá puntos en cada partida y escalá posiciones en la clasificación. ¡El primer puesto está esperando!</p>
+            <a href="/web2-unlam-tp-final/" class="header-link d-inline-flex mt-3 px-0">Volver al inicio <span aria-hidden="true">&nbsp;→</span></a>
+        </aside>
+    </div>
 
     <footer class="site-footer">Sistema de Preguntas y Respuestas</footer>
 </main>
