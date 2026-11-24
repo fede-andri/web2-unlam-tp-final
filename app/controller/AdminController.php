@@ -60,6 +60,10 @@ class AdminController
     {
         $this->render->renderiza('adminEstadisticas',
             [
+                'paises' => $this->adminModel->obtenerUsuariosPorPais(),
+                'sexos' => $this->adminModel->obtenerUsuariosPorSexo(),
+                'edades' => $this->adminModel->obtenerUsuariosPorEdad(),
+                'aciertos' => $this->adminModel->obtenerAciertosPorRango(),
                 'admin_url' => $this->appConfig['base_path_url'] . $this->appConfig['admin_show_url']
             ]
         );
