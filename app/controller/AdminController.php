@@ -56,6 +56,26 @@ class AdminController
         );
     }
 
+    public function estadisticas()
+    {
+        $this->render->renderiza('adminEstadisticas',
+            [
+                'admin_url' => $this->appConfig['base_path_url'] . $this->appConfig['admin_show_url']
+            ]
+        );
+    }
+
+    public function gestion()
+    {
+        $this->render->renderiza('adminGestion',
+            [
+                'admin_url' => $this->appConfig['base_path_url'] . $this->appConfig['admin_show_url']
+            ]
+        );
+    }
+
+
+
     //Va a Editor
 //    public function sugerencias()
 //    {
@@ -131,7 +151,7 @@ class AdminController
             'logout_url' => $base . $this->appConfig['logout_url'],
             'es_admin' => true,
             'admin_url' => $base . $this->appConfig['admin_show_url'],
-            'sugerencias_url' => $base . '/admin/sugerencias',
+            //'sugerencias_url' => $base . '/admin/sugerencias',
             'metricas_url' => $this->appConfig['base_path_url']. $this->appConfig['metricas_url'],
             'estadisticas_url' => $this->appConfig['base_path_url']. $this->appConfig['estadisticas_url'],
             'gestion_url' => $this->appConfig['base_path_url'] . $this->appConfig['gestion_url'] ,
