@@ -33,60 +33,61 @@ class AdminController
         $this->render->renderiza(
             'admin',
             array_merge($this->datosAdminBase(), [
-                'cantidad_pendientes' => $cantidadPendientes,
-                'tiene_pendientes' => $cantidadPendientes > 0,
+                'cantidad_pendientes' => $cantidadPendientes, //Editor
+                'tiene_pendientes' => $cantidadPendientes > 0, //Editor
             ])
         );
     }
 
-    public function sugerencias()
-    {
-        $this->requiereAdmin();
+    //Va a Editor
+//    public function sugerencias()
+//    {
+//        $this->requiereAdmin();
+//
+//        $preguntas = $this->preguntaModel ? $this->preguntaModel->getPreguntasPendientes() : [];
+//        $base = $this->appConfig['base_path_url'];
+//        $success = Request::get('success');
+//        $error = Request::get('error');
+//
+//        $this->render->renderiza(
+//            'adminSugerencias',
+//            array_merge($this->datosAdminBase(), [
+//                'preguntas' => $preguntas,
+//                'hay_preguntas' => count($preguntas) > 0,
+//                'aprobar_url' => $base . '/admin/aprobarSugerencia',
+//                'rechazar_url' => $base . '/admin/rechazarSugerencia',
+//                'success' => $success ? urldecode($success) : null,
+//                'error' => $error ? urldecode($error) : null,
+//            ])
+//        );
+//    }
 
-        $preguntas = $this->preguntaModel ? $this->preguntaModel->getPreguntasPendientes() : [];
-        $base = $this->appConfig['base_path_url'];
-        $success = Request::get('success');
-        $error = Request::get('error');
-
-        $this->render->renderiza(
-            'adminSugerencias',
-            array_merge($this->datosAdminBase(), [
-                'preguntas' => $preguntas,
-                'hay_preguntas' => count($preguntas) > 0,
-                'aprobar_url' => $base . '/admin/aprobarSugerencia',
-                'rechazar_url' => $base . '/admin/rechazarSugerencia',
-                'success' => $success ? urldecode($success) : null,
-                'error' => $error ? urldecode($error) : null,
-            ])
-        );
-    }
-
-    public function aprobarSugerencia()
-    {
-        $this->procesarEstadoSugerencia('ACTIVA', 'La pregunta sugerida fue aprobada y ya está activa en el juego.');
-    }
-
-    public function rechazarSugerencia()
-    {
-        $this->procesarEstadoSugerencia('BAJA', 'La pregunta sugerida fue rechazada y dada de baja.');
-    }
-
-    private function procesarEstadoSugerencia(string $estado, string $mensajeOk): void
-    {
-        $this->requiereAdmin();
-
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            $this->redirigir('/admin/sugerencias');
-        }
-
-        $preguntaId = (int) Request::post('pregunta_id', 0);
-        if ($preguntaId <= 0 || !$this->preguntaModel) {
-            $this->redirigir('/admin/sugerencias?error=' . urlencode('Pregunta inválida.'));
-        }
-
-        $this->preguntaModel->cambiarEstadoPregunta($preguntaId, $estado);
-        $this->redirigir('/admin/sugerencias?success=' . urlencode($mensajeOk));
-    }
+//    public function aprobarSugerencia()
+//    {
+//        $this->procesarEstadoSugerencia('ACTIVA', 'La pregunta sugerida fue aprobada y ya está activa en el juego.');
+//    }
+//
+//    public function rechazarSugerencia()
+//    {
+//        $this->procesarEstadoSugerencia('BAJA', 'La pregunta sugerida fue rechazada y dada de baja.');
+//    }
+//
+//    private function procesarEstadoSugerencia(string $estado, string $mensajeOk): void
+//    {
+//        $this->requiereAdmin();
+//
+//        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+//            $this->redirigir('/admin/sugerencias');
+//        }
+//
+//        $preguntaId = (int) Request::post('pregunta_id', 0);
+//        if ($preguntaId <= 0 || !$this->preguntaModel) {
+//            $this->redirigir('/admin/sugerencias?error=' . urlencode('Pregunta inválida.'));
+//        }
+//
+//        $this->preguntaModel->cambiarEstadoPregunta($preguntaId, $estado);
+//        $this->redirigir('/admin/sugerencias?success=' . urlencode($mensajeOk));
+//    }
 
     private function requiereAdmin(): array
     {
