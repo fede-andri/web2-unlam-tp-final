@@ -9,6 +9,9 @@ class PartidaModel
     const DIAS_SIN_REPETIR = 30;
     const REPETIR_SI_SE_AGOTAN = false;
 
+    const FACIL = 70;
+    const DIFICIL = 30;
+    const MIN_RESPUESTAS = 3; //media
     public function __construct($database)
     {
         $this->database = $database;
@@ -152,29 +155,50 @@ class PartidaModel
 
     private function elegirPregunta(int $partidaId, $categoriaId)
     {
-        // Ultima vez que el usuario de esta partida vio cada pregunta (incluye esta partida)
-        $historial = "SELECT pp.pregunta_id, MAX(pa.fecha) AS ultima_vez
+        // las que se quedo sin tiempo no cuentan como respondidas
+        $historial = "SELECT pp.pregunta_id, MAX(pa.fecha) AS ultima_vez,
+                             MAX(pp.respuesta_elegida_id IS NOT NULL) AS alguna_vez_respondida
                       FROM partida_pregunta pp
                       JOIN partidas pa ON pa.id = pp.partida_id
                       WHERE pa.usuario_id = (SELECT usuario_id FROM partidas WHERE id = ?)
                       GROUP BY pp.pregunta_id";
 
+        // Dificultad de cada pregunta
+        $dificultad = "SELECT pp.pregunta_id,
+                              CASE
+                                  WHEN COUNT(*) < " . self::MIN_RESPUESTAS . " THEN 'MEDIA'
+                                  WHEN SUM(pp.acerto) / COUNT(*) * 100 > " . self::FACIL . " THEN 'FACIL'
+                                  WHEN SUM(pp.acerto) / COUNT(*) * 100 < " . self::DIFICIL . " THEN 'DIFICIL'
+                                  ELSE 'MEDIA'
+                              END AS dificultad
+                       FROM partida_pregunta pp
+                       WHERE pp.respuesta_elegida_id IS NOT NULL
+                       GROUP BY pp.pregunta_id";
+
         $filtroCategoria = $categoriaId !== null ? " AND p.categoria_id = ?" : "";
 
-        // Nunca vistas, o vistas hace mas de 30 dias
         $valores = [$partidaId];
         if ($categoriaId !== null) {
             $valores[] = $categoriaId;
         }
+        $valores[] = $partidaId;
+        $valores[] = $this->getDificultadDeUsuario($partidaId);
 
+        //nunca vistas, sin responder alguna vez (se agoto el tiempo) o vistas hace mas de 30 dias.
         $fila = $this->database->queryOne(
             "SELECT p.id
              FROM preguntas p
              LEFT JOIN ($historial) h ON h.pregunta_id = p.id
+             LEFT JOIN ($dificultad) d ON d.pregunta_id = p.id
              WHERE p.estado = 'ACTIVA'" . $filtroCategoria . "
                AND (h.ultima_vez IS NULL
+                    OR h.alguna_vez_respondida = 0
                     OR h.ultima_vez < DATE_SUB(NOW(), INTERVAL " . self::DIAS_SIN_REPETIR . " DAY))
-             ORDER BY RAND()
+               AND NOT EXISTS (
+                   SELECT 1 FROM partida_pregunta x
+                   WHERE x.partida_id = ? AND x.pregunta_id = p.id
+               )
+             ORDER BY (COALESCE(d.dificultad, 'MEDIA') = ?) DESC, RAND()
              LIMIT 1",
             $valores
         );
@@ -214,15 +238,34 @@ class PartidaModel
     public function getPregunta(int $preguntaId)
     {
         $pregunta = $this->database->queryOne(
-            "SELECT p.id, p.enunciado, c.nombre AS categoria, c.color
+            "SELECT p.id, p.enunciado, c.nombre AS categoria, c.color,
+                    COUNT(pp.id) AS total_respondidas,
+                    COALESCE(SUM(pp.acerto), 0) AS total_acertadas
              FROM preguntas p
              JOIN categorias c ON c.id = p.categoria_id
-             WHERE p.id = ?",
+             LEFT JOIN partida_pregunta pp ON pp.pregunta_id = p.id AND pp.acerto IS NOT NULL
+             WHERE p.id = ?
+             GROUP BY p.id, p.enunciado, c.nombre, c.color",
             [$preguntaId]
         );
 
         if ($pregunta === null) {
             return null;
+        }
+
+        // etiqueta de dificultad según el historial
+        $respondidas = (int) $pregunta['total_respondidas'];
+        if ($respondidas < 5) {
+            $dificultad = 'Media';
+        } else {
+            $ratio = (float) $pregunta['total_acertadas'] / $respondidas;
+            if ($ratio > 0.70) {
+                $dificultad = 'Fácil';
+            } elseif ($ratio < 0.30) {
+                $dificultad = 'Difícil';
+            } else {
+                $dificultad = 'Media';
+            }
         }
 
         $respuestas = $this->database->queryAll(
@@ -235,6 +278,7 @@ class PartidaModel
             'enunciado' => $pregunta['enunciado'],
             'categoria' => $pregunta['categoria'],
             'color' => $pregunta['color'],
+            'dificultad' => $dificultad,
             'respuestas' => $respuestas,
         ];
     }
@@ -347,4 +391,31 @@ class PartidaModel
             [$id]
         );
     }
+
+    public function getDificultadDeUsuario(int $partidaId){
+            $fila = $this->database->queryOne(
+                "SELECT COUNT(*) AS respondidas,
+                    COALESCE(SUM(pp.acerto), 0) AS aciertos
+             FROM partida_pregunta pp
+             JOIN partidas pa ON pa.id = pp.partida_id
+             WHERE pa.usuario_id = (SELECT usuario_id FROM partidas WHERE id = ?)
+               AND pp.respuesta_elegida_id IS NOT NULL",
+                [$partidaId]
+            );
+
+            $respondidas = (int)($fila['respondidas'] ?? 0);
+            if ($respondidas < self::MIN_RESPUESTAS) {
+                return 'MEDIA'; // jugador nuevo: todavia no hay datos
+            }
+
+            $ratio = (int)$fila['aciertos'] / $respondidas * 100;
+
+            if ($ratio > self::FACIL) {
+                return 'DIFICIL';
+            }
+            if ($ratio < self::DIFICIL) {
+                return 'FACIL';
+            }
+            return 'MEDIA';
+        }
 }

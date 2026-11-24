@@ -121,6 +121,7 @@ class PartidaController
         $this->render->renderiza('partida', array_merge($this->datosHeader(), [
             'categoria' => $pregunta['categoria'],
             'categoria_color' => $this->colorValido($pregunta['color']),
+            'dificultad' => $pregunta['dificultad'], // <--- Agregá esta línea
             'enunciado' => $pregunta['enunciado'],
             'opciones' => $opciones,
             'puntaje' => (int) $partida['puntaje'],
