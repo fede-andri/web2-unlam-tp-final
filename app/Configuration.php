@@ -167,6 +167,9 @@ class Configuration
             "restablecer_password_url" => $this->config["app"]["restablecer_password_url"],
             "guardar_password_url" => $this->config["app"]["guardar_password_url"],
             "admin_show_url" => $this->config["app"]["admin_show_url"],
+            "metricas_url" => $this->config["app"]["metricas_url"],
+            "estadisticas_url" => $this->config["app"]["estadisticas_url"],
+            "gestion_url" => $this->config["app"]["gestion_url"],
         ];
     }
 

@@ -115,6 +115,9 @@ class AdminController
             'es_admin' => true,
             'admin_url' => $base . $this->appConfig['admin_show_url'],
             'sugerencias_url' => $base . '/admin/sugerencias',
+            'metricas_url' => $this->appConfig['base_path_url']. $this->appConfig['metricas_url'],
+            'estadisticas_url' => $this->appConfig['base_path_url']. $this->appConfig['estadisticas_url'],
+            'gestion_url' => $this->appConfig['base_path_url'] . $this->appConfig['gestion_url'] ,
         ];
     }
 
