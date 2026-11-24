@@ -30,15 +30,7 @@ class AdminController
             exit();
         }
         $usuario = $this->usuarioModel->buscarPorId($_SESSION['usuario_id']);
-        if (!$usuario || $usuario['rol'] !== 'ADMIN') {
-            header(
-                'Location:' .
-                $this->appConfig['base_path_url'] .
-                $this->appConfig['lobby_url']
-            );
 
-            exit();
-        }
         $this->render->renderiza(
             'admin',
             [

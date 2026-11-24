@@ -58,25 +58,40 @@ class Router
             'registro'
         ];
 
+        if (in_array($controller, $controllersPublicos)) {
+            return;
+        }
+
         $metodosPublicos = [
             'perfil' => [
                 'ver'
             ]
         ];
 
-        if (in_array($controller, $controllersPublicos)) {
-            return;
-        }
+        $roles = [
+            'admin' => ['ADMIN'],
+            'lobby' => ['JUGADOR'],
+            'partida' => ['JUGADOR']
+        ];
 
         if (isset($metodosPublicos[$controller]) && in_array($method, $metodosPublicos[$controller])) {
             return;
         }
-
         if (!isset($_SESSION['usuario_id'])) {
-            header(
-                'Location: /web2-unlam-tp-final/login/show'
-            );
+            header('Location: /web2-unlam-tp-final/login/show');
             exit();
+        }
+
+        if (isset($roles[$controller])) {
+            $rolUsuario = $_SESSION['rol'] ?? '';
+            if (!in_array($rolUsuario, $roles[$controller])) {
+                if ($rolUsuario === 'ADMIN') {
+                    header('Location: /web2-unlam-tp-final/admin/show');
+                    exit();
+                }
+                header('Location: /web2-unlam-tp-final/lobby/show');
+                exit();
+            }
         }
     }
 
