@@ -1161,6 +1161,9 @@ body.lobby-page {
 }
 
 .game-cat-band {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
     padding: .7rem 1.25rem;
     background: var(--cat);
     color: #0b0f0e;
