@@ -9,33 +9,50 @@ class AdminController
     private $render;
     private $usuarioModel;
     private $appConfig;
-    private $preguntaModel;
+    //private $preguntaModel;
+    private $adminModel;
 
     public function __construct(
         $render,
         $usuarioModel,
         $appConfig,
-        $preguntaModel = null
+        //$preguntaModel = null
+        $adminModel
     )
     {
         $this->render = $render;
         $this->usuarioModel = $usuarioModel;
         $this->appConfig = $appConfig;
-        $this->preguntaModel = $preguntaModel;
+        $this->adminModel = $adminModel;
+        //$this->preguntaModel = $preguntaModel;
     }
 
     public function show()
     {
         $this->requiereAdmin();
 
-        $cantidadPendientes = $this->preguntaModel ? $this->preguntaModel->contarPreguntasPendientes() : 0;
+        //$cantidadPendientes = $this->preguntaModel ? $this->preguntaModel->contarPreguntasPendientes() : 0;
 
         $this->render->renderiza(
             'admin',
-            array_merge($this->datosAdminBase(), [
-                'cantidad_pendientes' => $cantidadPendientes, //Editor
-                'tiene_pendientes' => $cantidadPendientes > 0, //Editor
-            ])
+            $this->datosAdminBase()
+        );
+    }
+
+    public function metricas()
+    {
+        $this->render->renderiza(
+            'adminMetricas',
+            [
+                'jugadores' => $this->adminModel->contarJugadores(),
+                'partidas' => $this->adminModel->contarPartidas(),
+                'preguntas_creadas' => $this->adminModel->contarPreguntasCreadas(),
+                'usuarios_nuevos' => $this->adminModel->contarUsuariosNuevosHoy(),
+                'base_url' => $this->appConfig['base_path_url'],
+                'mostrar_logout' => true,
+                'logout_url' => $this->appConfig['base_path_url'] . $this->appConfig['logout_url'],
+                'admin_url' => $this->appConfig['base_path_url'] . $this->appConfig['admin_show_url']
+            ]
         );
     }
 

@@ -14,6 +14,7 @@ use app\controller\PreguntaController;
 use app\controller\RankingController;
 use app\controller\RegistroController;
 use app\controller\ReservaController;
+use app\model\AdminModel;
 use app\model\EquipoModel;
 use app\model\EventoModel;
 use app\model\LobbyModel;
@@ -111,7 +112,7 @@ class Configuration
             $this->getRender(),
             $this->getUsuarioModel(),
             $this->getAppConfig(),
-            $this->getPreguntaModel()
+            $this->getAdminModel()
         );
     }
 
@@ -187,6 +188,11 @@ class Configuration
     private function getPartidaModel(){
         return new PartidaModel($this->getDatabase());
     }
+
+    private function getAdminModel(){
+        return new AdminModel($this->getDatabase());
+    }
+
     private function getDatabase()
     {
         return new MyDatabase(
