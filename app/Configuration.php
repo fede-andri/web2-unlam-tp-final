@@ -229,7 +229,12 @@ class Configuration
 
     private function getRender()
     {
-        return new MustacheRender();
+        $appConfig = $this->getAppConfig();
+
+        return new MustacheRender([
+            'base_url'      => $appConfig['base_path_url'],
+            'base_path_url' => $appConfig['base_path_url'],
+        ]);
     }
 
     public function getRouter()
