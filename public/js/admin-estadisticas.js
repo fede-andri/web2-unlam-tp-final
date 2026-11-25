@@ -3,7 +3,8 @@ function crearGrafico(
     tipo,
     labels,
     datos,
-    colores
+    colores,
+    titulo
 ) {
     const canvas =
         document.getElementById(canvasId);
@@ -15,6 +16,7 @@ function crearGrafico(
         data: {
             labels: labels,
             datasets: [{
+                label:titulo,
                 data: datos,
                 backgroundColor: colores,
                 borderWidth: 1
@@ -68,7 +70,28 @@ document.addEventListener(
                     '#0dcaf0',
                     '#6f42c1',
                     '#fd7e14'
-                ]
+                ],
+                "Cantidad de jugadores"
+            );
+        }
+
+        if (window.dashboardData && window.dashboardData.pais) {
+            console.log(window.dashboardData.pais.labels);
+            crearGrafico(
+                'graficoPais',
+                'bar',
+                window.dashboardData.pais.labels,
+                window.dashboardData.pais.datos,
+                [
+                    '#198754',
+                    '#20c997',
+                    '#0dcaf0',
+                    '#6f42c1',
+                    '#fd7e14',
+                    '#dc3545',
+                    '#ffc107'
+                ],
+                "Cantidad de jugadores"
             );
         }
     }

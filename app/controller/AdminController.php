@@ -191,12 +191,10 @@ class AdminController
         $paises = $this->adminModel->obtenerUsuariosPorPais();
         $edades = $this->adminModel->obtenerUsuariosPorEdad();
         $aciertos = $this->adminModel->obtenerAciertosPorRango();
-
         $graficoSexo = $this->prepararGrafico($sexos, 'sexo');
         $graficoEdad = $this->prepararGrafico($edades, 'rango');
         $graficoPais = $this->prepararGrafico($paises, 'pais');
         $graficoAciertos = $this->prepararGrafico($aciertos, 'rango');
-
         return [
             'paises' => $paises,
             'sexos' => $sexos,
