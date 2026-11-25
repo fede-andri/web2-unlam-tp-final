@@ -72,6 +72,17 @@ class AdminController
         );
     }
 
+    private function prepararGrafico(
+        array $datos,
+        string $campoLabel
+    )
+    {
+        return [
+            'labels' => $this->obtenerLabels($datos, $campoLabel),
+            'datos' => $this->obtenerValores($datos)
+        ];
+    }
+
     private function obtenerLabels(array $datos, string $campo)
     {
         return json_encode(
@@ -180,15 +191,31 @@ class AdminController
         $paises = $this->adminModel->obtenerUsuariosPorPais();
         $edades = $this->adminModel->obtenerUsuariosPorEdad();
         $aciertos = $this->adminModel->obtenerAciertosPorRango();
+
+        $graficoSexo = $this->prepararGrafico($sexos, 'sexo');
+        $graficoEdad = $this->prepararGrafico($edades, 'rango');
+        $graficoPais = $this->prepararGrafico($paises, 'pais');
+        $graficoAciertos = $this->prepararGrafico($aciertos, 'rango');
+
         return [
             'paises' => $paises,
             'sexos' => $sexos,
             'edades' => $edades,
             'aciertos' => $aciertos,
-            'sexos_labels_json' => $this->obtenerLabels($sexos, 'sexo'),
-            'sexos_datos_json' => $this->obtenerValores($sexos),
+            'sexos_labels_json' => $graficoSexo['labels'],
+            'sexos_datos_json' => $graficoSexo['datos'],
+            'edades_labels_json' => $graficoEdad['labels'],
+            'edades_datos_json' => $graficoEdad['datos'],
+            'paises_labels_json' => $graficoPais['labels'],
+            'paises_datos_json' => $graficoPais['datos'],
+            'aciertos_labels_json' => $graficoAciertos['labels'],
+            'aciertos_datos_json' => $graficoAciertos['datos'],
             'hay_datos_sexo' => $this->tieneDatos($sexos),
-            'admin_url' => $this->appConfig['base_path_url'] . $this->appConfig['admin_show_url']
+            'hay_datos_edad' => $this->tieneDatos($edades),
+            'hay_datos_pais' => $this->tieneDatos($paises),
+            'hay_datos_acierto' => $this->tieneDatos($aciertos),
+            'admin_url' => $this->appConfig['base_path_url'] . $this->appConfig['admin_show_url'],
+            'base_url' => $this->appConfig['base_path_url']
         ];
     }
 
