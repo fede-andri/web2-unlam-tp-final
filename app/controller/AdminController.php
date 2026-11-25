@@ -211,7 +211,7 @@ class AdminController
             'hay_datos_sexo' => $this->tieneDatos($sexos),
             'hay_datos_edad' => $this->tieneDatos($edades),
             'hay_datos_pais' => $this->tieneDatos($paises),
-            'hay_datos_acierto' => $this->tieneDatos($aciertos),
+            'hay_datos_aciertos' => $this->tieneDatos($aciertos),
             'admin_url' => $this->appConfig['base_path_url'] . $this->appConfig['admin_show_url'],
             'base_url' => $this->appConfig['base_path_url']
         ];

@@ -76,7 +76,6 @@ document.addEventListener(
         }
 
         if (window.dashboardData && window.dashboardData.pais) {
-            console.log(window.dashboardData.pais.labels);
             crearGrafico(
                 'graficoPais',
                 'bar',
@@ -92,6 +91,22 @@ document.addEventListener(
                     '#ffc107'
                 ],
                 "Cantidad de jugadores"
+            );
+        }
+
+        if (window.dashboardData && window.dashboardData.aciertos) {
+            crearGrafico(
+                'graficoAciertos',
+                'bar',
+                window.dashboardData.aciertos.labels,
+                window.dashboardData.aciertos.datos,
+                [
+                    '#dc3545',
+                    '#fd7e14',
+                    '#ffc107',
+                    '#198754'
+                ],
+                'Cantidad de jugadores'
             );
         }
     }
