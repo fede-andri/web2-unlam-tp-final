@@ -74,6 +74,18 @@
                             </span>
                         </div>
                     {{/sexos}}
+                    <hr>
+                    <div style="height:300px;">
+                        {{#hay_datos_sexo}}
+                            <canvas id="graficoSexo"></canvas>
+                        {{/hay_datos_sexo}}
+
+                        {{^hay_datos_sexo}}
+                            <div class="alert alert-secondary">
+                                No hay datos suficientes para generar el gráfico.
+                            </div>
+                        {{/hay_datos_sexo}}
+                    </div>
                 </div>
             </div>
         </div>
@@ -130,6 +142,37 @@
 </main>
 
 {{> components/footerView}}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+<script>
+
+    const ctxSexo =
+            document.getElementById('graficoSexo');
+
+    new Chart(ctxSexo, {
+
+        type: 'doughnut',
+
+        data: {
+
+            labels: {{{sexos_labels_json}}},
+
+            datasets: [{
+
+                data: {{{sexos_datos_json}}},
+
+                backgroundColor: [
+
+                    '#198754',
+                    '#20c997',
+                    '#0dcaf0',
+                    '#6f42c1'
+
+                ]
+            }]
+        }
+    });
+
+</script>
 </body>
 </html>

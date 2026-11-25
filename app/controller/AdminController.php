@@ -59,13 +59,7 @@ class AdminController
     public function estadisticas()
     {
         $this->render->renderiza('adminEstadisticas',
-            [
-                'paises' => $this->adminModel->obtenerUsuariosPorPais(),
-                'sexos' => $this->adminModel->obtenerUsuariosPorSexo(),
-                'edades' => $this->adminModel->obtenerUsuariosPorEdad(),
-                'aciertos' => $this->adminModel->obtenerAciertosPorRango(),
-                'admin_url' => $this->appConfig['base_path_url'] . $this->appConfig['admin_show_url']
-            ]
+            $this->obtenerDatosEstadisticas()
         );
     }
 
@@ -78,7 +72,25 @@ class AdminController
         );
     }
 
+    private function obtenerLabels(array $datos, string $campo)
+    {
+        return json_encode(
+            array_column(
+                $datos,
+                $campo
+            )
+        );
+    }
 
+    private function obtenerValores(array $datos)
+    {
+        return json_encode(
+            array_column(
+                $datos,
+                'total'
+            )
+        );
+    }
 
     //Va a Editor
 //    public function sugerencias()
@@ -160,6 +172,29 @@ class AdminController
             'estadisticas_url' => $this->appConfig['base_path_url']. $this->appConfig['estadisticas_url'],
             'gestion_url' => $this->appConfig['base_path_url'] . $this->appConfig['gestion_url'] ,
         ];
+    }
+
+    public function obtenerDatosEstadisticas(): array
+    {
+        $sexos = $this->adminModel->obtenerUsuariosPorSexo();
+        $paises = $this->adminModel->obtenerUsuariosPorPais();
+        $edades = $this->adminModel->obtenerUsuariosPorEdad();
+        $aciertos = $this->adminModel->obtenerAciertosPorRango();
+        return [
+            'paises' => $paises,
+            'sexos' => $sexos,
+            'edades' => $edades,
+            'aciertos' => $aciertos,
+            'sexos_labels_json' => $this->obtenerLabels($sexos, 'sexo'),
+            'sexos_datos_json' => $this->obtenerValores($sexos),
+            'hay_datos_sexo' => $this->tieneDatos($sexos),
+            'admin_url' => $this->appConfig['base_path_url'] . $this->appConfig['admin_show_url']
+        ];
+    }
+
+    public function tieneDatos($datos): bool
+    {
+        return array_sum(array_column($datos, 'total')) > 0;
     }
 
     private function redirigir(string $ruta): void
