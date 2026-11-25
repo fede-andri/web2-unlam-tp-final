@@ -6,11 +6,14 @@ class Router
     private $defaultController;
     private $defaultMethod;
 
-    public function __construct($config, $defaultController, $defaultMethod)
+    private $appConfig;
+
+    public function __construct($config, $defaultController, $defaultMethod, $appConfig)
     {
         $this->config            = $config;
         $this->defaultController = $defaultController;
         $this->defaultMethod     = $defaultMethod;
+        $this->appConfig         = $appConfig;
     }
 
     public function dispatch($controllerName, $method)
@@ -78,7 +81,7 @@ class Router
             return;
         }
         if (!isset($_SESSION['usuario_id'])) {
-            header('Location: /web2-unlam-tp-final/login/show');
+            header('Location: ' . $this->appConfig['base_path_url'] . $this->appConfig["login_show_url"]);
             exit();
         }
 
@@ -86,10 +89,10 @@ class Router
             $rolUsuario = $_SESSION['rol'] ?? '';
             if (!in_array($rolUsuario, $roles[$controller])) {
                 if ($rolUsuario === 'ADMIN') {
-                    header('Location: /web2-unlam-tp-final/admin/show');
+                    header('Location: ' . $this->appConfig['base_path_url'] . $this->appConfig["admin_show_url"]);
                     exit();
                 }
-                header('Location: /web2-unlam-tp-final/lobby/show');
+                header('Location: ' . $this->appConfig['base_path_url'] .$this->appConfig['lobby_url']);
                 exit();
             }
         }
