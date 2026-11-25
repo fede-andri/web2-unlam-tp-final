@@ -51,10 +51,20 @@
                             No hay información disponible.
                         </div>
                     {{/paises}}
+
+                    <div style="height:300px;">
+                        {{#hay_datos_pais}}
+                            <canvas id="graficoPais"></canvas>
+                        {{/hay_datos_pais}}
+
+                        {{^hay_datos_pais}}
+                            <div class="alert alert-secondary">
+                                No hay datos suficientes para generar el gráfico.
+                            </div>
+                        {{/hay_datos_pais}}
+                    </div>
                 </div>
-
             </div>
-
         </div>
 
 
@@ -74,6 +84,18 @@
                             </span>
                         </div>
                     {{/sexos}}
+                    <hr>
+                    <div style="height:300px;">
+                        {{#hay_datos_sexo}}
+                            <canvas id="graficoSexo"></canvas>
+                        {{/hay_datos_sexo}}
+
+                        {{^hay_datos_sexo}}
+                            <div class="alert alert-secondary">
+                                No hay datos suficientes para generar el gráfico.
+                            </div>
+                        {{/hay_datos_sexo}}
+                    </div>
                 </div>
             </div>
         </div>
@@ -94,6 +116,19 @@
                             </span>
                         </div>
                     {{/edades}}
+                    <hr>
+
+                    <div style="height:300px;">
+                        {{#hay_datos_edad}}
+                            <canvas id="graficoEdad"></canvas>
+                        {{/hay_datos_edad}}
+
+                        {{^hay_datos_edad}}
+                            <div class="alert alert-secondary">
+                                No hay datos suficientes para generar el gráfico.
+                            </div>
+                        {{/hay_datos_edad}}
+                    </div>
                 </div>
             </div>
         </div>
@@ -115,6 +150,17 @@
                             </span>
                         </div>
                     {{/aciertos}}
+                    <div style="height:300px;">
+                        {{#hay_datos_aciertos}}
+                            <canvas id="graficoAciertos"></canvas>
+                        {{/hay_datos_aciertos}}
+
+                        {{^hay_datos_aciertos}}
+                            <div class="alert alert-secondary">
+                                No hay datos suficientes para generar el gráfico.
+                            </div>
+                        {{/hay_datos_aciertos}}
+                    </div>
                 </div>
             </div>
         </div>
@@ -128,8 +174,29 @@
     </div>
 
 </main>
-
 {{> components/footerView}}
 
+<script>
+    window.dashboardData = {
+        aciertos: {
+            labels: {{{aciertos_labels_json}}},
+            datos: {{{aciertos_datos_json}}}
+        },
+        pais: {
+            labels: {{{paises_labels_json}}},
+            datos: {{{paises_datos_json}}}
+        },
+        sexo: {
+            labels: {{{sexos_labels_json}}},
+            datos: {{{sexos_datos_json}}}
+        },
+        edad: {
+            labels: {{{edades_labels_json}}},
+            datos: {{{edades_datos_json}}}
+        }
+    };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{base_url}}/public/js/admin-estadisticas.js"></script>
 </body>
 </html>

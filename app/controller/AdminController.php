@@ -59,13 +59,7 @@ class AdminController
     public function estadisticas()
     {
         $this->render->renderiza('adminEstadisticas',
-            [
-                'paises' => $this->adminModel->obtenerUsuariosPorPais(),
-                'sexos' => $this->adminModel->obtenerUsuariosPorSexo(),
-                'edades' => $this->adminModel->obtenerUsuariosPorEdad(),
-                'aciertos' => $this->adminModel->obtenerAciertosPorRango(),
-                'admin_url' => $this->appConfig['base_path_url'] . $this->appConfig['admin_show_url']
-            ]
+            $this->obtenerDatosEstadisticas()
         );
     }
 
@@ -78,7 +72,36 @@ class AdminController
         );
     }
 
+    private function prepararGrafico(
+        array $datos,
+        string $campoLabel
+    )
+    {
+        return [
+            'labels' => $this->obtenerLabels($datos, $campoLabel),
+            'datos' => $this->obtenerValores($datos)
+        ];
+    }
 
+    private function obtenerLabels(array $datos, string $campo)
+    {
+        return json_encode(
+            array_column(
+                $datos,
+                $campo
+            )
+        );
+    }
+
+    private function obtenerValores(array $datos)
+    {
+        return json_encode(
+            array_column(
+                $datos,
+                'total'
+            )
+        );
+    }
 
     //Va a Editor
 //    public function sugerencias()
@@ -160,6 +183,43 @@ class AdminController
             'estadisticas_url' => $this->appConfig['base_path_url']. $this->appConfig['estadisticas_url'],
             'gestion_url' => $this->appConfig['base_path_url'] . $this->appConfig['gestion_url'] ,
         ];
+    }
+
+    public function obtenerDatosEstadisticas(): array
+    {
+        $sexos = $this->adminModel->obtenerUsuariosPorSexo();
+        $paises = $this->adminModel->obtenerUsuariosPorPais();
+        $edades = $this->adminModel->obtenerUsuariosPorEdad();
+        $aciertos = $this->adminModel->obtenerAciertosPorRango();
+        $graficoSexo = $this->prepararGrafico($sexos, 'sexo');
+        $graficoEdad = $this->prepararGrafico($edades, 'rango');
+        $graficoPais = $this->prepararGrafico($paises, 'pais');
+        $graficoAciertos = $this->prepararGrafico($aciertos, 'rango');
+        return [
+            'paises' => $paises,
+            'sexos' => $sexos,
+            'edades' => $edades,
+            'aciertos' => $aciertos,
+            'sexos_labels_json' => $graficoSexo['labels'],
+            'sexos_datos_json' => $graficoSexo['datos'],
+            'edades_labels_json' => $graficoEdad['labels'],
+            'edades_datos_json' => $graficoEdad['datos'],
+            'paises_labels_json' => $graficoPais['labels'],
+            'paises_datos_json' => $graficoPais['datos'],
+            'aciertos_labels_json' => $graficoAciertos['labels'],
+            'aciertos_datos_json' => $graficoAciertos['datos'],
+            'hay_datos_sexo' => $this->tieneDatos($sexos),
+            'hay_datos_edad' => $this->tieneDatos($edades),
+            'hay_datos_pais' => $this->tieneDatos($paises),
+            'hay_datos_aciertos' => $this->tieneDatos($aciertos),
+            'admin_url' => $this->appConfig['base_path_url'] . $this->appConfig['admin_show_url'],
+            'base_url' => $this->appConfig['base_path_url']
+        ];
+    }
+
+    public function tieneDatos($datos): bool
+    {
+        return array_sum(array_column($datos, 'total')) > 0;
     }
 
     private function redirigir(string $ruta): void
