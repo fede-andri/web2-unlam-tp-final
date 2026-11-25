@@ -6,3 +6,5 @@ config/config.ini
 
 # Archivos de log
 log/
+
+.htaccess

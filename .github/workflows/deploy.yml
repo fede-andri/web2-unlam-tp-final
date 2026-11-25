@@ -1,0 +1,41 @@
+name: Deploy a InfinityFree
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  deploy_to_infinityfree:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clonar repositorio
+        uses: actions/checkout@v4
+
+      - name: Instalar lftp
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y lftp
+
+      - name: Deploy a InfinityFree
+        env:
+          FTP_USER: ${{ secrets.FTP_USERNAME }}
+          FTP_PASS: ${{ secrets.FTP_PASSWORD }}
+          FTP_HOST: ${{ secrets.FTP_SERVER }}
+        run: |
+          for v in FTP_USER FTP_PASS FTP_HOST; do
+            if [ -z "${!v}" ]; then echo "ERROR: el secreto $v está vacío o no existe"; exit 1; fi
+          done
+          echo "Conectando a $FTP_HOST como $FTP_USER..."
+          lftp <<EOF
+          set ftp:ssl-allow no
+          set ftp:passive-mode on
+          set ftp:use-site-chmod false
+          set net:max-retries 3
+          set net:timeout 30
+          set net:reconnect-interval-base 5
+          open -u "$FTP_USER","$FTP_PASS" "$FTP_HOST"
+          cls -l /
+          mirror -R --no-perms --verbose -x '^\.git/' -x '^\.github/' -x '^\.gitignore$' -x '^\.idea/' -x '^__MACOSX/' -x '\.DS_Store$' -x '^config/config\.ini$' ./ /htdocs/   
+          bye
+          EOF
