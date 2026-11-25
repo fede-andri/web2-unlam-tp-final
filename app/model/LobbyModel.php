@@ -50,12 +50,12 @@ class LobbyModel
         $aciertos = (int) ($respuestas['aciertos'] ?? 0);
 
         return [
-            'partidas_jugadas'      => (int) ($partidas['partidas_jugadas'] ?? 0),
-            'puntaje_total'         => (int) ($partidas['puntaje_total'] ?? 0),
+            'partidas_jugadas' => (int) ($partidas['partidas_jugadas'] ?? 0),
+            'puntaje_total' => (int) ($partidas['puntaje_total'] ?? 0),
 
-            'mejor_racha'           => (int) ($partidas['mejor_racha'] ?? 0),
+            'mejor_racha' => (int) ($partidas['mejor_racha'] ?? 0),
             'preguntas_respondidas' => $respondidas,
-            'precision'             => $respondidas > 0 ? (int) round($aciertos / $respondidas * 100) : 0,
+            'precision' => $respondidas > 0 ? (int) round($aciertos / $respondidas * 100) : 0,
         ];
     }
     public function obtenerDatosLobby($usuario)
@@ -69,14 +69,36 @@ class LobbyModel
                 ['nombre' => 'Runas y hechizos', 'precision' => 52],
                 ['nombre' => 'Lore de Runaterra', 'precision' => 47],
             ],
-            'ultimas_partidas' => [
-                ['fecha' => 'Hoy, 21:40', 'categoria' => 'Campeones', 'aciertos' => 8, 'total' => 10, 'puntaje' => 860, 'victoria' => true],
-                ['fecha' => 'Hoy, 19:15', 'categoria' => 'Ítems', 'aciertos' => 5, 'total' => 10, 'puntaje' => 420, 'victoria' => false],
-                ['fecha' => 'Ayer, 23:02', 'categoria' => 'Lore de Runaterra', 'aciertos' => 7, 'total' => 10, 'puntaje' => 730, 'victoria' => true],
-                ['fecha' => '23/10, 18:30', 'categoria' => 'eSports', 'aciertos' => 9, 'total' => 10, 'puntaje' => 940, 'victoria' => true],
-                ['fecha' => '22/10, 22:11', 'categoria' => 'Runas y hechizos', 'aciertos' => 4, 'total' => 10, 'puntaje' => 310, 'victoria' => false],
-            ],
-
         ];
+    }
+
+    public function getUltimasPartidas(int $usuarioId, int $limite = 5): array
+    {
+        $limite = max(1, min($limite, 20));
+
+        $sql = "SELECT p.id,
+                       p.puntaje,
+                       p.motivo_fin,
+                       COALESCE(c.nombre, 'Sin categoría') AS categoria,
+                       SUM(CASE WHEN pp.acerto = 1 THEN 1 ELSE 0 END) AS aciertos,
+                       COUNT(pp.id) AS total,
+                       SUM(CASE WHEN pp.acerto = 0 THEN 1 ELSE 0 END) AS errores,
+                       CASE
+                           WHEN DATE(p.fecha) = CURDATE()
+                               THEN CONCAT('Hoy, ', DATE_FORMAT(p.fecha, '%H:%i'))
+                           WHEN DATE(p.fecha) = DATE_SUB(CURDATE(), INTERVAL 1 DAY)
+                               THEN CONCAT('Ayer, ', DATE_FORMAT(p.fecha, '%H:%i'))
+                           ELSE DATE_FORMAT(p.fecha, '%d/%m, %H:%i')
+                       END AS fecha
+                FROM partidas p
+                LEFT JOIN categorias c ON c.id = p.categoria_id
+                LEFT JOIN partida_pregunta pp ON pp.partida_id = p.id
+                WHERE p.usuario_id = ?
+                  AND p.estado = 'TERMINADA'
+                GROUP BY p.id, p.puntaje, p.motivo_fin, c.nombre, p.fecha
+                ORDER BY p.fecha DESC, p.id DESC
+                LIMIT $limite";
+
+        return $this->database->queryAll($sql, [$usuarioId]);
     }
 }

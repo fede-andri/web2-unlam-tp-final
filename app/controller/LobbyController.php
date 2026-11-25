@@ -57,8 +57,38 @@ class LobbyController
             }
         }
 
-        foreach ($datos['ultimas_partidas'] as &$partida) {
-            $partida['puntaje'] = $this->formatearNumero($partida['puntaje']);
+        $ultimasPartidas = $this->model->getUltimasPartidas($usuarioIdActual, 5);
+
+        foreach ($ultimasPartidas as &$partida) {
+            $partida['aciertos'] = (int) $partida['aciertos'];
+            $partida['total'] = (int) $partida['total'];
+            $partida['errores'] = (int) $partida['errores'];
+            $partida['fecha'] = $partida['fecha'] ?? '—';
+
+            $partida['victoria'] = $partida['motivo_fin'] === null
+                && $partida['total'] > 0
+                && $partida['errores'] === 0;
+
+            $partida['tiempo_agotado'] = $partida['motivo_fin'] === 'TIEMPO';
+            $partida['sin_detalle'] = $partida['total'] === 0;
+
+            if ($partida['tiempo_agotado']) {
+                $partida['resultado'] = 'Tiempo agotado';
+            } elseif ($partida['sin_detalle']) {
+                $partida['resultado'] = 'Finalizada';
+            } elseif ($partida['victoria']) {
+                $partida['resultado'] = 'Victoria';
+            } else {
+                $partida['resultado'] = 'Derrota';
+            }
+
+            $partida['resultado_clase'] = $partida['victoria']
+                ? 'result-win'
+                : 'result-loss';
+
+            $partida['puntaje'] = $this->formatearNumero((int) $partida['puntaje']);
+
+            unset($partida['motivo_fin'], $partida['errores']);
         }
         unset($partida);
 
@@ -75,7 +105,7 @@ class LobbyController
             'xp_porcentaje' => $xp['xp_porcentaje'],
             'estadisticas' => $estadisticas,
             'categorias' => $datos['categorias'],
-            'ultimas_partidas' => $datos['ultimas_partidas'],
+            'ultimas_partidas' => $ultimasPartidas,
             'ranking' => $ranking,
             'mi_posicion' => $miPosicion,
             'crear_pregunta_bloqueada' => $nivel < $nivelRequerido,
