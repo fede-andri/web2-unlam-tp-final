@@ -94,12 +94,12 @@ class RankingModel{
         }
         return $mapa;
     }
-    private function normalizar(string $periodo): string
+    private function normalizar(string $periodo)
     {
         return self::esPeriodoValido($periodo) ? $periodo : self::PERIODO_POR_DEFECTO;
     }
 
-    private function filtroDePeriodo(string $periodo): string
+    private function filtroDePeriodo(string $periodo)
     {
         switch ($periodo) {
             case 'hoy':    return "AND p.fecha >= CURDATE()";
@@ -110,7 +110,7 @@ class RankingModel{
         }
     }
 
-    private function soloConPartidas(string $periodo): string
+    private function soloConPartidas(string $periodo)
     {
         return $periodo === 'total' ? "" : "HAVING COUNT(p.id) > 0";
     }

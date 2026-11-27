@@ -58,17 +58,41 @@ class LobbyModel
             'precision' => $respondidas > 0 ? (int) round($aciertos / $respondidas * 100) : 0,
         ];
     }
-    public function obtenerDatosLobby($usuario)
+    public function getPrecisionPorCategoria(int $usuarioId)
+    {
+        $filas = $this->database->queryAll(
+            "SELECT c.nombre,
+                COUNT(r.pregunta_id) AS respondidas,
+                COALESCE(SUM(r.acerto), 0) AS aciertos
+         FROM categorias c
+         LEFT JOIN preguntas q ON q.categoria_id = c.id
+         LEFT JOIN (
+             SELECT pp.pregunta_id, pp.acerto
+             FROM partida_pregunta pp
+             JOIN partidas p ON p.id = pp.partida_id
+             WHERE p.usuario_id = ? AND pp.respuesta_elegida_id IS NOT NULL
+         ) r ON r.pregunta_id = q.id
+         GROUP BY c.id, c.nombre
+         ORDER BY c.nombre",
+            [$usuarioId]
+        );
+
+        $categorias = [];
+        foreach ($filas as $f) {
+            $respondidas = (int) $f['respondidas'];
+            $categorias[] = [
+                'nombre'    => $f['nombre'],
+                'precision' => $respondidas > 0
+                    ? (int) round($f['aciertos'] / $respondidas * 100)
+                    : 0,
+            ];
+        }
+        return $categorias;
+    }
+    public function obtenerDatosLobby($usuarioId)
     {
         return [
             'nivel_requerido_crear_pregunta' => 10,
-            'categorias' => [
-                ['nombre' => 'Campeones', 'precision' => 74],
-                ['nombre' => 'eSports', 'precision' => 70],
-                ['nombre' => 'Ítems', 'precision' => 61],
-                ['nombre' => 'Runas y hechizos', 'precision' => 52],
-                ['nombre' => 'Lore de Runaterra', 'precision' => 47],
-            ],
         ];
     }
 
