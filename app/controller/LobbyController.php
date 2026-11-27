@@ -2,6 +2,8 @@
 
 namespace app\controller;
 
+use app\model\RankingModel;
+
 class LobbyController
 {
     private $render;
@@ -26,18 +28,18 @@ class LobbyController
 
         $usuario = $_SESSION['usuario'];
         $usuarioIdActual = (int) $_SESSION['usuario_id'];
-        $datos = $this->model->obtenerDatosLobby($usuario);
+//        $datos = $this->model->obtenerDatosLobby($usuarioIdActual);
         $basePath = $this->appConfig['base_path_url'];
 
         $xp = $this->model->getDatosExperiencia($usuarioIdActual);
         $nivel = $xp['nivel'];
-        $nivelRequerido = $datos['nivel_requerido_crear_pregunta'];
+//        $nivelRequerido = $datos['nivel_requerido_crear_pregunta'];
         $ranking = $this->rankingModel->getRanking(5);
         $estaEnTop = false;
 
         foreach ($ranking as $i => &$fila) {
             $fila['posicion'] = $i + 1;
-            $fila['usuario_actual'] = ((int) $fila['id'] === $usuarioIdActual);;
+            $fila['usuario_actual'] = ((int) $fila['id'] === $usuarioIdActual);
             $fila['puntaje'] = $this->formatearNumero($fila['puntaje_total']);
             $fila['url_perfil'] = $this->urlPerfil($fila['usuario']);
 
@@ -94,6 +96,8 @@ class LobbyController
 
         $estadisticas = $this->model->getEstadisticas($usuarioIdActual);
         $estadisticas['puntaje_total'] = $this->formatearNumero($estadisticas['puntaje_total']);
+        $sinPartidas = ((int) $estadisticas['partidas_jugadas'] === 0);
+
 
         $this->render->renderiza('lobby', [
             'usuario' => $usuario,
@@ -104,14 +108,16 @@ class LobbyController
             'xp_siguiente_nivel' => $this->formatearNumero($xp['xp_necesaria']),
             'xp_porcentaje' => $xp['xp_porcentaje'],
             'estadisticas' => $estadisticas,
-            'categorias' => $datos['categorias'],
+            'sin_partidas' => $sinPartidas,
+            'categorias' => $this->model->getPrecisionPorCategoria($usuarioIdActual),
             'ultimas_partidas' => $ultimasPartidas,
+            'ranking_etiqueta' => RankingModel::PERIODOS[RankingModel::PERIODO_POR_DEFECTO]['etiqueta'],
             'ranking' => $ranking,
             'mi_posicion' => $miPosicion,
-            'crear_pregunta_bloqueada' => $nivel < $nivelRequerido,
-            'nivel_requerido_crear_pregunta' => $nivelRequerido,
-            'niveles_faltantes' => max($nivelRequerido - $nivel, 0),
-            'progreso_desbloqueo' => (int) min(round($nivel / $nivelRequerido * 100), 100),
+//            'crear_pregunta_bloqueada' => $nivel < $nivelRequerido,
+//            'nivel_requerido_crear_pregunta' => $nivelRequerido,
+//            'niveles_faltantes' => max($nivelRequerido - $nivel, 0),
+//            'progreso_desbloqueo' => (int) min(round($nivel / $nivelRequerido * 100), 100),
 
             // Header
             'home_url' => $basePath . $this->appConfig['lobby_url'],

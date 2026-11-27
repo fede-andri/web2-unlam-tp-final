@@ -377,3 +377,12 @@
 .lobby-page .lobby-hero.rank-retador .level-ring {
     box-shadow: 0 0 1rem color-mix(in srgb, var(--rank) 35%, transparent);
 }
+
+/* Avisos cuando todavía no hay datos */
+.empty-note {
+    margin: 0;
+    padding: 1rem 1.5rem;
+    color: var(--muted);
+    font-size: .9rem;
+    list-style: none;
+}

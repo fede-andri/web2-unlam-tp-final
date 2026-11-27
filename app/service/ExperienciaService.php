@@ -4,8 +4,8 @@ namespace app\service;
 
 class ExperienciaService{
 
-    const XP_POR_PUNTO = 10;
-    const XP_POR_NIVEL = 100;
+    const XP_POR_PUNTO = 200;
+    const XP_POR_NIVEL = 2000;
 
     // Rangos lol
     const RANGOS = ['Hierro', 'Bronce', 'Plata', 'Oro', 'Platino', 'Esmeralda', 'Diamante', 'Maestro', 'Gran Maestro', 'Retador'];
