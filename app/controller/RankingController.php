@@ -25,7 +25,6 @@ class RankingController{
         }
         $base      = $this->appConfig['base_path_url'];
         $usuarioId = (int) $_SESSION['usuario_id'];
-        // Periodo elegido en la pestaña (?periodo=hoy|semana|anio|total)
         $periodo = Request::get('periodo', RankingModel::PERIODO_POR_DEFECTO);
         if (!RankingModel::esPeriodoValido($periodo)) {
             $periodo = RankingModel::PERIODO_POR_DEFECTO;
@@ -86,7 +85,6 @@ class RankingController{
     private function movimiento(int $usuarioId, int $posicionActual, array $anteriores): array
     {
         if (!isset($anteriores[$usuarioId])) {
-            // Sin posicion previa: no jugaba en este periodo hasta ayer
             return ['mov_sube' => false, 'mov_baja' => false, 'mov_nuevo' => !empty($anteriores), 'mov_cantidad' => 0];
         }
 
