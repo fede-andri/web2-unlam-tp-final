@@ -13,11 +13,14 @@
             </span>
 
         </a>
-        <button type="button" id="boton-musica" class="music-toggle"
-                data-src="{{base_path_url}}/public/audio/musica.mp3" aria-pressed="false">
-            <i class="bi bi-volume-up-fill music-icon" aria-hidden="true"></i>
-            <span class="music-text">Música</span>
-        </button>
+        {{^ocultar_audio}}
+            <button type="button" id="boton-musica" class="music-toggle"
+                    data-src="{{base_url}}/public/audio/musica.mp3" aria-pressed="false">
+                <i class="bi bi-volume-up-fill music-icon" aria-hidden="true"></i>
+                <span class="music-text">Música</span>
+            </button>
+            <script src="{{base_url}}/public/js/audio.js" defer></script>
+        {{/ocultar_audio}}
         <nav aria-label="Navegación principal">
 
             {{#mostrar_inicio}}

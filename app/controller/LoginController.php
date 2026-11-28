@@ -35,6 +35,7 @@ class LoginController
 
         $this->render->renderiza('login', [
             'login_error' => isset($_GET['login_error']),
+            'ocultar_audio' => true,
             'registro_exitoso' => $registroExitoso,
             'registro_url' => $this->appConfig["base_path_url"] .$this->appConfig["registro_url"],
             'login_url' => $this->appConfig["base_path_url"] . $this->appConfig["login_url"],
@@ -89,6 +90,7 @@ class LoginController
                 $this->appConfig["base_path_url"]
                 . $this->appConfig["enviar_recuperacion_url"],
             "login_show_url"=>$this->appConfig["base_path_url"].$this->appConfig["login_show_url"],
+            'ocultar_audio' => true,
         ];
 
         $this->render->renderiza(
@@ -121,7 +123,7 @@ class LoginController
                 'olvidePassword',
                 [
                     'error' => 'No existe una cuenta asociada a ese correo electrónico.',
-
+                    'ocultar_audio' => true,
                     'login_show_url' =>
                         $this->appConfig['base_path_url']
                         . $this->appConfig['login_show_url'],
@@ -162,7 +164,7 @@ class LoginController
                 [
                     'error' =>
                         'No se pudo enviar el correo de recuperación. Intentá nuevamente.',
-
+                    'ocultar_audio' => true,
                     'login_show_url' =>
                         $this->appConfig['base_path_url']
                         . $this->appConfig['login_show_url'],
@@ -181,7 +183,7 @@ class LoginController
             [
                 'success' =>
                     'Te enviamos un correo con instrucciones para recuperar tu contraseña.',
-
+                'ocultar_audio' => true,
                 'login_show_url' =>
                     $this->appConfig['base_path_url']
                     . $this->appConfig['login_show_url'],
@@ -220,7 +222,7 @@ class LoginController
                 [
                     'error' =>
                         'El enlace de recuperación no es válido o ya fue utilizado.',
-
+                    'ocultar_audio' => true,
                     'login_show_url' =>
                         $this->appConfig['base_path_url']
                         . $this->appConfig['login_show_url']
@@ -233,9 +235,11 @@ class LoginController
         $this->render->renderiza(
             'restablecerPassword',
             [
+                'ocultar_audio' => true,
                 'token' => $token,
                 'login_show_url' => $this->appConfig['base_path_url'] . $this->appConfig['login_show_url'],
-                'guardar_password_url' => $this->appConfig['base_path_url'] . $this->appConfig['guardar_password_url']
+                'guardar_password_url' => $this->appConfig['base_path_url'] . $this->appConfig['guardar_password_url'],
+
             ]
         );
     }
@@ -271,7 +275,7 @@ class LoginController
                 [
                     'error' =>
                         'El enlace de recuperación no es válido o ha expirado.',
-
+                    'ocultar_audio' => true,
                     'login_show_url' =>
                         $this->appConfig['base_path_url']
                         . $this->appConfig['login_show_url']
@@ -286,7 +290,7 @@ class LoginController
                 'restablecerPassword',
                 [
                     'token' => $token,
-
+                    'ocultar_audio' => true,
                     'error' =>
                         'Las contraseñas ingresadas no coinciden.',
 
