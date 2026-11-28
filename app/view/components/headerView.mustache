@@ -13,7 +13,11 @@
             </span>
 
         </a>
-
+        <button type="button" id="boton-musica" class="music-toggle"
+                data-src="{{base_path_url}}/public/audio/musica.mp3" aria-pressed="false">
+            <i class="bi bi-volume-up-fill music-icon" aria-hidden="true"></i>
+            <span class="music-text">Música</span>
+        </button>
         <nav aria-label="Navegación principal">
 
             {{#mostrar_inicio}}
