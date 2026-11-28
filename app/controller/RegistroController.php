@@ -31,7 +31,7 @@ class RegistroController
             "default_lat" => $this->mapConfig["default_lat"],
             "default_lng" => $this->mapConfig["default_lng"],
             "default_zoom" => $this->mapConfig["default_zoom"],
-
+            'ocultar_audio' => true,
             "modo_edicion" => true,
             "mensaje_mapa" => "Seleccioná tu ubicación en el mapa.",
             "registrar_url" => $this->basePathUrl . $this->appConfig["registrar_url"],
